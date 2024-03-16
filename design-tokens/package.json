@@ -1,0 +1,8 @@
+{
+  "name": "design-tokens",
+  "version": "1.0.0",
+  "description": "Padrões de design do Projeto",
+  "main": "index.ts",
+  "author": "MatheusHenrique005",
+  "license": "UNLICENSED"
+}
