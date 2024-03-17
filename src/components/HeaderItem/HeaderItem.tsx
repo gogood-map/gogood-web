@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-// import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react' 
 
 export type HeaderItemProps = {
     label: string
@@ -7,18 +7,55 @@ export type HeaderItemProps = {
     onClick?: () => void
 }
 
+type styleItem = {
+    textDecoration: string
+    color: string
+    fontWeight: number
+}
+
 export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
     const url = window.location.pathname
-
-    const styleItem = url === path ? {
-        textDecoration: 'underline',
-        color: designTokens.color.selected,
-        fontWeight: designTokens.fontWeight.bold
-    } : {
+    const divRef = window.location.hash
+    const [styleItem, setStyleItem] = useState<styleItem>({
         textDecoration: 'none',
         color: designTokens.color.text,
-        fontWeight: designTokens.fontWeight.regular,
-    }
+        fontWeight: designTokens.fontWeight.regular
+    })
+
+    console.log("divRef: ", divRef)
+
+    useEffect(() => {
+        if (divRef){
+            if(divRef === path){
+                setStyleItem({
+                    textDecoration: 'underline',
+                    color: designTokens.color.selected,
+                    fontWeight: designTokens.fontWeight.bold
+                })
+            } else {
+                setStyleItem({
+                    textDecoration: 'none',
+                    color: designTokens.color.text,
+                    fontWeight: designTokens.fontWeight.regular
+                })
+            }
+        } else {
+            if(url === path){
+                setStyleItem({
+                    textDecoration: 'underline',
+                    color: designTokens.color.selected,
+                    fontWeight: designTokens.fontWeight.bold
+                })
+            } else {
+                setStyleItem({
+                    textDecoration: 'none',
+                    color: designTokens.color.text,
+                    fontWeight: designTokens.fontWeight.regular
+                })
+            }
+        }
+
+    }, [divRef, path, url])
 
     return (
         <li onClick={onClick}
