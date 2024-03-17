@@ -18,7 +18,7 @@ export function Button(props: ButtonProps) {
         paddingLeft: designTokens.spacing.medium,
         paddingRight: designTokens.spacing.medium,
         borderRadius: designTokens.borderRadius.medium,
-        fontSize: designTokens.fontSize.medium,
+        fontSize: designTokens.font.size.medium,
         cursor: 'pointer',
     }
 

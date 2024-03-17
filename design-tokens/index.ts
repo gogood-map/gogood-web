@@ -18,20 +18,24 @@ export const designTokens = {
         medium: '8px',
         large: '12px',
     },
-    fontSize: {
-        small: '12px',
-        medium: '16px',
-        large: '24px',
-        extraLarge: '32px',
-    },
-    fontWeight: {
-        light: 300,
-        regular: 400,
-        medium: 500,
-        bold: 700,
-    },
-    fontFamily: {
-        primary: 'Poppins, sans-serif',
-        secondary: 'Roboto, sans-serif',
-    },
+    font: {
+        family: 'Poppins, sans-serif',
+        size: {
+            small: '12px',
+            medium: '16px',
+            large: '24px',
+            extraLarge: '32px',
+        },
+        weight: {
+            light: 300,
+            regular: 400,
+            medium: 500,
+            bold: 700,
+        },
+        lineHeight: {
+            small: '16px',
+            medium: '24px',
+            large: '32px',
+        },
+    }
 }
