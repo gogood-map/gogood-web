@@ -19,7 +19,7 @@ export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
     const [styleItem, setStyleItem] = useState<styleItem>({
         textDecoration: 'none',
         color: designTokens.color.text,
-        fontWeight: designTokens.fontWeight.regular
+        fontWeight: designTokens.font.weight.regular
     })
 
     console.log("divRef: ", divRef)
@@ -30,13 +30,13 @@ export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
                 setStyleItem({
                     textDecoration: 'underline',
                     color: designTokens.color.selected,
-                    fontWeight: designTokens.fontWeight.bold
+                    fontWeight: designTokens.font.weight.bold
                 })
             } else {
                 setStyleItem({
                     textDecoration: 'none',
                     color: designTokens.color.text,
-                    fontWeight: designTokens.fontWeight.regular
+                    fontWeight: designTokens.font.weight.regular
                 })
             }
         } else {
@@ -44,13 +44,13 @@ export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
                 setStyleItem({
                     textDecoration: 'underline',
                     color: designTokens.color.selected,
-                    fontWeight: designTokens.fontWeight.bold
+                    fontWeight: designTokens.font.weight.bold
                 })
             } else {
                 setStyleItem({
                     textDecoration: 'none',
                     color: designTokens.color.text,
-                    fontWeight: designTokens.fontWeight.regular
+                    fontWeight: designTokens.font.weight.regular
                 })
             }
         }

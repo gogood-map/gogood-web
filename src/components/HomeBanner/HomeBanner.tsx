@@ -16,7 +16,7 @@ export function HomeBanner(props: HomeBannerProps) {
         <div style={{
             display: 'flex',
             width: '100%',
-            minHeight: '550px',
+            maxHeight: '550px',
             alignSelf: 'stretch',
             justifyContent: 'start',
             backgroundImage: `url(${image})`,
@@ -24,37 +24,28 @@ export function HomeBanner(props: HomeBannerProps) {
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'auto 100%',
         }}>
-            {title && !subtitle && !onClick && (
-                <h1 style={{
-                    color: designTokens.color.text,
-                    marginTop: designTokens.spacing.small,
-                    marginBottom: designTokens.spacing.large,
-                    fontSize: '55px',
-                    fontWeight: '700',
-                    maxWidth: '50%',
-                    height: 'min-content',
-                    zIndex: 1
-                }}> {title} </h1>
-            )}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: '600px',
+                height: '100%',
+                marginRight: 'auto',
+            }}>
 
-            {subtitle && !onClick && (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    width: '40%',
-                    height: '100%',
-                    marginRight: 'auto',
-                }}>
+                {title && (
                     <h1 style={{
                         color: designTokens.color.text,
                         marginTop: designTokens.spacing.small,
                         marginBottom: designTokens.spacing.large,
                         fontSize: '55px',
                         fontWeight: '700',
+                        width: '100%',
                         height: 'min-content',
                         zIndex: 1
                     }}> {title} </h1>
+                )}
 
+                {subtitle && (
                     <p style={{
                         color: designTokens.color.text,
                         fontSize: '20px',
@@ -63,35 +54,9 @@ export function HomeBanner(props: HomeBannerProps) {
                         marginBottom: 0,
                         zIndex: 1
                     }}> {subtitle} </p>
-                </div>
-            )}
+                )}
 
-            {onClick && (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    maxWidth: '500px',
-                    height: '100%',
-                }}>
-                    <h1 style={{
-                        color: designTokens.color.text,
-                        marginTop: designTokens.spacing.small,
-                        marginBottom: designTokens.spacing.large,
-                        fontSize: '55px',
-                        fontWeight: '700',
-                        height: 'min-content',
-                        zIndex: 1
-                    }}> {title} </h1>
-
-                    <p style={{
-                        color: designTokens.color.text,
-                        fontSize: '20px',
-                        lineHeight: '29px',
-                        marginTop: 0,
-                        marginBottom: 0,
-                        zIndex: 1
-                    }}> {subtitle} </p>
-
+                {onClick && (
                     <button style={{
                         width: '200px',
                         height: '80px',
@@ -104,17 +69,17 @@ export function HomeBanner(props: HomeBannerProps) {
                         paddingTop: designTokens.spacing.small,
                         paddingBottom: designTokens.spacing.small,
                         zIndex: 1
-                    }} onClick={onClick}> 
+                    }} onClick={onClick}>
                         <span style={{
                             fontSize: '24px',
                             fontWeight: '700',
                             color: designTokens.color.white,
                         }}> Navegar </span>
                     </button>
-                </div>
-            )}
+                )}
 
-
+            </div>
         </div>
+
     )
 }
