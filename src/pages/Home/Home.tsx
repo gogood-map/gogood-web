@@ -12,8 +12,7 @@ export function Home() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            width: '100%',
-            minHeight: '100vh',
+            width: '100%'
         }}>
             <HomeBanner 
                 image={ImageBanner}

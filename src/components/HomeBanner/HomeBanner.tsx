@@ -16,9 +16,13 @@ export function HomeBanner(props: HomeBannerProps) {
         <div style={{
             display: 'flex',
             width: '100%',
-            height: '550px',
+            minHeight: '550px',
             alignSelf: 'stretch',
-            justifyContent: 'center',
+            justifyContent: 'start',
+            backgroundImage: `url(${image})`,
+            backgroundPosition: 'right',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'auto 100%',
         }}>
             {title && !subtitle && !onClick && (
                 <h1 style={{
@@ -66,9 +70,8 @@ export function HomeBanner(props: HomeBannerProps) {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    width: '40%',
+                    maxWidth: '500px',
                     height: '100%',
-                    marginRight: '-64px',
                 }}>
                     <h1 style={{
                         color: designTokens.color.text,
@@ -109,13 +112,6 @@ export function HomeBanner(props: HomeBannerProps) {
                         }}> Navegar </span>
                     </button>
                 </div>
-            )}
-            {image && (
-                <img src={image} alt="Banner" style={{
-                    width: 'auto',
-                    height: '100%',
-                    objectFit: 'contain'
-                }} />
             )}
 
 
