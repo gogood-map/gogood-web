@@ -37,7 +37,7 @@ export function InformativeCard(props: InformativeCardProps) {
     } as React.CSSProperties
 
     const hoverStyle = {
-        transform: 'scale(1.015)',
+        transform: 'scale(1.02)',
     } as React.CSSProperties
 
     return (
