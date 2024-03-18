@@ -25,7 +25,7 @@ export function Button(props: ButtonProps) {
 
     return (
         <>
-            {isSolid &&
+            {(isSolid || !type) &&
                 <button onClick={onClick}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = 'transparent'
