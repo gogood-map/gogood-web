@@ -21,6 +21,7 @@ export function Layout() {
             padding: '32px',
             minHeight: '100vh',
             userSelect: 'none',
+            overflow: 'hidden',
             backgroundColor: designTokens.color.background,
             gap: designTokens.spacing.large
         }}>
