@@ -11,6 +11,7 @@ export const designTokens = {
     spacing: {
         small: '8px',
         medium: '16px',
+        mediumLarge: '24px',
         large: '32px',
     },
     borderRadius: {
