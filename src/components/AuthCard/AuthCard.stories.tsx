@@ -1,3 +1,4 @@
+import { QuestionProps } from '../Question/Question'
 import { AuthCard } from './AuthCard'
 
 export default {
@@ -5,26 +6,105 @@ export default {
     component: AuthCard,
 }
 
-const title = 'Cadastro'
-const steps = [
+const loginSteps = [
     {
-        title: 'Dados pessoais',
+        title: 'Login',
         inputs: [
-            { label: 'Nome', type: 'text', placeholder: 'Digite seu nome' },
-            { label: 'Email', type: 'email', placeholder: 'Digite seu email' },
-            { label: 'Senha', type: 'password', placeholder: 'Digite sua senha' },
-        ]
+            {
+                title: 'Email',
+                placeholder: 'email@exemplo.com',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            },
+            {
+                title: 'Senha',
+                placeholder: '********',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            },
+            {
+                title: 'Confirmar senha',
+                placeholder: '********',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            }
+
+        ] as QuestionProps[]
     },
     {
-        title: 'Endereço',
+        title: 'Dados Pessoais',
         inputs: [
-            { label: 'CEP', type: 'text', placeholder: 'Digite seu CEP' },
-            { label: 'Rua', type: 'text', placeholder: 'Digite sua rua' },
-            { label: 'Número', type: 'text', placeholder: 'Digite o número' },
-        ]
+            {
+                title: 'Nome',
+                placeholder: 'Nome',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            },
+            {
+                title: 'Gênero',
+                type: 'SingleChoice',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: false,
+                options: [
+                    {
+                        label: 'Masculino',
+                        openField: false
+                    },
+                    {
+                        label: 'Feminino',
+                        openField: false
+                    },
+                    {
+                        label: 'Prefiro não dizer',
+                        openField: false
+                    },
+                    {
+                        label: 'Outro',
+                        openField: true
+                    }
+                ],
+            },
+            {
+                title: 'Data de Nascimento',
+                placeholder: 'dd/mm/aaaa',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            },
+            {
+                title: 'Telefone',
+                placeholder: '(00) 00000-0000',
+                type: 'FreeText',
+                value: '',
+                helperText: 'Campo obrigatório',
+                required: true,
+                onChange: (value) => console.log(value),
+                onBlur: (event) => console.log(event),
+            }
+        ] as QuestionProps[]
     }
-
 ]
-const Template = () => <AuthCard title={title} steps={steps} />
+
+const Template = () => <AuthCard steps={loginSteps} />
 
 export const Default = Template.bind({})
