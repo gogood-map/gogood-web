@@ -8,8 +8,7 @@ export const routes = (
         <Route path='' element={<Layout />}>
             <Route path='' element={<Home />} />
         </Route>
-        <Route path='entrar' element={<div>Entrar</div>} />
-        <Route path='cadastrar' element={<div>Cadastrar</div>} />
+        
         <Route path='*' element={<NotFound />} />
     </Routes>
 )
