@@ -1,24 +1,18 @@
-import { designTokens } from "design-tokens"
-import { useState } from "react"
-import { Stepper } from "../Steper/Stepper"
-
-export type Input = {
-
-}
+import { designTokens } from 'design-tokens'
+import { useState } from 'react'
+import { Stepper } from '../Steper/Stepper'
+import { Question, QuestionProps } from '../Question/Question'
 
 export type AuthCardProps = {
-    title: string
     steps: {
         title: string
-        inputs: {
-            
-        }[]
+        inputs: QuestionProps[] 
     }[]
     onComplete?: () => void
 }
 
 export function AuthCard(props: AuthCardProps) {
-    const { title, steps, inputs, onComplete } = props
+    const { steps, onComplete } = props
     const [currentStep, setCurrentStep] = useState(0)
 
     return (
@@ -43,25 +37,37 @@ export function AuthCard(props: AuthCardProps) {
                 width: '100%',
             }}>
                 
-                <h1 style={{
-                    color: designTokens.color.text,
-                    margin: 0,
-                }}>{title}</h1>
+                {steps[currentStep].title && (
+                    <div style={{
+                        color: designTokens.color.text,
+                        fontSize: designTokens.font.size.medium,
+                    }}>
+                        {steps[currentStep].title}
+                    </div>
+                )}
 
                 {steps[currentStep].inputs.map((input, index) => (
-                    <input key={index}
-                        style={{
-                            padding: designTokens.spacing.medium,
-                            borderRadius: designTokens.borderRadius.medium,
-                            border: `1px solid ${designTokens.color.border}`,
-                            outline: 'none',
-                        }}
-                        type={input.type}
-                        placeholder={input.placeholder}
-                        value={input.value}
-                        onChange={input.onChange}
-                    />
+                    <Question key={index} {...input} />
                 ))}
+
+                <button style={{
+                    padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
+                    borderRadius: designTokens.borderRadius.medium,
+                    backgroundColor: designTokens.color.primary,
+                    color: designTokens.color.white,
+                    fontSize: designTokens.font.size.medium,
+                    border: 'none',
+                    cursor: 'pointer',
+                    outline: 'none',
+                }} onClick={() => {
+                    if (currentStep === steps.length - 1) {
+                        onComplete && onComplete()
+                    } else {
+                        setCurrentStep(currentStep + 1)
+                    }
+                }}>
+                    {currentStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
+                </button>
             </div>
         </div>
     )

@@ -13,13 +13,13 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@fontsource/poppins": "^5.0.12",
     "@ladle/react": "^4.0.2",
     "@mui/material": "^5.15.13",
     "design-tokens": "file:design-tokens",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "styled-components": "^6.1.8",
     "use-query-params": "^2.2.1",
     "yup": "^1.4.0"
   },

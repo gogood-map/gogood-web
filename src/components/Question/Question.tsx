@@ -9,7 +9,7 @@ export type QuestionProps = {
     value?: string | string[]
     error?: boolean
     helperText?: string
-    isOptional?: boolean
+    required?: boolean
     options?: {
         label: string
         openField: boolean
@@ -19,7 +19,7 @@ export type QuestionProps = {
 }
 
 export function Question(props: QuestionProps) {
-    const { title, placeholder, type, value, error, helperText, isOptional, options, onChange, onBlur } = props
+    const { title, placeholder, type, value, error, helperText, required, options, onChange, onBlur } = props
     const [currentValue, setCurrentValue] = useState(value)
 
     const RatioButton = styled.input.attrs({ type: 'radio' })`
@@ -54,7 +54,7 @@ export function Question(props: QuestionProps) {
                 fontSize: designTokens.font.size.medium,
             }}>
                 {title}
-                {!isOptional && (
+                {required && (
                     <span>*</span>
                 )}
             </div>
@@ -88,7 +88,7 @@ export function Question(props: QuestionProps) {
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: designTokens.spacing.minimum,
+                    gap: designTokens.spacing.tiny,
                     marginTop: designTokens.spacing.small,
                 }}>
                     {options?.map((option, index) => (
