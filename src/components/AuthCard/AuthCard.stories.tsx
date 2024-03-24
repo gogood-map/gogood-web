@@ -82,16 +82,6 @@ const loginSteps = [
                 ],
             },
             {
-                title: 'Data de Nascimento',
-                placeholder: 'dd/mm/aaaa',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
-            },
-            {
                 title: 'Telefone',
                 placeholder: '(00) 00000-0000',
                 type: 'FreeText',
