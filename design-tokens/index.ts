@@ -8,6 +8,7 @@ export const designTokens = {
         selected: '#008961',
         boxShadow: 'rgba(0, 0, 0, 0.25)',
         text: '#334049',
+        error: '#FF0000',
     },
     spacing: {
         tiny: '4px',
