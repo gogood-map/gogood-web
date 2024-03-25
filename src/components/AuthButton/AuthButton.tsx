@@ -3,13 +3,14 @@ import { designTokens } from "design-tokens"
 export type AuthButtonProps = {
     steps: number
     currentStep: number
-    onClickBack: () => void
-    onClickNext: () => void
-    onClickSubmit: () => void
+    disabled?: boolean
+    onClickBack?: () => void
+    onClickNext?: () => void
+    onClickSubmit?: Promise<void>
 }
 
 export function AuthButton(props: AuthButtonProps) {
-    const { steps, currentStep, onClickBack, onClickNext, onClickSubmit } = props
+    const { steps, currentStep, disabled, onClickBack, onClickNext, onClickSubmit } = props
     return (
         <div style={{
             display: 'flex',
@@ -27,7 +28,8 @@ export function AuthButton(props: AuthButtonProps) {
                     cursor: 'pointer',
                     width: '50px',
                     height: '50px',
-                }} onClick={onClickBack}>
+                }} onClick={onClickBack}
+                type='reset'>
                     Back
                 </button>
             )}
@@ -40,7 +42,9 @@ export function AuthButton(props: AuthButtonProps) {
                     cursor: 'pointer',
                     width: '50px',
                     height: '50px',
-                }} onClick={onClickNext}>
+                    filter: disabled ? 'grayscale(1)' : 'none',
+                }} onClick={onClickNext}
+                    disabled={disabled}>
                     Next
                 </button>
             )}
@@ -53,7 +57,10 @@ export function AuthButton(props: AuthButtonProps) {
                     cursor: 'pointer',
                     width: '50px',
                     height: '50px',
-                }} onClick={onClickSubmit}>
+                    filter: disabled ? 'grayscale(1)' : 'none',
+                }} onClick={() => onClickSubmit}
+                    disabled={disabled}
+                    type='submit'>
                     Submit
                 </button>
             )}
