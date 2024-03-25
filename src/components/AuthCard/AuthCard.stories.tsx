@@ -1,4 +1,4 @@
-import { QuestionProps } from '../Question/Question'
+import { QuestionProps } from './AuthCard' 
 import { AuthCard } from './AuthCard'
 
 export default {
@@ -6,39 +6,37 @@ export default {
     component: AuthCard,
 }
 
+
 const loginSteps = [
     {
         title: 'Login',
         inputs: [
             {
-                title: 'Email',
-                placeholder: 'email@exemplo.com',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
+                label: 'E-mail',
+                name: 'email',
+                type: 'email',
+                placeholder: 'Seu E-mail',
+                registerOptions: {
+                    required: true
+                }
             },
             {
-                title: 'Senha',
-                placeholder: '********',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
+                label: 'Senha',
+                name: 'password',
+                type: 'password',
+                placeholder: 'Senha',
+                registerOptions: {
+                    required: true
+                }
             },
             {
-                title: 'Confirmar senha',
-                placeholder: '********',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
+                label: 'Confirmar Senha',
+                name: 'passwordConfirmation',
+                type: 'password',
+                placeholder: 'Confirme sua senha',
+                registerOptions: {
+                    required: true
+                }
             }
 
         ] as QuestionProps[]
@@ -47,54 +45,43 @@ const loginSteps = [
         title: 'Dados Pessoais',
         inputs: [
             {
-                title: 'Nome',
-                placeholder: 'Nome',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
+                label: 'Nome',
+                name: 'name',
+                type: 'text',
+                placeholder: 'Seu nome',
+                registerOptions: {
+                    required: true
+                }
             },
             {
-                title: 'Gênero',
-                type: 'SingleChoice',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: false,
+                label: 'Gênero',
+                name: 'gender',
+                type: 'radio',
                 options: [
-                    {
-                        label: 'Masculino',
-                        openField: false
-                    },
-                    {
-                        label: 'Feminino',
-                        openField: false
-                    },
-                    {
-                        label: 'Prefiro não dizer',
-                        openField: false
-                    },
-                    {
-                        label: 'Outro',
-                        openField: true
-                    }
+                    { label: 'Masculino', value: 'masculino' },
+                    { label: 'Feminino', value: 'feminino' },
+                    { label: 'Outro', value: 'outro' }
                 ],
+                registerOptions: {
+                    required: true
+                }
             },
             {
-                title: 'Telefone',
-                placeholder: '(00) 00000-0000',
-                type: 'FreeText',
-                value: '',
-                helperText: 'Campo obrigatório',
-                required: true,
-                onChange: (value) => console.log(value),
-                onBlur: (event) => console.log(event),
+                label: 'Data de Nascimento',
+                name: 'birthDate',
+                type: 'date',
+                placeholder: 'Data de Nascimento',
+                registerOptions: {
+                    required: true
+                }
             }
         ] as QuestionProps[]
     }
 ]
 
-const Template = () => <AuthCard steps={loginSteps} />
+const Template = () => <AuthCard
+    steps={loginSteps}
+    onSubmit={(value) => { console.log(value) }}
+/>
 
 export const Default = Template.bind({})
