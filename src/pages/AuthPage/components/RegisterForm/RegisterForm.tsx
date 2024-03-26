@@ -1,15 +1,19 @@
-import { designTokens } from "design-tokens";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
-import { Stepper } from "../Steper/Stepper";
-import { AuthButton } from "../AuthButton/AuthButton";
+import { isAlpha, isEmail } from 'validator'
+import { designTokens } from 'design-tokens'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Stepper } from '../../../../components/Steper/Stepper'
+import { AuthButton } from '../AuthButton/AuthButton'
+import { useNavigate } from 'react-router-dom'
+import CompleteRegister from '../../../../assets/CompleteRegister.svg'
+import styled from 'styled-components'
 
 export function RegisterForm() {
     const [formStep, setFormStep] = useState(0)
+    const navigate = useNavigate()
     const steps = [
         { title: 'Cadastro' },
-        { title: 'Dados Pessoais' },
+        { title: 'Dados' },
         { title: 'Personalização' },
         { title: 'Concluído' }
     ]
@@ -17,19 +21,13 @@ export function RegisterForm() {
         register,
         handleSubmit,
         watch,
-        reset,
         formState: { isValid, errors }
-    } = useForm({mode: 'all'})
+    } = useForm({ mode: 'all' })
 
     const onSubmit = (data: unknown) => {
         console.log(data)
     }
 
-    console.log('render')
-
-    useEffect(() => {
-        // console.log(JSON.stringify(errors, null, 2))
-    }, [errors, formStep, watch()])
 
     const RadioInput = styled.input.attrs({ type: 'radio' })`
         appearance: none;
@@ -50,7 +48,7 @@ export function RegisterForm() {
         border: `1px solid ${designTokens.color.border}`,
         outline: 'none',
         fontSize: designTokens.font.size.medium,
-        height: '35px',
+        height: '25px',
     }
 
     const smallTextInputStyle = {
@@ -66,15 +64,19 @@ export function RegisterForm() {
     return (
         <form style={{
             display: 'flex',
-            width: 'auto',
+            width: '100%',
+            height: '100%',
             flexDirection: 'column',
-            gap: designTokens.spacing.mediumLarge
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: designTokens.spacing.mediumLarge,
         }}
             onSubmit={handleSubmit(onSubmit)}>
             <Stepper steps={steps} currentStep={formStep} />
             {formStep >= 0 && (
                 <section style={{
                     display: formStep === 0 ? 'flex' : 'none',
+                    width: '100%',
                     flexDirection: 'column',
                     gap: designTokens.spacing.medium
                 }}>
@@ -93,24 +95,18 @@ export function RegisterForm() {
                         gap: designTokens.spacing.tiny
                     }}>
                         <label htmlFor='email'>Email</label>
-                        <input style={{
-                            padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
-                            borderRadius: designTokens.borderRadius.medium,
-                            border: `1px solid ${designTokens.color.border}`,
-                            outline: 'none',
-                            fontSize: designTokens.font.size.medium,
-                            height: '35px',
-                        }}
+                        <input style={textInputStyle}
+                            autoComplete='off'
                             id='email'
                             type='email'
                             {...register('email', {
                                 required: { value: true, message: 'Email obrigatório' },
-                                validate: (value) => value.includes('@') || 'Email inválido',
+                                validate: (value) => isEmail(value) || 'Email inválido',
 
                             })}
                             placeholder='Seu email'
                         />
-                        {errors.email && <span style={{ color: 'red' }}>{errors.email.message as string}</span>}
+                        {errors.email && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.email.message as string}</span>}
                     </div>
                     <div style={{
                         display: 'flex',
@@ -127,7 +123,7 @@ export function RegisterForm() {
                             })}
                             placeholder='Sua senha'
                         />
-                        {errors.password && <span style={{ color: 'red' }}>{errors.password.message as string}</span>}
+                        {errors.password && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.password.message as string}</span>}
                     </div>
                     <div style={{
                         display: 'flex',
@@ -144,19 +140,31 @@ export function RegisterForm() {
                             })}
                             placeholder='Confirme sua senha'
                         />
-                        {errors.confirmPassword && <span style={{ color: 'red' }}>{errors.confirmPassword.message as string}</span>}
+                        {errors.confirmPassword && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.confirmPassword.message as string}</span>}
                     </div>
                     <AuthButton
                         currentStep={formStep}
                         steps={steps.length}
-                        disabled={!isValid}
+                        disabled={(!watch('email') || !watch('password') || !watch('confirmPassword'))
+                            || (errors.email ? true : false || errors.password ? true : false || errors.confirmPassword ? true : false)}
                         onClickNext={() => setFormStep(formStep + 1)}
                     />
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        Ou faça parte com
+                        
+
+                    </div>
                 </section>
             )}
             {formStep >= 1 && (
                 <section style={{
                     display: formStep === 1 ? 'flex' : 'none',
+                    width: '100%',
                     flexDirection: 'column',
                     gap: designTokens.spacing.medium
                 }}>
@@ -179,11 +187,13 @@ export function RegisterForm() {
                             id='name'
                             type='text'
                             {...register('name', {
-                                required: { value: true, message: 'Nome obrigatório' }
+                                required: { value: true, message: 'Nome obrigatório' },
+                                minLength: { value: 3, message: 'Nome deve ter no mínimo 3 caracteres' },
+                                validate: (value) => isAlpha(value) || 'Nome deve conter apenas letras'
                             })}
                             placeholder='Seu nome'
                         />
-                        {errors.name && <span style={{ color: 'red' }}>{errors.name.message as string}</span>}
+                        {errors.name && watch('name') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.name.message as string}</span>}
                     </div>
                     <div style={{
                         display: 'flex',
@@ -241,38 +251,30 @@ export function RegisterForm() {
                                 <label htmlFor='outro'>Outro</label>
                             </div>
                         </div>
-                        {errors.gender && <span style={{ color: 'red' }}>Selecione uma opção</span>}
+                        {errors.gender && watch('gender') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>Selecione uma opção</span>}
                     </div>
                     <div style={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: designTokens.spacing.tiny
                     }}>
-                        <label htmlFor="birthDate">Data de nascimento</label>
+                        <label htmlFor='birthDate'>Data de nascimento</label>
                         <input style={smallTextInputStyle}
-                            id="birthDate"
-                            type="date"
+                            id='birthDate'
+                            type='date'
                             {...register('birthDate', {
                                 required: { value: true, message: 'Data de nascimento obrigatória' }
                             })}
                         />
-                        {errors.birthDate && <span style={{ color: 'red' }}>{errors.birthDate.message as string}</span>}
+                        {errors.birthDate && watch('birthDate') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.birthDate.message as string}</span>}
                     </div>
                     <AuthButton
                         currentStep={formStep}
                         steps={steps.length}
-                        disabled={!isValid}
+                        disabled={(!watch('name') || !watch('gender') || !watch('birthDate'))
+                            || (errors.name ? true : false || errors.gender ? true : false || errors.birthDate ? true : false)}
                         onClickBack={() => {
                             setFormStep(formStep - 1)
-                            // reset({ 
-                            //     email: watch('email'), 
-                            //     password: watch('password'), 
-                            //     confirmPassword: watch('confirmPassword'),
-                            // })
-                            // errors?.birthDate 
-                            // ? unregister('birthDate')
-                            // : resetField('birthDate')
-
                         }}
                         onClickNext={() => setFormStep(formStep + 1)}
                     />
@@ -281,6 +283,7 @@ export function RegisterForm() {
             {formStep >= 2 && (
                 <section style={{
                     display: formStep === 2 ? 'flex' : 'none',
+                    width: '100%',
                     flexDirection: 'column',
                     gap: designTokens.spacing.medium
                 }}>
@@ -310,35 +313,31 @@ export function RegisterForm() {
                             id='address'
                             type='text'
                             {...register('address', {
-                                required: { value: true, message: 'Endereço obrigatório' }
+                                required: { value: true, message: 'Endereço obrigatório' },
                             })}
                             placeholder='Seu endereço'
                         />
+                        {errors.address && watch('address') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.address.message as string}</span>}
                     </div>
                     <AuthButton
                         currentStep={formStep}
-                        steps={steps.length}
-                        disabled={!isValid}
+                        steps={steps.length - 1}
+                        disabled={!watch('address') || !isValid}
                         onClickBack={() => {
                             setFormStep(formStep - 1)
-                            reset({
-                                email: watch('email'),
-                                password: watch('password'),
-                                confirmPassword: watch('confirmPassword'),
-                                name: watch('name'),
-                                gender: watch('gender'),
-                                birthDate: watch('birthDate')
-                            })
                         }}
                         onClickNext={() => setFormStep(formStep + 1)}
+                        onClickSubmit={() => {
+                            setFormStep(formStep + 1)
+                        }}
                     />
                 </section>
             )}
             {formStep >= 3 && (
                 <section style={{
                     display: formStep === 3 ? 'flex' : 'none',
+                    width: '100%',
                     flexDirection: 'column',
-                    gap: designTokens.spacing.medium
                 }}>
                     <h1 style={{
                         color: designTokens.color.text,
@@ -349,29 +348,40 @@ export function RegisterForm() {
                     }}>
                         Concluído
                     </h1>
-                    <label>Seu cadastro foi realizado com sucesso!</label>
-                    <AuthButton
-                        currentStep={formStep}
-                        steps={steps.length}
-                        disabled={!isValid}
-                        onClickBack={() => {
-                            setFormStep(formStep - 1)
-                        }}
-                    />
+                    <div>
+                        <span>Seu cadastro foi realizado com sucesso!</span>
+                        <img src={CompleteRegister} alt="cadastro completo" />
+                    </div>
+
                 </section>
             )}
-            <AuthButton
-                currentStep={formStep}
-                steps={steps.length}
-                disabled={isValid}
-                onClickBack={() => {
-                    setFormStep(formStep - 1)
-                }}
-                onClickNext={() => setFormStep(formStep + 1)}
-            />
-            <pre>
-                {JSON.stringify(watch(), null, 2)}
-            </pre>
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                color: designTokens.color.text,
+                fontSize: designTokens.font.size.medium,
+            }}>
+
+                Possui cadastro? Retome sua segurança!
+                <a
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.color = designTokens.color.secondary
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.color = designTokens.color.primary
+                    }}
+                    style={{
+                        color: designTokens.color.primary,
+                        textDecoration: 'underline',
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => { navigate('/login') }}
+                > Login </a>
+
+            </div>
         </form>
     )
 }

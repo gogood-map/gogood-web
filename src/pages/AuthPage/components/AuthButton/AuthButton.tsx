@@ -1,4 +1,6 @@
-import { designTokens } from "design-tokens"
+import { designTokens } from 'design-tokens'
+import ArrowButtonNext from '../../../../assets/ArrowButtonNext.svg'
+import ArrowButtonBack from '../../../../assets/ArrowButtonBack.svg'
 
 export type AuthButtonProps = {
     steps: number
@@ -6,7 +8,7 @@ export type AuthButtonProps = {
     disabled?: boolean
     onClickBack?: () => void
     onClickNext?: () => void
-    onClickSubmit?: Promise<void>
+    onClickSubmit?: () => void
 }
 
 export function AuthButton(props: AuthButtonProps) {
@@ -22,6 +24,9 @@ export function AuthButton(props: AuthButtonProps) {
             {currentStep > 0 && (
                 <button style={{
                     backgroundColor: 'transparent',
+                    backgroundImage: `url(${ArrowButtonBack})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
                     border: `1px solid ${designTokens.color.secondary}`,
                     borderRadius: '50%',
@@ -29,13 +34,15 @@ export function AuthButton(props: AuthButtonProps) {
                     width: '50px',
                     height: '50px',
                 }} onClick={onClickBack}
-                type='reset'>
-                    Back
-                </button>
+                type='reset'
+                value={''} />
             )}
             {currentStep < steps - 1 && (
                 <button style={{
                     backgroundColor: 'transparent',
+                    backgroundImage: `url(${ArrowButtonNext})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
                     border: `1px solid ${designTokens.color.secondary}`,
                     borderRadius: '50%',
@@ -44,13 +51,15 @@ export function AuthButton(props: AuthButtonProps) {
                     height: '50px',
                     filter: disabled ? 'grayscale(1)' : 'none',
                 }} onClick={onClickNext}
-                    disabled={disabled}>
-                    Next
-                </button>
+                    disabled={disabled}
+                    value={''} />
             )}
             {currentStep === steps - 1 && (
                 <button style={{
                     backgroundColor: 'transparent',
+                    backgroundImage: `url(${ArrowButtonNext})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
                     border: `1px solid ${designTokens.color.secondary}`,
                     borderRadius: '50%',
@@ -58,11 +67,10 @@ export function AuthButton(props: AuthButtonProps) {
                     width: '50px',
                     height: '50px',
                     filter: disabled ? 'grayscale(1)' : 'none',
-                }} onClick={() => onClickSubmit}
+                }} onClick={onClickSubmit}
                     disabled={disabled}
-                    type='submit'>
-                    Submit
-                </button>
+                    type='submit'
+                    value={''} />
             )}
 
         </div>
