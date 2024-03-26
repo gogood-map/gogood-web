@@ -14,7 +14,7 @@ export function Stepper(props: StepperProps) {
             justifyContent: 'center',
             alignItems: 'center',
             gap: '4px',
-            width: '100%',
+            width: '90%',
         }}>
             {props.steps.map((step, index) => (
                 <div key={index}
