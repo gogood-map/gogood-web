@@ -14,7 +14,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@ladle/react": "^4.0.2",
-    "@mui/material": "^5.15.13",
+    "@react-oauth/google": "^0.12.1",
     "design-tokens": "file:design-tokens",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,11 +22,12 @@
     "react-router-dom": "^6.22.3",
     "styled-components": "^6.1.8",
     "use-query-params": "^2.2.1",
-    "yup": "^1.4.0"
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
+    "@types/validator": "^13.11.9",
     "@typescript-eslint/eslint-plugin": "^7.1.1",
     "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
