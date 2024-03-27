@@ -26,6 +26,7 @@ export const designTokens = {
         family: 'Poppins, sans-serif',
         size: {
             small: '12px',
+            smallMedium: '14px',
             medium: '16px',
             large: '24px',
             extraLarge: '32px',
