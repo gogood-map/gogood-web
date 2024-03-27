@@ -1,5 +1,6 @@
 import BackgroundSign from '../../assets/BackgroundSign.svg'
 import { AuthCard } from './components/AuthCard/AuthCard'
+import { LoginForm } from './components/LoginForm/LoginForm'
 import { RegisterForm } from './components/RegisterForm/RegisterForm'
 
 export type AuthPageProps = {
@@ -24,6 +25,11 @@ export function AuthPage(props: AuthPageProps) {
             {type === 'register' && (
                 <AuthCard>
                     <RegisterForm />
+                </AuthCard>
+            )}
+            {type === 'login' && (
+                <AuthCard>
+                    <LoginForm />
                 </AuthCard>
             )}
 

@@ -28,7 +28,7 @@ export function AuthButton(props: AuthButtonProps) {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
-                    border: `1px solid ${designTokens.color.secondary}`,
+                    border: `none`,
                     borderRadius: '50%',
                     cursor: 'pointer',
                     width: '50px',
@@ -44,12 +44,12 @@ export function AuthButton(props: AuthButtonProps) {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
-                    border: `1px solid ${designTokens.color.secondary}`,
+                    border: `none`,
                     borderRadius: '50%',
-                    cursor: 'pointer',
+                    cursor: disabled ? 'undefined' : 'pointer',
                     width: '50px',
                     height: '50px',
-                    filter: disabled ? 'grayscale(1)' : 'none',
+                    opacity: disabled ? 0.5 : 1,
                 }} onClick={onClickNext}
                     disabled={disabled}
                     value={''} />
@@ -61,12 +61,11 @@ export function AuthButton(props: AuthButtonProps) {
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     color: designTokens.color.text,
-                    border: `1px solid ${designTokens.color.secondary}`,
+                    border: `none`,
                     borderRadius: '50%',
-                    cursor: 'pointer',
+                    cursor: disabled ? 'undefined' : 'pointer',
                     width: '50px',
                     height: '50px',
-                    filter: disabled ? 'grayscale(1)' : 'none',
                 }} onClick={onClickSubmit}
                     disabled={disabled}
                     type='submit'

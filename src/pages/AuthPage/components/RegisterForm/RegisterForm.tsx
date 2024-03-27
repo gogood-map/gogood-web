@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Stepper } from '../../../../components/Steper/Stepper'
 import { AuthButton } from '../AuthButton/AuthButton'
 import { useNavigate } from 'react-router-dom'
+import { GoogleLogin } from '@react-oauth/google'
 import CompleteRegister from '../../../../assets/CompleteRegister.svg'
 import styled from 'styled-components'
 
@@ -32,7 +33,7 @@ export function RegisterForm() {
     const RadioInput = styled.input.attrs({ type: 'radio' })`
         appearance: none;
         accent-color: ${designTokens.color.primary};
-        border-radius: 100%;    
+        border-radius: 100%;
         border: 1px solid ${designTokens.color.border};
         width: ${designTokens.spacing.medium};
         height: ${designTokens.spacing.medium};
@@ -57,7 +58,7 @@ export function RegisterForm() {
         border: `1px solid ${designTokens.color.border}`,
         outline: 'none',
         fontSize: designTokens.font.size.medium,
-        height: '35px',
+        height: '25px',
         width: '200px'
     }
 
@@ -82,6 +83,7 @@ export function RegisterForm() {
                 }}>
                     <h1 style={{
                         color: designTokens.color.text,
+                        fontSize: designTokens.font.size.extraLarge,
                         display: 'flex',
                         justifyContent: 'center',
                         width: '100%',
@@ -102,7 +104,6 @@ export function RegisterForm() {
                             {...register('email', {
                                 required: { value: true, message: 'Email obrigatório' },
                                 validate: (value) => isEmail(value) || 'Email inválido',
-
                             })}
                             placeholder='Seu email'
                         />
@@ -156,8 +157,12 @@ export function RegisterForm() {
                         alignItems: 'center'
                     }}>
                         Ou faça parte com
-                        
 
+                        <GoogleLogin
+                            text='signin'
+                            onSuccess={response => console.log(response)}
+                            onError={() => console.log('error')}
+                        />
                     </div>
                 </section>
             )}
@@ -170,6 +175,7 @@ export function RegisterForm() {
                 }}>
                     <h1 style={{
                         color: designTokens.color.text,
+                        fontSize: designTokens.font.size.extraLarge,
                         display: 'flex',
                         justifyContent: 'center',
                         width: '100%',
@@ -273,9 +279,7 @@ export function RegisterForm() {
                         steps={steps.length}
                         disabled={(!watch('name') || !watch('gender') || !watch('birthDate'))
                             || (errors.name ? true : false || errors.gender ? true : false || errors.birthDate ? true : false)}
-                        onClickBack={() => {
-                            setFormStep(formStep - 1)
-                        }}
+                        onClickBack={() => setFormStep(formStep - 1)}
                         onClickNext={() => setFormStep(formStep + 1)}
                     />
                 </section>
@@ -294,14 +298,25 @@ export function RegisterForm() {
                     }}>
                         <h1 style={{
                             color: designTokens.color.text,
+                            fontSize: designTokens.font.size.extraLarge,
                             display: 'flex',
                             justifyContent: 'center',
                             width: '100%',
                             margin: 0,
                         }}>
-                            Pernalização
+                            Personalização
                         </h1>
-                        <p>Estamos quase lá! Só mais algumas informações para conhecermos um pouco melhor de você.</p>
+                        <p style={{
+                            color: designTokens.color.text,
+                            fontSize: designTokens.font.size.smallMedium,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            width: '100%',
+                            margin: 0,
+
+                        }}>Estamos quase lá! Só mais algumas informações para conhecermos um pouco melhor de você.</p>
                     </div>
                     <div style={{
                         display: 'flex',
@@ -323,13 +338,9 @@ export function RegisterForm() {
                         currentStep={formStep}
                         steps={steps.length - 1}
                         disabled={!watch('address') || !isValid}
-                        onClickBack={() => {
-                            setFormStep(formStep - 1)
-                        }}
+                        onClickBack={() => setFormStep(formStep - 1)}
                         onClickNext={() => setFormStep(formStep + 1)}
-                        onClickSubmit={() => {
-                            setFormStep(formStep + 1)
-                        }}
+                        onClickSubmit={() => setFormStep(formStep + 1)}
                     />
                 </section>
             )}
@@ -341,6 +352,7 @@ export function RegisterForm() {
                 }}>
                     <h1 style={{
                         color: designTokens.color.text,
+                        fontSize: designTokens.font.size.extraLarge,
                         display: 'flex',
                         justifyContent: 'center',
                         width: '100%',
@@ -348,7 +360,14 @@ export function RegisterForm() {
                     }}>
                         Concluído
                     </h1>
-                    <div>
+                    <div style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: designTokens.spacing.medium,
+                        width: '100%'
+                    }}>
                         <span>Seu cadastro foi realizado com sucesso!</span>
                         <img src={CompleteRegister} alt="cadastro completo" />
                     </div>
@@ -364,7 +383,6 @@ export function RegisterForm() {
                 color: designTokens.color.text,
                 fontSize: designTokens.font.size.medium,
             }}>
-
                 Possui cadastro? Retome sua segurança!
                 <a
                     onMouseEnter={(e) => {
@@ -382,6 +400,12 @@ export function RegisterForm() {
                 > Login </a>
 
             </div>
+            {/* <AuthButton
+                currentStep={formStep}
+                steps={steps.length}
+                onClickBack={() => setFormStep(formStep - 1)}
+                onClickNext={() => setFormStep(formStep + 1)}
+            /> */}
         </form>
     )
 }

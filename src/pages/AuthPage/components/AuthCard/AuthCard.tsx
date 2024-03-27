@@ -19,6 +19,7 @@ export function AuthCard(props: AuthCardProps) {
             padding: designTokens.spacing.large,
             borderRadius: designTokens.borderRadius.medium,
             boxShadow: `0px 4px 13.9px 0px ${designTokens.color.boxShadow}`,
+            backgroundColor: designTokens.color.white,
         }}>
             {props.children}
         </div>
