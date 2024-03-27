@@ -18,7 +18,9 @@ const Template = () => {
         onClickNext: () => {
             setCurrentStep(currentStep + 1)
         },
-        onClickSubmit: Promise.resolve(),
+        onClickFinish: () => {
+            alert('Finish')
+        }
     } as AuthButtonProps
 
     return <AuthButton {...authButtonExemple} />

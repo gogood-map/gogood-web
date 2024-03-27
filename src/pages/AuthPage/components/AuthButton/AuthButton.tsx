@@ -20,6 +20,7 @@ export function AuthButton(props: AuthButtonProps) {
             alignItems: 'center',
             width: '100%',
             gap: designTokens.spacing.medium,
+            marginTop: designTokens.spacing.medium,
         }}>
             {currentStep > 0 && (
                 <button style={{
