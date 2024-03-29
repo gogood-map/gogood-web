@@ -3,12 +3,15 @@ export const designTokens = {
         primary: '#12FFBB',
         secondary: '#334049',
         background: '#F4FBF9',
+        border: '#C5D1E2',
         white: '#FFFFFF',
         selected: '#008961',
         boxShadow: 'rgba(0, 0, 0, 0.25)',
         text: '#334049',
+        error: '#FF0000',
     },
     spacing: {
+        tiny: '4px',
         small: '8px',
         medium: '16px',
         mediumLarge: '24px',
@@ -23,6 +26,7 @@ export const designTokens = {
         family: 'Poppins, sans-serif',
         size: {
             small: '12px',
+            smallMedium: '14px',
             medium: '16px',
             large: '24px',
             extraLarge: '32px',

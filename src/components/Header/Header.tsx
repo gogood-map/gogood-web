@@ -66,6 +66,7 @@ export function Header(props: HeaderProps) {
                         {React.Children.map(children, (child) => {
                             if (isValidElement<HeaderItemProps>(child)) {
                                 return React.cloneElement(child, {
+                                    key: child.props.path,
                                     onClick: () => handleClick(child.props.path)
                                 })
                             }

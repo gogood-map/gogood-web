@@ -2,7 +2,7 @@ import { Header } from './Header'
 import { HeaderItem } from '../HeaderItem/HeaderItem'
 
 export default {
-    title: 'Header',
+    title: 'Components/Header',
     component: Header
 }
 
