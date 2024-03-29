@@ -16,6 +16,7 @@
     "@ladle/react": "^4.0.2",
     "@react-oauth/google": "^0.12.1",
     "design-tokens": "file:design-tokens",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.1",
