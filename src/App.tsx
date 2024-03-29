@@ -3,9 +3,11 @@ import { routes } from './routes'
 import { BrowserRouter } from 'react-router-dom'
 
 function App() {
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+
   return (
     <BrowserRouter>
-      <GoogleOAuthProvider clientId='112629213943-ltci50f3petj9rfckhofatc6sve64btj.apps.googleusercontent.com'>
+      <GoogleOAuthProvider clientId={clientId ? clientId : ''}>
         {routes}
       </GoogleOAuthProvider>
     </BrowserRouter>
