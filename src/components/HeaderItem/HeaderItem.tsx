@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useEffect, useState } from 'react' 
+import { useEffect, useState } from 'react'
 
 export type HeaderItemProps = {
     label: string
@@ -22,11 +22,9 @@ export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
         fontWeight: designTokens.font.weight.regular
     })
 
-    console.log("divRef: ", divRef)
-
     useEffect(() => {
-        if (divRef){
-            if(divRef === path){
+        if (divRef) {
+            if (divRef === path) {
                 setStyleItem({
                     textDecoration: 'underline',
                     color: designTokens.color.selected,
@@ -40,7 +38,7 @@ export function HeaderItem({ label, path, onClick }: HeaderItemProps) {
                 })
             }
         } else {
-            if(url === path){
+            if (url === path) {
                 setStyleItem({
                     textDecoration: 'underline',
                     color: designTokens.color.selected,

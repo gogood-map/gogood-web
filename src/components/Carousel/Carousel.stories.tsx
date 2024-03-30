@@ -8,17 +8,17 @@ export default {
 const cards = [
     {
         title: 'Card 1',
-        tags: [ 
+        tags: [
             { name: 'Tag 1', color: 'red' },
-            { name: 'Tag 2', color: 'blue' } 
+            { name: 'Tag 2', color: 'blue' }
         ],
         onClick: () => { }
     },
     {
         title: 'Card 2',
-        tags: [ 
+        tags: [
             { name: 'Tag 3', color: 'green' },
-            { name: 'Tag 4', color: 'yellow' } 
+            { name: 'Tag 4', color: 'yellow' }
         ],
         onClick: () => { }
     }

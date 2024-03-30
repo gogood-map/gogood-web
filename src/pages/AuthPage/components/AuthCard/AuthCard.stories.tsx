@@ -6,6 +6,6 @@ export default {
     component: AuthCard,
 }
 
-const Template = () => <AuthCard children={<RegisterForm/>} /> 
+const Template = () => <AuthCard children={<RegisterForm />} />
 
 export const Register = Template.bind({})

@@ -32,7 +32,7 @@ export function Layout() {
                 maxWidth: '1376px',
                 width: '100%',
                 gap: designTokens.spacing.large
-            
+
             }}>
                 <Header>
                     {navItems.map((item, index) => (

@@ -19,7 +19,7 @@ export function NotFound() {
                 gap: '1rem'
             }}>
                 <h1>Página não encontrada!</h1>
-                <Button label='Voltar' type='solid' onClick={() => {navigate('/')}} />
+                <Button label='Voltar' type='solid' onClick={() => { navigate('/') }} />
             </div>
         </div>
     );

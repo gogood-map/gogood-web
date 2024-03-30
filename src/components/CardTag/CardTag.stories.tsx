@@ -1,8 +1,8 @@
 import { CardTag } from './CardTag'
 
 export default {
-  title: 'Components/CardTag',
-  component: CardTag
+    title: 'Components/CardTag',
+    component: CardTag
 }
 
 const tag = {

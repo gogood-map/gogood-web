@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { TagProps, CardTag } from '../CardTag/CardTag'
 
 export type InformativeCardProps = {
@@ -11,10 +11,6 @@ export type InformativeCardProps = {
 export function InformativeCard(props: InformativeCardProps) {
     const { title, tags, onClick } = props
     const [isHovered, setIsHovered] = useState(false)
-
-    useEffect(() => {
-        console.log('isHovered', isHovered)
-    }, [isHovered])
 
     const defaultStyle = {
         display: 'flex',

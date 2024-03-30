@@ -12,22 +12,22 @@ export function Home() {
     const cards = [
         {
             title: 'Casos de crimes',
-            tags: [ { name: 'Últimas 24h', color: designTokens.color.secondary } ],
+            tags: [{ name: 'Últimas 24h', color: designTokens.color.secondary }],
             onClick: () => { }
         },
         {
             title: 'Escala de furtos',
-            tags: [ { name: 'Queda', color: '#10C200' } ],
+            tags: [{ name: 'Queda', color: '#10C200' }],
             onClick: () => { }
         },
         {
             title: 'Registros',
-            tags: [ { name: 'Última semana', color: designTokens.color.secondary } ],
+            tags: [{ name: 'Última semana', color: designTokens.color.secondary }],
             onClick: () => { }
         },
         {
             title: 'Sua região',
-            tags: [ { name: 'Últimos dias', color: designTokens.color.secondary }, { name: 'alerta', color: '#F11D00' } ],
+            tags: [{ name: 'Últimos dias', color: designTokens.color.secondary }, { name: 'alerta', color: '#F11D00' }],
             onClick: () => { }
         }
     ]
@@ -39,11 +39,11 @@ export function Home() {
             alignItems: 'center',
             width: '100%'
         }}>
-            <HomeBanner 
+            <HomeBanner
                 image={ImageBanner}
                 title={bannerTitle}
                 subtitle={bannerSubtitle}
-                onClick={bannerOnClick} 
+                onClick={bannerOnClick}
             />
             <Carousel cards={cards} />
         </div>
