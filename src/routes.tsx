@@ -9,8 +9,8 @@ export const routes = (
     <Route path='' element={<Layout />}>
       <Route path='' element={<Home />} />
     </Route>
-    <Route path='cadastrar' element={<AuthPage type='register' />} />
-    <Route path='entrar' element={<AuthPage type='login' />} />
+    <Route path='cadastro' element={<AuthPage type='register' />} />
+    <Route path='login' element={<AuthPage type='login' />} />
     <Route path='*' element={<NotFound />} />
   </Routes>
 )
