@@ -1,7 +1,7 @@
 import { HomeBanner } from '../../components/HomeBanner/HomeBanner'
-import ImageBanner from '../../assets/ImageBanner.svg'
 import { Carousel } from '../../components/Carousel/Carousel'
 import { designTokens } from 'design-tokens'
+import bannerImage from '../../assets/banner-image.svg'
 
 export function Home() {
 
@@ -40,7 +40,7 @@ export function Home() {
             width: '100%'
         }}>
             <HomeBanner
-                image={ImageBanner}
+                image={bannerImage}
                 title={bannerTitle}
                 subtitle={bannerSubtitle}
                 onClick={bannerOnClick}

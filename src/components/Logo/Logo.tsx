@@ -1,16 +1,16 @@
-import Logo from '../../assets/Logo.svg'
+import logo from '../../assets/logo.svg'
 import { useNavigate } from 'react-router-dom'
 
 export type LogoProps = {
     size: 'small' | 'medium' | 'large'
 }
 
-export function LogoImage(props: LogoProps) {
+export function Logo(props: LogoProps) {
     const { size } = props
     const navigate = useNavigate()
 
     return (
-        <img src={Logo} alt='logo'
+        <img src={logo} alt='logo'
             onClick={() => navigate('/')}
             style={{
                 cursor: 'pointer',

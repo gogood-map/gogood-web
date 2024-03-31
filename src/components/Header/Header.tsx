@@ -2,7 +2,7 @@ import React, { useEffect, useState, isValidElement } from 'react'
 import { designTokens } from 'design-tokens'
 import { HeaderItemProps } from '../HeaderItem/HeaderItem'
 import { useNavigate } from 'react-router-dom'
-import { LogoImage } from '../Logo/Logo'
+import { Logo } from '../Logo/Logo'
 import { Button } from '../Button/Button'
 
 export type HeaderProps = {
@@ -52,7 +52,7 @@ export function Header(props: HeaderProps) {
         }}>
 
             {!isMobile && <>
-                <LogoImage size='large' />
+                <Logo size='large' />
                 <nav style={{
                     userSelect: 'none',
                 }}>

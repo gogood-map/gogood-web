@@ -22,5 +22,5 @@ export function NotFound() {
                 <Button label='Voltar' type='solid' onClick={() => { navigate('/') }} />
             </div>
         </div>
-    );
+    )
 }

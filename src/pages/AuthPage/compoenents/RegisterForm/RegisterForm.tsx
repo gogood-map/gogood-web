@@ -2,12 +2,12 @@ import { isAlpha, isEmail } from 'validator'
 import { designTokens } from 'design-tokens'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Stepper } from '../../../../components/Steper/Stepper'
+import { Stepper } from '../../../../components/Stepper/Stepper'
 import { AuthButton } from '../AuthButton/AuthButton'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
-import CompleteRegister from '../../../../assets/CompleteRegister.svg'
+import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
 
 export function RegisterForm() {
@@ -373,8 +373,8 @@ export function RegisterForm() {
                     }}>
                         <span>Seu cadastro foi realizado com sucesso!</span>
                         <img
-                            src={CompleteRegister}
-                            alt="cadastro completo"
+                            src={completeRegister}
+                            alt='cadastro completo'
                             style={{
                                 width: '100%',
                             }}
@@ -408,7 +408,7 @@ export function RegisterForm() {
                         textDecoration: 'underline',
                         cursor: 'pointer'
                     }}
-                    onClick={() => { navigate('/entrar') }}
+                    onClick={() => { navigate('/login') }}
                 > Login </a>
             </div>}
         </form>

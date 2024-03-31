@@ -12,13 +12,13 @@ export function Carousel(props: CarouselProps) {
 
     useEffect(() => {
         const handleResize = () => {
-            setCurrentWindowWidth(window.innerWidth);
-        };
+            setCurrentWindowWidth(window.innerWidth)
+        }
 
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', handleResize)
 
         return () => {
-            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('resize', handleResize)
         }
     }, [])
 

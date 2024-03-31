@@ -1,6 +1,6 @@
 import { designTokens } from 'design-tokens'
-import ArrowButtonNext from '../../../../assets/ArrowButtonNext.svg'
-import ArrowButtonBack from '../../../../assets/ArrowButtonBack.svg'
+import formNextButton from '../../../../assets/form-next-button.svg'
+import formBackButton from '../../../../assets/form-back-button.svg'
 
 export type AuthButtonProps = {
     steps: number
@@ -23,54 +23,57 @@ export function AuthButton(props: AuthButtonProps) {
         }}>
             {currentStep > 0 && steps > 1 && (
                 <button style={{
-                    backgroundColor: 'transparent',
-                    backgroundImage: `url(${ArrowButtonBack})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    color: designTokens.color.text,
                     border: `none`,
                     borderRadius: '50%',
                     cursor: 'pointer',
                     width: '50px',
                     height: '50px',
+                    padding: '0',
                 }} onClick={onClickBack}
                     type='reset'
-                    value={''} />
+                    value={''}>
+                    <img src={formBackButton} alt='Voltar' style={{
+                        width: '100%',
+                        height: '100%'
+                    }} />
+                </button>
             )}
             {currentStep < steps - 1 && steps > 1 && (
                 <button style={{
-                    backgroundColor: 'transparent',
-                    backgroundImage: `url(${ArrowButtonNext})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    color: designTokens.color.text,
                     border: `none`,
                     borderRadius: '50%',
                     cursor: disabled ? 'undefined' : 'pointer',
                     width: '50px',
                     height: '50px',
                     opacity: disabled ? 0.5 : 1,
+                    padding: '0',
                 }} onClick={onClickNext}
                     disabled={disabled}
-                    value={''} />
+                    value={''}>
+                    <img src={formNextButton} alt='Próximo' style={{
+                        width: '100%',
+                        height: '100%'
+                    }} />
+                </button>
             )}
             {(currentStep === steps - 1 || steps === 1) && (
                 <button style={{
-                    backgroundColor: 'transparent',
-                    backgroundImage: `url(${ArrowButtonNext})`,
-                    backgroundSize: 'cover',
-                    backgroundRepeat: 'no-repeat',
-                    color: designTokens.color.text,
                     border: `none`,
                     borderRadius: '50%',
                     cursor: disabled ? 'auto' : 'pointer',
                     width: '50px',
                     height: '50px',
                     opacity: disabled ? 0.5 : 1,
+                    padding: '0',
                 }} onClick={onClickSubmit}
                     disabled={disabled}
                     type='submit'
-                    value={''} />
+                    value={''}>
+                    <img src={formNextButton} alt='Enviar' style={{
+                        width: '100%',
+                        height: '100%'
+                    }} />
+                </button>
             )}
 
         </div>

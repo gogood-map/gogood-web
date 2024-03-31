@@ -1,9 +1,9 @@
 import { designTokens } from 'design-tokens'
-import { AuthCard } from './components/AuthCard/AuthCard'
-import { LoginForm } from './components/LoginForm/LoginForm'
-import { RegisterForm } from './components/RegisterForm/RegisterForm'
-import BackgroundSign from '../../assets/BackgroundSign.svg'
-import BackButton from '../../assets/BackButton.svg'
+import { AuthCard } from './compoenents/AuthCard/AuthCard'
+import { LoginForm } from './compoenents/LoginForm/LoginForm'
+import { RegisterForm } from './compoenents/RegisterForm/RegisterForm'
+import formBackground from '../../assets/form-background.svg'
+import backButton from '../../assets/back-button.svg'
 
 export type AuthPageProps = {
     type?: 'login' | 'register'
@@ -19,7 +19,7 @@ export function AuthPage(props: AuthPageProps) {
             alignItems: 'center',
             height: '100vh',
             width: '100%',
-            backgroundImage: `url(${BackgroundSign})`,
+            backgroundImage: `url(${formBackground})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -29,12 +29,9 @@ export function AuthPage(props: AuthPageProps) {
                     position: 'absolute',
                     top: designTokens.spacing.medium,
                     left: designTokens.spacing.medium,
-                    backgroundImage: `url(${BackButton})`,
-                    backgroundPosition: 'center',
-                    backgroundSize: 'cover',
                     border: 'none',
                     borderRadius: '50%',
-                    padding: designTokens.spacing.small,
+                    padding: '0',
                     boxShadow: `0px 4px 4px ${designTokens.color.boxShadow}`,
                     cursor: 'pointer',
                     width: '50px',
@@ -42,6 +39,10 @@ export function AuthPage(props: AuthPageProps) {
                 }}
                 onClick={() => window.history.back()}
             >
+                <img src={backButton} alt='Voltar' style={{
+                    width: '100%',
+                    height: '100%'
+                }} />
             </button>
             {type === 'register' && (
                 <AuthCard>
