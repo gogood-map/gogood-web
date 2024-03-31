@@ -374,7 +374,7 @@ export function RegisterForm() {
                         <span>Seu cadastro foi realizado com sucesso!</span>
                         <img
                             src={completeRegister}
-                            alt="cadastro completo"
+                            alt='cadastro completo'
                             style={{
                                 width: '100%',
                             }}
@@ -408,7 +408,7 @@ export function RegisterForm() {
                         textDecoration: 'underline',
                         cursor: 'pointer'
                     }}
-                    onClick={() => { navigate('/entrar') }}
+                    onClick={() => { navigate('/login') }}
                 > Login </a>
             </div>}
         </form>

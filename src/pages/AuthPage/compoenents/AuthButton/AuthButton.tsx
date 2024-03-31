@@ -32,7 +32,7 @@ export function AuthButton(props: AuthButtonProps) {
                 }} onClick={onClickBack}
                     type='reset'
                     value={''}>
-                    <img src={formBackButton} alt="Voltar" style={{
+                    <img src={formBackButton} alt='Voltar' style={{
                         width: '100%',
                         height: '100%'
                     }} />
@@ -50,7 +50,7 @@ export function AuthButton(props: AuthButtonProps) {
                 }} onClick={onClickNext}
                     disabled={disabled}
                     value={''}>
-                    <img src={formNextButton} alt="Próximo" style={{
+                    <img src={formNextButton} alt='Próximo' style={{
                         width: '100%',
                         height: '100%'
                     }} />
@@ -69,7 +69,7 @@ export function AuthButton(props: AuthButtonProps) {
                     disabled={disabled}
                     type='submit'
                     value={''}>
-                    <img src={formNextButton} alt="Enviar" style={{
+                    <img src={formNextButton} alt='Enviar' style={{
                         width: '100%',
                         height: '100%'
                     }} />

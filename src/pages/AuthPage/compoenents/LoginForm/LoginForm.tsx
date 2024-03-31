@@ -55,10 +55,10 @@ export function LoginForm() {
                 flexDirection: 'column',
             }}>
 
-                <label htmlFor="email">Email</label>
+                <label htmlFor='email'>Email</label>
                 <input
-                    id="email"
-                    type="email"
+                    id='email'
+                    type='email'
                     style={textInputStyle}
                     {...register('email', {
                         required: { value: true, message: 'Email obrigatório' },
@@ -80,7 +80,7 @@ export function LoginForm() {
                 flexDirection: 'column',
 
             }}>
-                <label htmlFor="password">Password</label>
+                <label htmlFor='password'>Password</label>
                 <input style={textInputStyle}
                     id='password'
                     type='password'
@@ -143,7 +143,7 @@ export function LoginForm() {
                             textDecoration: 'underline',
                             cursor: 'pointer'
                         }}
-                        onClick={() => { navigate('/cadastrar') }}
+                        onClick={() => { navigate('/cadastro') }}
                     > Cadastro </a>
 
                 </div>
