@@ -1,4 +1,4 @@
-import logo from '../../assets/Logo.svg'
+import logo from '../../assets/logo.svg'
 import { useNavigate } from 'react-router-dom'
 
 export type LogoProps = {
