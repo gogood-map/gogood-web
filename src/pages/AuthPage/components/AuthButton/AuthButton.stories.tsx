@@ -14,12 +14,14 @@ const Template = () => {
         currentStep: currentStep,
         onClickBack: () => {
             setCurrentStep(currentStep - 1)
+            console.log(currentStep)
         },
         onClickNext: () => {
             setCurrentStep(currentStep + 1)
+            console.log(currentStep)
         },
         onClickFinish: () => {
-            alert('Finish')
+            console.log('Finish')
         }
     } as AuthButtonProps
 

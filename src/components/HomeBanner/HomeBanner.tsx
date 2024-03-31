@@ -1,4 +1,4 @@
-import { designTokens } from "design-tokens"
+import { designTokens } from 'design-tokens'
 
 export type HomeBannerProps = {
     image?: string
@@ -9,8 +9,6 @@ export type HomeBannerProps = {
 
 export function HomeBanner(props: HomeBannerProps) {
     const { image, title, subtitle, onClick } = props
-
-
 
     return (
         <div style={{
