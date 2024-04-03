@@ -7,12 +7,14 @@ import { AuthButton } from '../AuthButton/AuthButton'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
+import { User, useAuth } from '../../../../components/AuthProvider/AuthProvider'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
 
 export function RegisterForm() {
     const [formStep, setFormStep] = useState(0)
     const navigate = useNavigate()
+    const { login } = useAuth()
     const steps = [
         { title: 'Cadastro' },
         { title: 'Dados' },
@@ -28,6 +30,25 @@ export function RegisterForm() {
 
     const onSubmit = (data: unknown) => {
         console.log(data)
+        login(data as User)
+        navigate('/')
+    }
+
+    type GoogleResponse = {
+        aud: string
+        azp: string
+        email: string
+        email_verified: true
+        exp: number
+        family_name: string
+        given_name: string
+        iat: number
+        iss: string
+        jti: string
+        name: string
+        nbf: number
+        picture: string
+        sub: string
     }
 
 
@@ -71,7 +92,6 @@ export function RegisterForm() {
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
-            // gap: designTokens.spacing.mediumLarge,
         }}
             onSubmit={handleSubmit(onSubmit)}>
             <Stepper steps={steps} currentStep={formStep} />
@@ -162,8 +182,13 @@ export function RegisterForm() {
                             text='signin'
                             onSuccess={response => {
                                 if (response.credential) {
-                                    const userInfo = jwtDecode(response.credential)
-                                    console.log(userInfo)
+                                    const userInfo = jwtDecode(response.credential) as GoogleResponse
+                                    const user = {
+                                        name: userInfo.name,
+                                        email: userInfo.email,
+                                        picture: userInfo.picture
+                                    } as User
+                                    login(user)
                                 }
                             }}
                             shape='circle'
