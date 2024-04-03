@@ -4,6 +4,8 @@ import { HeaderItemProps } from '../HeaderItem/HeaderItem'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../Logo/Logo'
 import { Button } from '../Button/Button'
+import { useAuth } from '../AuthProvider/AuthProvider'
+import { UserIcon } from '../UserIcon/UserIcon'
 
 export type HeaderProps = {
     children?: React.ReactNode | React.ReactNode[]
@@ -11,6 +13,7 @@ export type HeaderProps = {
 
 export function Header(props: HeaderProps) {
     const { children } = props
+    const { user } = useAuth()
     const [isMobile, setIsMobile] = useState(false)
     const navigate = useNavigate()
 
@@ -80,8 +83,13 @@ export function Header(props: HeaderProps) {
                     gap: designTokens.spacing.medium,
 
                 }}>
-                    <Button label='Entrar' type='outline' onClick={() => handleClick('/login')} />
-                    <Button label='Cadastrar' type='solid' onClick={() => handleClick('/cadastro')} />
+                    {!user?.name &&
+                        <>
+                            <Button label='Entrar' type='outline' onClick={() => handleClick('/login')} />
+                            <Button label='Cadastrar' type='solid' onClick={() => handleClick('/cadastro')} />
+                        </>
+                    }
+                    {user?.name && <UserIcon />}
                 </div>
             </>}
 
