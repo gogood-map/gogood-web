@@ -29,7 +29,8 @@ export function UserIcon() {
 
     return (
         <div style={isHovered ? { ...defaultStyle, ...hoverStyle } : defaultStyle}
-            
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}            
             onClick={() => {
                 console.log('Clicou no usuário!')
                 navigate('/profile')
