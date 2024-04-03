@@ -8,7 +8,7 @@ export type User = {
 
 type AuthContextType = {
     user: User | null;
-    login: (userData: User) => void;
+    login: (userData: User, persistData: boolean) => void;
     logout: () => void;
 }
 
@@ -27,13 +27,21 @@ export const useAuth = (): AuthContextType => {
 };
 
 export function AuthProvider(props: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user') || null;
+    const [user, setUser] = useState<User | null>(storedUser ? JSON.parse(storedUser) : null);
 
-    const login = (userData: User) => {
+    const login = (userData: User, persistData: boolean) => {
+        if (persistData) {
+            localStorage.setItem('user', JSON.stringify(userData));
+        } else {
+            sessionStorage.setItem('user', JSON.stringify(userData));
+        }
         setUser(userData);
     };
 
     const logout = () => {
+        localStorage.removeItem('user');
+        sessionStorage.removeItem('user');
         setUser(null);
     };
 

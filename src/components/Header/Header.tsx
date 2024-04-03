@@ -4,7 +4,7 @@ import { HeaderItemProps } from '../HeaderItem/HeaderItem'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '../Logo/Logo'
 import { Button } from '../Button/Button'
-import { useAuth } from '../AuthProvider/AuthProvider'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 import { UserIcon } from '../UserIcon/UserIcon'
 
 export type HeaderProps = {

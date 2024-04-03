@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useAuth } from '../AuthProvider/AuthProvider'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 

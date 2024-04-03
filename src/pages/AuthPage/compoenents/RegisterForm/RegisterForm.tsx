@@ -7,7 +7,7 @@ import { AuthButton } from '../AuthButton/AuthButton'
 import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
-import { User, useAuth } from '../../../../components/AuthProvider/AuthProvider'
+import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
 
