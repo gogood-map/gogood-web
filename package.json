@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "cors": "^2.8.5",
     "design-tokens": "file:design-tokens",
+    "express": "^4.19.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +30,7 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.3",
     "vite": "^5.2.0"
   }
 }
