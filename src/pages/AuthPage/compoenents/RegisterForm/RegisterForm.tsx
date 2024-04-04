@@ -11,6 +11,22 @@ import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
 
+export type GoogleResponse = {
+    aud: string
+    azp: string
+    email: string
+    email_verified: true
+    exp: number
+    family_name: string
+    given_name: string
+    iat: number
+    iss: string
+    jti: string
+    name: string
+    nbf: number
+    picture: string
+    sub: string
+}
 export function RegisterForm() {
     const [formStep, setFormStep] = useState(0)
     const navigate = useNavigate()
@@ -30,26 +46,10 @@ export function RegisterForm() {
 
     const onSubmit = (data: unknown) => {
         console.log(data)
-        login(data as User)
+        login(data as User, false)
         navigate('/')
     }
 
-    type GoogleResponse = {
-        aud: string
-        azp: string
-        email: string
-        email_verified: true
-        exp: number
-        family_name: string
-        given_name: string
-        iat: number
-        iss: string
-        jti: string
-        name: string
-        nbf: number
-        picture: string
-        sub: string
-    }
 
 
     const RadioInput = styled.input.attrs({ type: 'radio' })`
@@ -188,7 +188,8 @@ export function RegisterForm() {
                                         email: userInfo.email,
                                         picture: userInfo.picture
                                     } as User
-                                    login(user)
+                                    login(user, false)
+                                    navigate('/')
                                 }
                             }}
                             shape='circle'

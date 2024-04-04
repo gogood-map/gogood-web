@@ -33,7 +33,7 @@ export function UserIcon() {
             onMouseLeave={() => setIsHovered(false)}            
             onClick={() => {
                 console.log('Clicou no usuário!')
-                navigate('/profile')
+                navigate('/perfil')
             }}
         >
             <span>{user?.name}</span>

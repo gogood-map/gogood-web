@@ -5,9 +5,12 @@ import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import { isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
+import { GoogleResponse } from '../RegisterForm/RegisterForm'
+import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 
 export function LoginForm() {
     const navigate = useNavigate()
+    const { login } = useAuth()
     const {
         register,
         handleSubmit,
@@ -119,8 +122,14 @@ export function LoginForm() {
                     text='signin'
                     onSuccess={response => {
                         if (response.credential) {
-                            const userInfo = jwtDecode(response.credential)
-                            console.log(userInfo)
+                            const userInfo = jwtDecode(response.credential) as GoogleResponse
+                            const user = {
+                                name: userInfo.name,
+                                email: userInfo.email,
+                                picture: userInfo.picture
+                            }
+
+                            login(user, true)
                         }
                     }}
                     shape='circle'
