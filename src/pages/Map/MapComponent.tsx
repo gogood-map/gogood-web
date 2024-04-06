@@ -28,6 +28,8 @@ export function MapComponent() {
             center: { lat: -23.5325011, lng: -46.4013353 },
             mapTypeId: 'roadmap',
             mapTypeControl: false,
+            streetViewControl: false,
+            fullscreenControl: false,
         })
 
         setMap(mapInstance)
