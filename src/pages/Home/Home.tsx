@@ -2,12 +2,14 @@ import { HomeBanner } from '../../components/HomeBanner/HomeBanner'
 import { Carousel } from '../../components/Carousel/Carousel'
 import { designTokens } from 'design-tokens'
 import bannerImage from '../../assets/banner-image.svg'
+import { useNavigate } from 'react-router-dom'
 
 export function Home() {
+    const navigate = useNavigate()
 
     const bannerTitle = 'Segurança e tranquilidade em cada jornada.'
     const bannerSubtitle = 'Explore com confiança nossa plataforma. Indicamos a melhor rota para você. Combinamos tecnologia avançada e dados precisos para proporcionar uma experiência de navegação tranquila. Viaje com tranquilidade, vai de good!'
-    const bannerOnClick = () => console.log('Clicou!')
+    const bannerOnClick = () => navigate('/mapa')
 
     const cards = [
         {
