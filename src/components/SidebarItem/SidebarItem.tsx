@@ -7,9 +7,10 @@ export type SidebarItemProps = {
     text: string;
     active?: boolean;
     alert?: boolean;
+    onClick?: () => void;
 }
 
-export function SidebarItem({ icon, text, alert }: SidebarItemProps) {
+export function SidebarItem({ icon, text, alert, onClick }: SidebarItemProps) {
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
     const [isHovered, setIsHovered] = useState(false)
 
@@ -49,7 +50,7 @@ export function SidebarItem({ icon, text, alert }: SidebarItemProps) {
                 padding: 0,
                 cursor: 'pointer',
             }}
-            onClick={() => { console.log('clicked') }}
+            onClick={onClick}
         >
             {icon}
             <span

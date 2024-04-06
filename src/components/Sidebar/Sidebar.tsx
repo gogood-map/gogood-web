@@ -2,6 +2,8 @@ import { FiLogOut, FiMenu } from 'react-icons/fi';
 import { createContext, useState, ReactNode } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export type SidebarContextProps = {
     expanded: boolean;
@@ -12,6 +14,8 @@ export const SidebarContext = createContext<SidebarContextProps | undefined>(und
 export function Sidebar({ children }: { children: ReactNode }) {
     const [expanded, setExpanded] = useState(false)
     const [isHovered, setIsHovered] = useState(false)
+    const navigate = useNavigate()
+    const { logout } = useAuth()
 
     const buttonStyle = {
         backgroundColor: 'rgb(249, 250, 251)',
@@ -75,7 +79,10 @@ export function Sidebar({ children }: { children: ReactNode }) {
                         {children}
                     </ul>
                     <div>
-                        <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} />
+                        <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
+                            logout()
+                            navigate('/')
+                        }} />
                     </div>
                 </SidebarContext.Provider>
             </nav>
