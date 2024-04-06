@@ -7,17 +7,25 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "stories": "npx ladle serve",
+    "start": "node server.js"
   },
   "dependencies": {
+    "@googlemaps/react-wrapper": "^1.1.35",
+    "@googlemaps/typescript-guards": "^2.0.3",
+    "@ladle/react": "^4.0.3",
     "@react-oauth/google": "^0.12.1",
+    "@types/google.maps": "^3.55.6",
     "cors": "^2.8.5",
     "design-tokens": "file:design-tokens",
     "express": "^4.19.2",
+    "fast-equals": "^5.0.1",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.2",
+    "react-icons": "^5.0.1",
     "react-router-dom": "^6.22.3",
     "styled-components": "^6.1.8",
     "validator": "^13.11.0"
