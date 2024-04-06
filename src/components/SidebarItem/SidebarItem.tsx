@@ -73,7 +73,6 @@ export function SidebarItem({ icon, text, alert }: SidebarItemProps) {
                         borderRadius: '50%',
                         width: '0.5rem',
                         height: '0.5rem',
-                        transition: 'margin 1s ease',
                     }}
                 />
             )}

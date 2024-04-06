@@ -30,6 +30,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
             position: 'fixed',
             top: '0',
             left: '0',
+            zIndex: 1,
         }}>
             <nav style={{
                 display: 'flex',
