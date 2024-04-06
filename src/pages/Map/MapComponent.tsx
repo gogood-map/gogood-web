@@ -137,7 +137,6 @@ export function MapComponent() {
             <div id="floating-panel" style={{
                 position: 'absolute',
                 top: '10px',
-                left: '25%',
                 zIndex: 1,
                 backgroundColor: designTokens.color.white,
                 borderRadius: designTokens.borderRadius.small
