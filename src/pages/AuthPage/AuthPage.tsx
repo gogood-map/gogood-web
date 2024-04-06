@@ -4,6 +4,7 @@ import { LoginForm } from './compoenents/LoginForm/LoginForm'
 import { RegisterForm } from './compoenents/RegisterForm/RegisterForm'
 import formBackground from '../../assets/form-background.svg'
 import backButton from '../../assets/back-button.svg'
+import { useNavigate } from 'react-router-dom'
 
 export type AuthPageProps = {
     type?: 'login' | 'register'
@@ -11,6 +12,7 @@ export type AuthPageProps = {
 
 export function AuthPage(props: AuthPageProps) {
     const { type } = props
+    const navigate = useNavigate()
 
     return (
         <div style={{
@@ -37,7 +39,7 @@ export function AuthPage(props: AuthPageProps) {
                     width: '50px',
                     height: '50px'
                 }}
-                onClick={() => window.history.back()}
+                onClick={() => { navigate('/') }}
             >
                 <img src={backButton} alt='Voltar' style={{
                     width: '100%',
