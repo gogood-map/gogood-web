@@ -4,14 +4,15 @@ import { AuthPage } from './pages/AuthPage/AuthPage.tsx'
 import { Home } from './pages/Home/Home.tsx'
 import { NotFound } from './pages/NotFound/NotFound.tsx'
 import { SidebarLayout } from './pages/SidebarLayout/SidebarLayout.tsx'
+import { MapComponent } from './pages/Map/MapComponent.tsx'
 
 export const routes = (
     <Routes>
         <Route path='' element={<Layout />}>
             <Route path='' element={<Home />} />
         </Route>
-        <Route path='sidebartexte' element={<SidebarLayout />}>
-            
+        <Route path='' element={<SidebarLayout />}>
+            <Route path='mapa' element={<MapComponent />} />
         </Route>
         <Route path='cadastro' element={<AuthPage type='register' />} />
         <Route path='login' element={<AuthPage type='login' />} />
