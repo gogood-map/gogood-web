@@ -37,8 +37,8 @@ export function Header(props: HeaderProps) {
         boxShadow: `-3px 5px 12.4px 0px ${designTokens.color.boxShadow}`,
         backgroundColor: designTokens.color.background,
         borderRadius: designTokens.borderRadius.large,
-        paddingTop: designTokens.spacing.small,
-        paddingBottom: designTokens.spacing.small,
+        paddingTop: designTokens.spacing.medium,
+        paddingBottom: designTokens.spacing.medium,
         paddingLeft: designTokens.spacing.large,
         paddingRight: designTokens.spacing.large
 
