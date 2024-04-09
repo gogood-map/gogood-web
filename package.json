@@ -18,6 +18,7 @@
     "@ladle/react": "^4.0.3",
     "@react-oauth/google": "^0.12.1",
     "@types/google.maps": "^3.55.6",
+    "axios": "^1.6.8",
     "cors": "^2.8.5",
     "design-tokens": "file:design-tokens",
     "express": "^4.19.2",
