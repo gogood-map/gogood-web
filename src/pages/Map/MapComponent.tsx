@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
+import axios from 'axios'
 
 export function MapComponent() {
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
+    const [data, setData] = useState<google.maps.LatLng[]>([])
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: 'weekly',
@@ -23,7 +25,6 @@ export function MapComponent() {
         })
     }, [])
 
-    const [data, setData] = useState<google.maps.LatLng[]>([])
 
     useEffect(() => {
         lazyLoadData()
@@ -36,26 +37,32 @@ export function MapComponent() {
         }
     }, [map, data])
 
-    const lazyLoadData = async () => {
-        const promises = []
-        for (let i = 0; i < 45; i++) {
-            promises.push(loadData(i))
+    
+    const lazyLoadData = () => {
+        for (let i = 1; i <= 45; i++) {
+            loadData(i)
         }
+    }
+    
+    type ResponseAxios = {
+        id: string,
+        mapData: {
+            id: string,
+            latitude: number,
+            longitude: number,
+        }[]
     }
 
     const loadData = async (i: number) => {
-        try {
-            const response = await fetch(`http://localhost:8080/consultar/parte:lista${i}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }) as Response & { json: () => Promise<google.maps.LatLng[]> }
-            
-            setData((prevData) => [...prevData, ...data])
-        } catch (error) {
-            console.error(error)
-        }
+        axios.get(`http://localhost:8080/consultar/parte:lista${i}`)
+            .then((response) => {
+                const data = response.data as ResponseAxios
+                const newData = data.mapData.map((item) => new google.maps.LatLng(item.latitude, item.longitude))
+                setData((prevData) => [...prevData, ...newData])
+            })
+            .catch((error) => {
+                console.error(error)
+            })
     }
 
     return (
