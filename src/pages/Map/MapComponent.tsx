@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export function MapComponent() {
     const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
+    const [_heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -13,37 +13,42 @@ export function MapComponent() {
     })
 
     useEffect(() => {
-        loader.load().then(() => {
-            const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
-                center: { lat: -23.7128, lng: -47.006 },
-                zoom: 8,
-                mapTypeControl: false,
-                streetViewControl: false,
-                fullscreenControl: false,
+        loader.load()
+            .then(() => {
+                const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
+                    center: { lat: -23.7128, lng: -47.006 },
+                    zoom: 8,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                })
+                setMap(map)
             })
-            setMap(map)
-        })
+            .then(() => {
+                lazyLoadData()
+            })
     }, [])
 
 
+
     useEffect(() => {
-        lazyLoadData()
         if (map) {
             const heatmap = new google.maps.visualization.HeatmapLayer({
                 data,
                 map,
+                maxIntensity: 8
             })
             setHeatmap(heatmap)
         }
     }, [map, data])
 
-    
+
     const lazyLoadData = () => {
         for (let i = 1; i <= 45; i++) {
             loadData(i)
         }
     }
-    
+
     type ResponseAxios = {
         id: string,
         mapData: {
@@ -54,7 +59,7 @@ export function MapComponent() {
     }
 
     const loadData = async (i: number) => {
-        axios.get(`http://localhost:8080/consultar/parte:lista${i}`)
+        axios.get(`http://52.226.122.160:8080/consultar/parte:lista${i}`)
             .then((response) => {
                 const data = response.data as ResponseAxios
                 const newData = data.mapData.map((item) => new google.maps.LatLng(item.latitude, item.longitude))
