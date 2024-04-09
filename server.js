@@ -4,10 +4,10 @@ import cors from "cors"
 const server = express()
 server.use(cors())
 
-server.use(express.static('dist'))
+server.use(express.static('./dist'))
 
 server.get('/', (req, res) => {
-    res.sendFile('dist/index.html')
+    res.sendFile('./dist/index.html')
 })
 
 server.listen(3000, () => {
