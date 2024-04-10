@@ -1,76 +1,84 @@
-import { useEffect, useState } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
-import axios from 'axios'
+import { useEffect, useState, useCallback } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
 
 export function MapComponent() {
-    const [map, setMap] = useState<google.maps.Map | null>(null)
-    const [_heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
-    const [data, setData] = useState<google.maps.LatLng[]>([])
+    const [map, setMap] = useState<google.maps.Map | null>(null);
+    const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null);
+    const [data, setData] = useState<google.maps.LatLng[]>([]);
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: 'weekly',
         libraries: ['visualization'],
-    })
+    });
+
+    // Função de debounce
+    const debounce = (func: (...args: any[]) => void, wait: number) => {
+        let timeout: NodeJS.Timeout;
+        return function executedFunction(...args: any[]) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+
+    const debouncedLoadData = useCallback(debounce((lat, lng) => {
+        loadData(lat, lng).then(newData => setData(newData));
+    }, 500), []);
 
     useEffect(() => {
-        loader.load()
-            .then(() => {
-                const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
-                    center: { lat: -23.7128, lng: -47.006 },
-                    zoom: 8,
-                    mapTypeControl: false,
-                    streetViewControl: false,
-                    fullscreenControl: false,
-                })
-                setMap(map)
-            })
-            .then(() => {
-                lazyLoadData()
-            })
-    }, [])
+        loader.load().then(() => {
+            const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
+                center: { lat: -23.5581213, lng: -46.661614 },
+                zoom: 15,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+            });
 
+            map.addListener('center_changed', () => {
+                const center = map.getCenter();
+                if (center) {
+                    debouncedLoadData(center.lat(), center.lng());
+                }
+            });
 
+            setMap(map);
+        });
+    }, []);
 
     useEffect(() => {
-        if (map) {
-            const heatmap = new google.maps.visualization.HeatmapLayer({
+        if (map && data.length) {
+            if (heatmap) {
+                heatmap.setMap(null);
+            }
+            const newHeatmap = new google.maps.visualization.HeatmapLayer({
                 data,
                 map,
-                maxIntensity: 8
-            })
-            setHeatmap(heatmap)
+                maxIntensity: 7,
+            });
+            setHeatmap(newHeatmap);
         }
-    }, [map, data])
+    }, [data, map]);
 
-
-    const lazyLoadData = () => {
-        for (let i = 1; i <= 45; i++) {
-            loadData(i)
+    const loadData = async (lat: number, lng: number) => {
+        try {
+            const response = await fetch(`http://52.226.122.160:8080/consultar/local/${lat}/${lng}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const json = await response.json();
+            return json.mapData.map((item: { latitude: number; longitude: number; }) => new google.maps.LatLng(item.latitude, item.longitude));
+        } catch (error) {
+            console.error(error);
+            return [];
         }
-    }
+    };
 
-    type ResponseAxios = {
-        id: string,
-        mapData: {
-            id: string,
-            latitude: number,
-            longitude: number,
-        }[]
-    }
-
-    const loadData = async (i: number) => {
-        axios.get(`http://52.226.122.160:8080/consultar/parte:lista${i}`)
-            .then((response) => {
-                const data = response.data as ResponseAxios
-                const newData = data.mapData.map((item) => new google.maps.LatLng(item.latitude, item.longitude))
-                setData((prevData) => [...prevData, ...newData])
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    }
-
-    return (
-        <div id="map" style={{ width: '100%', height: '100%' }}></div>
-    )
+    return <div id="map" style={{ width: '100%', height: '100%' }}></div>;
 }
