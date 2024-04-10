@@ -28,6 +28,7 @@ export const designTokens = {
             small: '12px',
             smallMedium: '14px',
             medium: '16px',
+            mediumLarge: '18px',
             large: '24px',
             extraLarge: '32px',
         },

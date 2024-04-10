@@ -45,6 +45,13 @@ export function Header(props: HeaderProps) {
     }
 
     const handleClick = (path: string) => {
+        if (path === '#sobre-nos') {
+            window.scrollTo({
+                top: document.getElementById('sobre-nos')?.offsetTop,
+                behavior: 'smooth'
+            })
+            return
+        }
         navigate(path)
     }
 
