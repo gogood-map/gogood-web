@@ -26,8 +26,8 @@ export function InformativeCard(props: InformativeCardProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         borderRadius: designTokens.borderRadius.large,
-        backgroundColor: designTokens.color.white,
-        boxShadow: `0px 8px 22px 0px ${designTokens.color.boxShadow}`,
+        backgroundColor: designTokens.color.gray,
+        boxShadow: designTokens.color.cardShadow,
         transition: 'transform .5s ease',
         cursor: 'default',
     } as React.CSSProperties

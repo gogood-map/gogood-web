@@ -58,7 +58,15 @@ export function LoginForm() {
                 flexDirection: 'column',
             }}>
 
-                <label htmlFor='email'>Email</label>
+                <label
+                    htmlFor='email'
+                    style={{
+                        fontWeight: designTokens.font.weight.medium,
+                        color: designTokens.color.secondary,
+                    }}
+                >
+                    Email
+                </label>
                 <input
                     id='email'
                     type='email'
@@ -83,7 +91,15 @@ export function LoginForm() {
                 flexDirection: 'column',
 
             }}>
-                <label htmlFor='password'>Password</label>
+                <label
+                    htmlFor='password'
+                    style={{
+                        fontWeight: designTokens.font.weight.medium,
+                        color: designTokens.color.secondary,
+                    }}
+                >
+                    Senha
+                </label>
                 <input style={textInputStyle}
                     id='password'
                     type='password'

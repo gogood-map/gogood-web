@@ -56,8 +56,8 @@ export function HomeBanner(props: HomeBannerProps) {
 
                 {onClick && (
                     <button style={{
-                        width: '200px',
-                        height: '80px',
+                        width: '209px',
+                        height: '78px',
                         backgroundColor: '#00B176',
                         border: 'none',
                         borderRadius: designTokens.borderRadius.medium,
@@ -66,8 +66,18 @@ export function HomeBanner(props: HomeBannerProps) {
                         paddingRight: designTokens.spacing.large,
                         paddingTop: designTokens.spacing.small,
                         paddingBottom: designTokens.spacing.small,
-                        zIndex: 1
-                    }} onClick={onClick}>
+                        zIndex: 1,
+                        transition: 'background-color .2s ease-in-out',
+                        cursor:'pointer',
+                    }} 
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#147454'
+                    }}
+
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#00B176'
+                    }}
+                    onClick={onClick}>
                         <span style={{
                             fontSize: '24px',
                             fontWeight: '700',
