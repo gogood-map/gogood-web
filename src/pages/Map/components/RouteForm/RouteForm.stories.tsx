@@ -6,5 +6,7 @@ export default {
 }
 
 export const Default = () => {
-  return <RouteForm />
+  return <RouteForm onClickExpand={() => {
+    console.log('clicked')
+  }} />
 }
