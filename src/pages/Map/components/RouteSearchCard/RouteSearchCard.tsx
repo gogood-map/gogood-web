@@ -1,7 +1,7 @@
 import { designTokens } from 'design-tokens'
 import { createContext, useContext, useState } from 'react'
 import { RouteForm } from '../RouteForm/RouteForm'
-import { RoutesResponse, RoutesSelection } from '../RoutesSelection/RoutesSelection'
+import { RoutesSelection } from '../RoutesSelection/RoutesSelection'
 import { SidebarContext, SidebarContextProps } from '../../../SidebarLayout/SidebarLayout'
 
 export type RouteSearchCardContextProps = {
@@ -10,14 +10,7 @@ export type RouteSearchCardContextProps = {
 
 export const RouteSearchCardContext = createContext<RouteSearchCardContextProps | undefined>(undefined)
 
-export type RouteSearchCardProps = {
-    routes?: RoutesResponse[]
-    searchStatus: 'loading' | 'success' | 'error' | 'none'
-    onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
-}
-
-export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, onSubmitSearch } = props
+export function RouteSearchCard() {
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -36,8 +29,8 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 backgroundColor: 'transparent',
                 transition: 'left 0.3s ease',
             }}>
-                <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} onSubmit={onSubmitSearch} />
-                <RoutesSelection routes={routes} searchStatus={searchStatus} />
+                <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} />
+                <RoutesSelection />
             </div>
         </RouteSearchCardContext.Provider>
     )

@@ -5,12 +5,6 @@ export default {
   component: RouteForm,
 }
 
-const onSubmit = (origin: string, destination: string, travelMode: string) => {
-  console.log(origin, destination, travelMode)
-}
-
 export const Default = () => {
-  return <RouteForm onClickExpand={() => {
-    console.log('clicked')
-  }} onSubmit={onSubmit} />
+  return <RouteForm />
 }
