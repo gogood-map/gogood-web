@@ -1,5 +1,5 @@
 import { ReactNode, useContext, useState } from "react";
-import { SidebarContext, SidebarContextProps } from "../Sidebar/Sidebar";
+import { SidebarContext, SidebarContextProps } from "../../pages/SidebarLayout/SidebarLayout";
 import { designTokens } from "design-tokens";
 
 export type SidebarItemProps = {
