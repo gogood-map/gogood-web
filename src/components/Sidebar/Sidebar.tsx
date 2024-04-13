@@ -1,10 +1,9 @@
 import { FiLogOut, FiMenu } from 'react-icons/fi';
-import { ReactNode, useContext } from 'react'
+import { useState, ReactNode } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
-import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout';
 
 type SidebarProps = {
     children: ReactNode
@@ -12,6 +11,7 @@ type SidebarProps = {
 }
 
 export function Sidebar({ children, onClick }: SidebarProps) {
+    const [isHovered, setIsHovered] = useState(false)
     const navigate = useNavigate()
     const { logout } = useAuth()
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
@@ -60,12 +60,30 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 }}>
                     <button
                         onClick={() => onClick()}
-                        style={expanded ? { ...buttonStyle, ...expandedStyle } : buttonStyle}
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                        style={isHovered ? { ...buttonStyle, ...hoveredButtonStyle } : buttonStyle}
                     >
                         <FiMenu size={'28px'} />
                     </button>
                 </div>
 
+                <ul style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    margin: 0,
+                    padding: 0,
+                    gap: designTokens.spacing.large,
+                    minHeight: '70%',
+                }}>
+                    {children}
+                </ul>
+                <div>
+                    <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
+                        logout()
+                        navigate('/')
+                    }} />
+                </div>
                 <ul style={{
                     display: 'flex',
                     flexDirection: 'column',
