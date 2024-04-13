@@ -4,7 +4,7 @@ import { AuthPage } from './pages/AuthPage/AuthPage.tsx'
 import { Home } from './pages/Home/Home.tsx'
 import { NotFound } from './pages/NotFound/NotFound.tsx'
 import { SidebarLayout } from './pages/SidebarLayout/SidebarLayout.tsx'
-import { MapComponent } from './pages/Map/MapComponent.tsx'
+import { Map } from './pages/Map/Map.tsx'
 
 export const routes = (
     <Routes>
@@ -12,7 +12,7 @@ export const routes = (
             <Route path='' element={<Home />} />
         </Route>
         <Route path='' element={<SidebarLayout />}>
-            <Route path='mapa' element={<MapComponent />} />
+            <Route path='mapa' element={<Map />} />
             <Route path='perfil' element={<div />} />
             <Route path='historico' element={<div />} />
             <Route path='ajustes' element={<div />} />
