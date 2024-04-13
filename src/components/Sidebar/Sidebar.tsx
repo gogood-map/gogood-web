@@ -1,18 +1,16 @@
 import { FiLogOut, FiMenu } from 'react-icons/fi';
-import { createContext, useState, ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
-export type SidebarContextProps = {
-    expanded: boolean;
+type SidebarProps = {
+    children: ReactNode
+    onClick: () => void
 }
 
-export const SidebarContext = createContext<SidebarContextProps | undefined>(undefined)
-
-export function Sidebar({ children }: { children: ReactNode }) {
-    const [expanded, setExpanded] = useState(false)
+export function Sidebar({ children, onClick }: SidebarProps) {
     const [isHovered, setIsHovered] = useState(false)
     const navigate = useNavigate()
     const { logout } = useAuth()
@@ -58,7 +56,7 @@ export function Sidebar({ children }: { children: ReactNode }) {
                     height: '30px',
                 }}>
                     <button
-                        onClick={() => setExpanded(!expanded)}
+                        onClick={() => onClick()}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                         style={isHovered ? { ...buttonStyle, ...hoveredButtonStyle } : buttonStyle}
@@ -67,24 +65,22 @@ export function Sidebar({ children }: { children: ReactNode }) {
                     </button>
                 </div>
 
-                <SidebarContext.Provider value={{ expanded }}>
-                    <ul style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        margin: 0,
-                        padding: 0,
-                        gap: designTokens.spacing.large,
-                        minHeight: '70%',
-                    }}>
-                        {children}
-                    </ul>
-                    <div>
-                        <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
-                            logout()
-                            navigate('/')
-                        }} />
-                    </div>
-                </SidebarContext.Provider>
+                <ul style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    margin: 0,
+                    padding: 0,
+                    gap: designTokens.spacing.large,
+                    minHeight: '70%',
+                }}>
+                    {children}
+                </ul>
+                <div>
+                    <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
+                        logout()
+                        navigate('/')
+                    }} />
+                </div>
             </nav>
         </aside>
     )
