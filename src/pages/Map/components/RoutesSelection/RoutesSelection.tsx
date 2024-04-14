@@ -1,6 +1,7 @@
 import { designTokens } from "design-tokens";
 import { useContext } from "react";
 import { RouteSearchCardContext, RouteSearchCardContextProps } from "../RouteSearchCard/RouteSearchCard";
+import { RouteOption } from "../RouteOption/RouteOption";
 
 export function RoutesSelection() {
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
@@ -48,128 +49,11 @@ export function RoutesSelection() {
                 gap: designTokens.spacing.small,
                 width: '70%'
             }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    width: '100%',
-                    padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
-                    boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
-                    backgroundColor: designTokens.color.white,
-                    borderRadius: designTokens.borderRadius.smallMedium
-                }}>
-                    <div style={{
-                        gap: designTokens.spacing.tiny,
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                    }}>
-                        <div style={{
-                            width: '32px',
-                            height: '12px',
-                            backgroundColor: designTokens.color.error,
-                            borderRadius: designTokens.borderRadius.small,
-                        }} />
-                        <div style={{
-                            color: designTokens.color.text,
-                            fontSize: designTokens.font.size.small,
-                            fontWeight: designTokens.font.weight.bold,
-                        }}>
-                            Alto Risco
-                        </div>
-                    </div>
 
-                    <div style={{
-                        color: designTokens.color.text,
-                        fontSize: designTokens.font.size.small,
-                        fontWeight: designTokens.font.weight.bold,
-                    }}>
-                        20 min
-                    </div>
-                </div>
+                <RouteOption risk="Risco Baixo" durationInMinutes={30} color={designTokens.color.success} />
+                <RouteOption risk="Risco Médio" durationInMinutes={60} color={designTokens.color.alert} />
+                <RouteOption risk="Risco Alto" durationInMinutes={130} color={designTokens.color.error} />
 
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    width: '100%',
-                    padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
-                    boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
-                    backgroundColor: designTokens.color.white,
-                    borderRadius: designTokens.borderRadius.smallMedium
-                }}>
-                    <div style={{
-                        gap: designTokens.spacing.tiny,
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                    }}>
-                        <div style={{
-                            width: '32px',
-                            height: '12px',
-                            backgroundColor: designTokens.color.alert,
-                            borderRadius: designTokens.borderRadius.small,
-                        }} />
-                        <div style={{
-                            color: designTokens.color.text,
-                            fontSize: designTokens.font.size.small,
-                            fontWeight: designTokens.font.weight.bold,
-                        }}>
-                            Médio Risco
-                        </div>
-                    </div>
-
-                    <div style={{
-                        color: designTokens.color.text,
-                        fontSize: designTokens.font.size.small,
-                        fontWeight: designTokens.font.weight.bold,
-                    }}>
-                        30 min
-                    </div>
-                </div>
-
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    width: '100%',
-                    padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
-                    boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
-                    backgroundColor: designTokens.color.white,
-                    borderRadius: designTokens.borderRadius.smallMedium
-                }}>
-                    <div style={{
-                        gap: designTokens.spacing.tiny,
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                    }}>
-                        <div style={{
-                            width: '32px',
-                            height: '12px',
-                            backgroundColor: designTokens.color.success,
-                            borderRadius: designTokens.borderRadius.small,
-                        }} />
-                        <div style={{
-                            color: designTokens.color.text,
-                            fontSize: designTokens.font.size.small,
-                            fontWeight: designTokens.font.weight.bold,
-                        }}>
-                            Baixo Risco
-                        </div>
-                    </div>
-
-                    <div style={{
-                        color: designTokens.color.text,
-                        fontSize: designTokens.font.size.small,
-                        fontWeight: designTokens.font.weight.bold,
-                    }}>
-                        40 min
-                    </div>
-                </div>
             </div>
         </div>
     )
