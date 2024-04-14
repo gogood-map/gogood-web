@@ -1,5 +1,4 @@
 import { designTokens } from 'design-tokens'
-import { useState, CSSProperties } from 'react'
 
 export type RouteOptionProps = {
     risk: string
@@ -9,29 +8,19 @@ export type RouteOptionProps = {
 
 export function RouteOption(props: RouteOptionProps) {
     const { risk, durationInMinutes, color } = props
-    const [hovered, setHovered] = useState(false)
-
-    const defaultStyle = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        width: '100%',
-        padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
-        boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
-        backgroundColor: designTokens.color.white,
-        borderRadius: designTokens.borderRadius.smallMedium,
-        transition: 'transform .3s ease',
-    } as CSSProperties
-
-    const hoveredStyle = {
-        transform: 'scale(1.02)',
-    } as CSSProperties
 
     return (
-        <div onMouseEnter={() => { setHovered(true) }}
-            onMouseLeave={() => { setHovered(false) }}
-            style={ hovered ? {...defaultStyle, ...hoveredStyle} : {...defaultStyle}} >
+        <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexDirection: 'row',
+            width: '100%',
+            padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
+            boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
+            backgroundColor: designTokens.color.white,
+            borderRadius: designTokens.borderRadius.smallMedium
+        }}>
             <div style={{
                 gap: designTokens.spacing.tiny,
                 display: 'flex',
@@ -59,7 +48,7 @@ export function RouteOption(props: RouteOptionProps) {
                 fontWeight: designTokens.font.weight.bold,
             }}>
                 {durationInMinutes < 60 && (
-                    `${durationInMinutes}min`
+                    `${durationInMinutes} min`
                 )}
                 {durationInMinutes >= 60 && <>
                     {`${Math.floor(durationInMinutes / 60)}h`}
