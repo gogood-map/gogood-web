@@ -44,48 +44,34 @@ export function RouteForm(props: RouteFormProps) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'start',
                 width: '100%',
-                height: expandedCard ? '210px' : '24px',
+                height: expandedCard ? '210px' : '80px',
                 gap: designTokens.spacing.medium,
-                padding: expandedCard
-                    ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
-                    : `${designTokens.spacing.tiny} ${designTokens.spacing.medium}`,
+                padding: `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`,
                 borderRadius: designTokens.borderRadius.medium,
                 backgroundColor: designTokens.color.background,
                 boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
                 transition: 'height 0.3s ease',
             }}>
                 <div style={{
-                    width: '100%',
-                    position: expandedCard ? 'absolute' : 'initial',
+                    position: 'absolute',
                     top: designTokens.spacing.tiny,
+                    right: 0,
                     display: 'flex',
-                    justifyContent: 'space-between',
+                    justifyContent: 'end',
                     alignItems: 'start',
-                    height: '100%',
                 }}>
                     <span style={{
-                        width: expandedCard ? '0' : '150px',
-                        overflow: 'hidden',
-                        transition: 'width 0.3s ease',
-                        whiteSpace: 'nowrap',
-                        fontSize: designTokens.font.size.medium,
-                        fontWeight: designTokens.font.weight.bold,
-                        color: designTokens.color.text,
-                    }}>
-                        Buscar rota
-                    </span>
-                    <span style={{
                         display: 'flex',
-                        height: '24px',
+                        cursor: 'pointer',
                     }} onClick={onClickExpand}>
                         {expandedCard && <MdOutlineExpandLess size={iconSize} />}
                         {!expandedCard && <MdOutlineExpandMore size={iconSize} />}
                     </span>
                 </div>
                 <div style={{
-                    display: expandedCard ? 'flex' : 'none',
+                    display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'row',
