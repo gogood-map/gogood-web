@@ -32,9 +32,6 @@ export function MapComponent() {
 
     useEffect(() => {
         loader.load().then(() => {
-           
-            
-
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
                 center: { lat: -23.5581213, lng: -46.661614 },
                 zoom: 15,
@@ -68,6 +65,12 @@ export function MapComponent() {
             });
 
             setMap(map);
+
+            const center = map.getCenter();
+            if (center) {
+                loadData(center.lat(), center.lng()).then(newData => setData(newData));
+            }
+            
         });
     }, []);
 
