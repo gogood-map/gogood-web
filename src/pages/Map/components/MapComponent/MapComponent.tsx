@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 
+
 export function MapComponent() {
     const [map, setMap] = useState<google.maps.Map | null>(null);
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null);
@@ -31,6 +32,9 @@ export function MapComponent() {
 
     useEffect(() => {
         loader.load().then(() => {
+           
+            
+
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
                 center: { lat: -23.5581213, lng: -46.661614 },
                 zoom: 15,
@@ -39,6 +43,23 @@ export function MapComponent() {
                 fullscreenControl: false,
             });
 
+            consultaRota().then(async(rota:any)=>{
+                const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrar
+                const caminho = encoding.decodePath(rota.polyline)
+                const polyline = new google.maps.Polyline({
+                    path: caminho,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    map: map 
+                })
+                
+                polyline.setMap(map)
+                
+                console.log(caminho);
+                
+            })
+                       
             map.addListener('center_changed', () => {
                 const center = map.getCenter();
                 if (center) {
@@ -50,6 +71,13 @@ export function MapComponent() {
         });
     }, []);
 
+    const consultaRota = async () =>{
+        const response = await fetch('https://gogood.brazilsouth.cloudapp.azure.com/rotas/bike?origem=Faculdade%20SPTECH&destino=Parque%20Ibirapuera')
+        const json = await response.json();
+
+        return await json[1]
+    }
+    
     useEffect(() => {
         if (map && data.length) {
             if (heatmap) {
@@ -66,7 +94,7 @@ export function MapComponent() {
 
     const loadData = async (lat: number, lng: number) => {
         try {
-            const response = await fetch(`http://52.226.122.160:8080/consultar/local/${lat}/${lng}`, {
+            const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/consultar/local/${lat}/${lng}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,6 +107,9 @@ export function MapComponent() {
             return [];
         }
     };
+
+
+    
 
     return <div id="map" style={{ width: '100%', height: '100%' }}></div>;
 }
