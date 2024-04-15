@@ -47,6 +47,23 @@ export function MapComponent(props: MapComponentProps) {
                 fullscreenControl: false,
             })
 
+            consultaRota().then(async(rota:any)=>{
+                const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrar
+                const caminho = encoding.decodePath(rota.polyline)
+                const polyline = new google.maps.Polyline({
+                    path: caminho,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    map: map
+                })
+
+                polyline.setMap(map)
+
+                console.log(caminho);
+
+            })
+
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 if (center) {
@@ -59,6 +76,13 @@ export function MapComponent(props: MapComponentProps) {
         })
     }, [])
 
+
+    const consultaRota = async () =>{
+        const response = await fetch('https://gogood.brazilsouth.cloudapp.azure.com/rotas/bike?origem=Faculdade%20SPTECH&destino=Parque%20Ibirapuera')
+        const json = await response.json();
+
+        return await json[1]
+    }
 
     useEffect(() => {
         if (map && data.length) {
