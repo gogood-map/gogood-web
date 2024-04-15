@@ -10,25 +10,15 @@ export type RouteSearchCardContextProps = {
 
 export const RouteSearchCardContext = createContext<RouteSearchCardContextProps | undefined>(undefined)
 
-export function RouteSearchCard() {
+export type RouteSearchCardProps = {
+    routes?: RoutesResponse[]
+    onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
+}
+
+export function RouteSearchCard(props: RouteSearchCardProps) {
+    const { routes, onSubmitSearch } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
-    const [routes, setRoutes] = useState<RoutesResponse[]>()
-
-    const handleSubmit = (origin: string, destination: string, travelMode: string) => {
-        consultaRota(origin, destination, travelMode)
-            .then((rotas) => {
-                setRoutes(rotas)
-                console.log(rotas)
-            })
-    }
-
-    const consultaRota = async (origin: string, destination: string, travelMode: string) => {
-        const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`)
-        const json = await response.json();
-
-        return await json as RoutesResponse[]
-    }
 
     return (
         <RouteSearchCardContext.Provider value={{ expandedCard }}>
@@ -45,7 +35,7 @@ export function RouteSearchCard() {
                 backgroundColor: 'transparent',
                 transition: 'left 0.3s ease',
             }}>
-                <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} onSubmit={handleSubmit} />
+                <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} onSubmit={onSubmitSearch} />
                 {routes && <RoutesSelection routes={routes} />}
             </div>
         </RouteSearchCardContext.Provider>
