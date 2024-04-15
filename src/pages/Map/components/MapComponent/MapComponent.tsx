@@ -77,12 +77,6 @@ export function MapComponent(props: MapComponentProps) {
     }, [])
 
 
-    const consultaRota = async () =>{
-        const response = await fetch('https://gogood.brazilsouth.cloudapp.azure.com/rotas/bike?origem=Faculdade%20SPTECH&destino=Parque%20Ibirapuera')
-        const json = await response.json();
-
-        return await json[1]
-    }
 
     useEffect(() => {
         if (map && data.length) {
