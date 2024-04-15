@@ -59,7 +59,7 @@ export function RouteOption(props: RouteOptionProps) {
                 fontWeight: designTokens.font.weight.bold,
             }}>
                 {durationInMinutes < 60 && (
-                    `${durationInMinutes} min`
+                    `${durationInMinutes}min`
                 )}
                 {durationInMinutes >= 60 && <>
                     {`${Math.floor(durationInMinutes / 60)}h`}
