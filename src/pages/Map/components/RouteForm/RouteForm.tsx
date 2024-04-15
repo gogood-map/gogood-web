@@ -1,17 +1,20 @@
 import { designTokens } from 'design-tokens'
 import { useContext } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
-import { IoSearchSharp } from 'react-icons/io5'
+import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
 import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
 import { RiCarLine } from 'react-icons/ri'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
+import { useForm } from 'react-hook-form'
 
 type RouteFormProps = {
     onClickExpand: () => void
+    onSubmit: (origin: string, destination: string, travelMode: string) => void
 }
 
 export function RouteForm(props: RouteFormProps) {
-    const { onClickExpand } = props
+    const { register, watch, handleSubmit } = useForm({ mode: 'all' })
+    const { onClickExpand, onSubmit } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const inputStyle = {
@@ -36,11 +39,20 @@ export function RouteForm(props: RouteFormProps) {
         cursor: 'pointer',
     } as React.CSSProperties
 
+    const selectedRouteLabelStyle = {
+        backgroundColor: designTokens.color.secondary,
+        color: designTokens.color.gray,
+    } as React.CSSProperties
+
     const iconSize = '24px'
+
+    const handleFormSubmit = (data: any) => {
+        onSubmit(data.origin, data.destination, data.travelMode)
+    }
 
     return (
         <>
-            <form style={{
+            <form onSubmit={handleSubmit(handleFormSubmit)} style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -117,8 +129,8 @@ export function RouteForm(props: RouteFormProps) {
                         gap: designTokens.spacing.small,
                         width: '100%',
                     }}>
-                        <input style={inputStyle} type='text' id='origin' />
-                        <input style={inputStyle} type='text' id='destination' />
+                        <input {...register('origin')} style={inputStyle} type='text' id='origin' />
+                        <input {...register('destination')} style={inputStyle} type='text' id='destination' />
                     </div>
                 </div>
                 <div style={{
@@ -134,12 +146,71 @@ export function RouteForm(props: RouteFormProps) {
                     alignItems: 'center',
                     gap: designTokens.spacing.tiny,
                 }}>
-                    <input style={radioInputStyle} type='radio' id='walk' name='locomotion' />
-                    <input style={radioInputStyle} type='radio' id='bicycle' name='locomotion' />
-                    <input style={radioInputStyle} type='radio' id='car' name='locomotion' />
-                    <label style={routeLabelStyle} htmlFor='walk'><MdDirectionsWalk size={iconSize} /></label>
-                    <label style={routeLabelStyle} htmlFor='bicycle'><IoIosBicycle size={iconSize} /></label>
-                    <label style={routeLabelStyle} htmlFor='car'><RiCarLine size={iconSize} /></label>
+                    <input
+                        {...register('travelMode', { required: true })}
+                        style={radioInputStyle}
+                        type='radio'
+                        id='walk'
+                        name='travelMode'
+                        value='a-pe'
+                    />
+                    <input
+                        {...register('travelMode', { required: true })}
+                        style={radioInputStyle}
+                        type='radio'
+                        id='bicycle'
+                        name='travelMode'
+                        value='bike'
+                    />
+                    <input
+                        {...register('travelMode', { required: true })}
+                        style={radioInputStyle}
+                        type='radio'
+                        id='car'
+                        name='travelMode'
+                        value='veiculo'
+                    />
+                    <input
+                        {...register('travelMode', { required: true })}
+                        style={radioInputStyle}
+                        type='radio'
+                        id='bus'
+                        name='travelMode'
+                        value='transporte-publico'
+                    />
+
+                    <label
+                        style={watch('travelMode') === 'a-pe'
+                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                            : routeLabelStyle}
+                        htmlFor='walk'
+                    >
+                        <MdDirectionsWalk size={iconSize} />
+                    </label>
+                    <label
+                        style={watch('travelMode') === 'bike'
+                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                            : routeLabelStyle}
+                        htmlFor='bicycle'
+                    >
+                        <IoIosBicycle size={iconSize} />
+                    </label>
+                    <label
+                        style={watch('travelMode') === 'veiculo'
+                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                            : routeLabelStyle}
+                        htmlFor='car'
+                    >
+                        <RiCarLine size={iconSize} />
+                    </label>
+                    <label
+                        style={watch('travelMode') === 'transporte-publico'
+                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                            : routeLabelStyle}
+                        htmlFor='bus'
+                    >
+                        <IoBusOutline size={iconSize} />
+                    </label>
                 </div>
                 <button style={{
                     display: expandedCard ? 'flex' : 'none',
