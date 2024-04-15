@@ -26,8 +26,8 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
-        const durationA = stringToMinutes(a.duracao);
-        const durationB = stringToMinutes(b.duracao);
+        const durationA = a.qtdOcorrenciasTotais;
+        const durationB = b.qtdOcorrenciasTotais;
 
         return durationA - durationB;
     });
@@ -105,7 +105,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     const durationInMinutes = stringToMinutes(route.duracao);
                     const color = index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error;
                     const risk = index === 0 ? 'Menor Risco' : index === 1 ? 'Risco Médio' : 'Risco Alto';
-                    return <RouteOption risk={risk} durationInMinutes={durationInMinutes} color={color} />;
+                    return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} />;
                 })}
             </div>
         </div>
