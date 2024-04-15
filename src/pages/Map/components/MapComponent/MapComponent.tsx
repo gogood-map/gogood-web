@@ -48,7 +48,7 @@ export function MapComponent(props: MapComponentProps) {
             })
 
             consultaRota().then(async(rota:any)=>{
-                const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrar
+                const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
                 const caminho = encoding.decodePath(rota.polyline)
                 const polyline = new google.maps.Polyline({
                     path: caminho,
