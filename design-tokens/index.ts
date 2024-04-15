@@ -6,7 +6,7 @@ export const designTokens = {
         border: '#C5D1E2',
         white: '#FFFFFF',
         gray: '#EDEDED',
-        darktGray: '#8C8C8C',
+        darkGray: '#8C8C8C',
         selected: '#008961',
         selectedLight: '#00B176', 
         boxShadow: 'rgba(0, 0, 0, 0.10)',
