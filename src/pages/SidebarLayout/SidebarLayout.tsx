@@ -4,8 +4,16 @@ import { SidebarItem } from "../../components/SidebarItem/SidebarItem";
 import { FiHome, FiMap, FiSettings, FiUser } from "react-icons/fi";
 import { RiHistoryFill } from "react-icons/ri";
 import { designTokens } from "design-tokens";
+import { createContext, useState } from "react";
+
+export type SidebarContextProps = {
+    expanded: boolean;
+}
+
+export const SidebarContext = createContext<SidebarContextProps | undefined>(undefined)
 
 export function SidebarLayout() {
+    const [expanded, setExpanded] = useState(false)
     const defaultIconSize = '24px';
     const navigate = useNavigate();
 
@@ -18,28 +26,30 @@ export function SidebarLayout() {
     ]
 
     return (
-        <span style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: '100vw',
-            height: '100vh',
-            userSelect: 'none',
-            overflow: 'hidden',
-            backgroundColor: designTokens.color.background,
-        }}>
-            <Sidebar>
-                {icons.map((icon, index) => (
-                    <SidebarItem
-                        key={index}
-                        icon={icon.icon}
-                        text={icon.text}
-                        onClick={icon.onclick}
-                        alert={icon.alert}
-                    />
-                ))}
-            </Sidebar>
-            <Outlet />
-        </span>
+        <SidebarContext.Provider value={{ expanded }}>
+            <span style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100vw',
+                height: '100vh',
+                userSelect: 'none',
+                overflow: 'hidden',
+                backgroundColor: designTokens.color.background,
+            }}>
+                <Sidebar onClick={() => { setExpanded(!expanded) }}>
+                    {icons.map((icon, index) => (
+                        <SidebarItem
+                            key={index}
+                            icon={icon.icon}
+                            text={icon.text}
+                            onClick={icon.onclick}
+                            alert={icon.alert}
+                        />
+                    ))}
+                </Sidebar>
+                <Outlet />
+            </span>
+        </SidebarContext.Provider>
     );
 }

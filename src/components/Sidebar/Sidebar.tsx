@@ -1,30 +1,31 @@
 import { FiLogOut, FiMenu } from 'react-icons/fi';
-import { createContext, useState, ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout';
 
-export type SidebarContextProps = {
-    expanded: boolean;
+type SidebarProps = {
+    children: ReactNode
+    onClick: () => void
 }
 
-export const SidebarContext = createContext<SidebarContextProps | undefined>(undefined)
-
-export function Sidebar({ children }: { children: ReactNode }) {
-    const [expanded, setExpanded] = useState(false)
-    const [isHovered, setIsHovered] = useState(false)
+export function Sidebar({ children, onClick }: SidebarProps) {
     const navigate = useNavigate()
     const { logout } = useAuth()
+    const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
     const buttonStyle = {
         backgroundColor: 'rgb(249, 250, 251)',
         border: 'none',
         padding: 0,
+        cursor: 'pointer',
+        transition: 'transform 0.3s ease',
     } as React.CSSProperties
 
-    const hoveredButtonStyle = {
-        backgroundColor: 'rgb(243, 244, 246)'
+    const expandedStyle = {
+        transform: 'rotate(180deg)',
     } as React.CSSProperties
 
     return (
@@ -58,33 +59,29 @@ export function Sidebar({ children }: { children: ReactNode }) {
                     height: '30px',
                 }}>
                     <button
-                        onClick={() => setExpanded(!expanded)}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        style={isHovered ? { ...buttonStyle, ...hoveredButtonStyle } : buttonStyle}
+                        onClick={() => onClick()}
+                        style={expanded ? { ...buttonStyle, ...expandedStyle } : buttonStyle}
                     >
                         <FiMenu size={'28px'} />
                     </button>
                 </div>
 
-                <SidebarContext.Provider value={{ expanded }}>
-                    <ul style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        margin: 0,
-                        padding: 0,
-                        gap: designTokens.spacing.large,
-                        minHeight: '70%',
-                    }}>
-                        {children}
-                    </ul>
-                    <div>
-                        <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
-                            logout()
-                            navigate('/')
-                        }} />
-                    </div>
-                </SidebarContext.Provider>
+                <ul style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    margin: 0,
+                    padding: 0,
+                    gap: designTokens.spacing.large,
+                    minHeight: '70%',
+                }}>
+                    {children}
+                </ul>
+                <div>
+                    <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
+                        logout()
+                        navigate('/')
+                    }} />
+                </div>
             </nav>
         </aside>
     )
