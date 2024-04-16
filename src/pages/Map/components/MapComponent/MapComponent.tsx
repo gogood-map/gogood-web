@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse } from '../RoutesSelection/RoutesSelection'
+import { designTokens } from 'design-tokens'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[]
@@ -10,6 +11,7 @@ export function MapComponent(props: MapComponentProps) {
     const { routes } = props
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
+    const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -73,26 +75,32 @@ export function MapComponent(props: MapComponentProps) {
     }, [data, map])
 
     useEffect(() => {
-        if (map) {
-            map.data.forEach((feature) => {
-                map.data.remove(feature)
+        if (polyline && polyline?.length > 0) {
+            polyline.forEach(polyline => {
+                polyline.setMap(null)
             })
         }
         if (routes) {
-            routes.forEach(async (route) => {
+            const listaPolyline: google.maps.Polyline[] = []
+
+            routes.forEach(async (route, index) => {
                 const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
                 const caminho = encoding.decodePath(route.polyline)
-                const polyline = new google.maps.Polyline({
+                const polylineRota = new google.maps.Polyline({
                     path: caminho,
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 0.8,
+                    geodesic: true,
+                    strokeColor: index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error,
+                    strokeOpacity: 1.0,
                     strokeWeight: 2,
-                    map: map
                 })
-                polyline.setMap(map)
+                listaPolyline.push(polylineRota)
+                polylineRota.setMap(map)
             })
+
+            setPolyline(listaPolyline)
+
         }
-           
+
     }, [routes])
 
     const loadData = async (lat: number, lng: number) => {
