@@ -2,6 +2,7 @@ import { designTokens } from "design-tokens";
 import { useContext } from "react";
 import { RouteSearchCardContext, RouteSearchCardContextProps } from "../RouteSearchCard/RouteSearchCard";
 import { RouteOption } from "../RouteOption/RouteOption";
+import { LoaderIcon } from "../../../../components/LoaderIcon/LoaderIcon";
 
 export type RoutesResponse = {
     origem: string
@@ -59,9 +60,9 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(57px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
-            ? 'calc(57px + 35px)'
+            ? 'calc(60px + 35px)'
             : '0px'
 
     return (
@@ -74,7 +75,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             height: height,
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
-            padding: (expandedCard && routes) || (expandedCard && searchStatus === 'loading')
+            padding: (expandedCard && routes) || (expandedCard && searchStatus !== 'none')
                 ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
                 : `0px ${designTokens.spacing.medium}`,
             backgroundColor: designTokens.color.background,
@@ -115,7 +116,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} />;
                 })}
 
-                {(!routes || searchStatus === 'loading') && <div style={{
+                {(!routes && searchStatus === 'loading') && <div style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -125,7 +126,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     fontWeight: designTokens.font.weight.bold,
                     color: designTokens.color.text,
                 }}>
-                    Carregando rotas...
+                    <LoaderIcon size={35} />
                 </div>}
                 {searchStatus === 'error' && <div style={{
                     display: 'flex',
