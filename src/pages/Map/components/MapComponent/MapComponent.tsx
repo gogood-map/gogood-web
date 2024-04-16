@@ -91,7 +91,8 @@ export function MapComponent(props: MapComponentProps) {
                     geodesic: true,
                     strokeColor: index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error,
                     strokeOpacity: 1.0,
-                    strokeWeight: 2,
+                    strokeWeight: 5,
+
                 })
                 listaPolyline.push(polylineRota)
                 polylineRota.setMap(map)

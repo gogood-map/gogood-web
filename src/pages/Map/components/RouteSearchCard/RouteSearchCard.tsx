@@ -12,11 +12,12 @@ export const RouteSearchCardContext = createContext<RouteSearchCardContextProps 
 
 export type RouteSearchCardProps = {
     routes?: RoutesResponse[]
+    searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, onSubmitSearch } = props
+    const { routes, searchStatus, onSubmitSearch } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -36,7 +37,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 transition: 'left 0.3s ease',
             }}>
                 <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} onSubmit={onSubmitSearch} />
-                {routes && <RoutesSelection routes={routes} />}
+                <RoutesSelection routes={routes} searchStatus={searchStatus} />
             </div>
         </RouteSearchCardContext.Provider>
     )
