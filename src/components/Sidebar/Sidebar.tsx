@@ -1,9 +1,10 @@
 import { FiLogOut, FiMenu } from 'react-icons/fi';
-import { useState, ReactNode } from 'react'
+import { ReactNode, useContext } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout';
 
 type SidebarProps = {
     children: ReactNode
@@ -11,18 +12,20 @@ type SidebarProps = {
 }
 
 export function Sidebar({ children, onClick }: SidebarProps) {
-    const [isHovered, setIsHovered] = useState(false)
     const navigate = useNavigate()
     const { logout } = useAuth()
+    const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
     const buttonStyle = {
         backgroundColor: 'rgb(249, 250, 251)',
         border: 'none',
         padding: 0,
+        cursor: 'pointer',
+        transition: 'transform 0.3s ease',
     } as React.CSSProperties
 
-    const hoveredButtonStyle = {
-        backgroundColor: 'rgb(243, 244, 246)'
+    const expandedStyle = {
+        transform: 'rotate(180deg)',
     } as React.CSSProperties
 
     return (
@@ -57,9 +60,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 }}>
                     <button
                         onClick={() => onClick()}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                        style={isHovered ? { ...buttonStyle, ...hoveredButtonStyle } : buttonStyle}
+                        style={expanded ? { ...buttonStyle, ...expandedStyle } : buttonStyle}
                     >
                         <FiMenu size={'28px'} />
                     </button>
