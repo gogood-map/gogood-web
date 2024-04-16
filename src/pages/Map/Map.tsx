@@ -23,6 +23,9 @@ export function Map() {
 
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
         const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`)
+        if (!response.ok) {
+            return Promise.reject('Erro ao consultar rotas')
+        }   
         const json = await response.json()
 
         return await json as RoutesResponse[]
