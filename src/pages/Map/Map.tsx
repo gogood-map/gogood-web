@@ -5,12 +5,19 @@ import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
+    const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
+        setSearchStatus('loading')
         consultaRota(origin, destination, travelMode)
             .then((rotas) => {
                 setRoutes(rotas)
                 console.log(rotas)
+                setSearchStatus('success')
+            })
+            .catch((error) => {
+                console.error(error)
+                setSearchStatus('error')
             })
     }
 
@@ -23,7 +30,7 @@ export function Map() {
     return (
         <>
             <MapComponent routes={routes} />
-            <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} />
+            <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
         </>
     )
 }
