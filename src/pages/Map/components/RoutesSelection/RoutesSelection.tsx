@@ -18,11 +18,12 @@ export type RoutesResponse = {
 }
 
 type RoutesSelectionProps = {
-    routes: RoutesResponse[]
+    routes?: RoutesResponse[]
+    searchStatus: 'loading' | 'success' | 'error' | 'none'
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes } = props
+    const { routes, searchStatus } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
@@ -57,6 +58,12 @@ export function RoutesSelection(props: RoutesSelectionProps) {
         return totalMinutos;
     }
 
+    const height = routes && expandedCard && searchStatus === 'success'
+        ? `calc(57px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
+            ? 'calc(57px + 35px)'
+            : '0px'
+
     return (
         <div style={{
             display: 'flex',
@@ -64,10 +71,10 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
-            height: expandedCard ? `calc(57px + (35 * ${routes.length}))` : '0px',
+            height: height,
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
-            padding: expandedCard
+            padding: (expandedCard && routes) || (expandedCard && searchStatus === 'loading')
                 ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
                 : `0px ${designTokens.spacing.medium}`,
             backgroundColor: designTokens.color.background,
@@ -101,12 +108,37 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                 width: '70%'
             }}>
 
-                {orderedRoutes(routes).map((route, index) => {
+                {routes && searchStatus === 'success' && orderedRoutes(routes).map((route, index) => {
                     const durationInMinutes = stringToMinutes(route.duracao);
                     const color = index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error;
                     const risk = index === 0 ? 'Menor Risco' : index === 1 ? 'Risco Médio' : 'Risco Alto';
                     return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} />;
                 })}
+
+                {(!routes || searchStatus === 'loading') && <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '35px',
+                    fontSize: designTokens.font.size.smallMedium,
+                    fontWeight: designTokens.font.weight.bold,
+                    color: designTokens.color.text,
+                }}>
+                    Carregando rotas...
+                </div>}
+                {searchStatus === 'error' && <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    height: '35px',
+                    fontSize: designTokens.font.size.smallMedium,
+                    fontWeight: designTokens.font.weight.bold,
+                    color: designTokens.color.text,
+                }}>
+                    Erro ao carregar rotas
+                </div>}
             </div>
         </div>
     )
