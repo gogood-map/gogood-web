@@ -75,7 +75,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             height: height,
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
-            padding: (expandedCard && routes) || (expandedCard && searchStatus === 'loading')
+            padding: (expandedCard && routes) || (expandedCard && searchStatus !== 'none')
                 ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
                 : `0px ${designTokens.spacing.medium}`,
             backgroundColor: designTokens.color.background,
@@ -116,7 +116,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} />;
                 })}
 
-                {(!routes || searchStatus === 'loading') && <div style={{
+                {(!routes && searchStatus === 'loading') && <div style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
