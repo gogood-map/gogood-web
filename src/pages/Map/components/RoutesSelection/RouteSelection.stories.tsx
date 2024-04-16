@@ -43,5 +43,5 @@ const routes = [
 ] as RoutesResponse[]
 
 export const Default = () => {
-    return <RoutesSelection routes={routes} />
+    return <RoutesSelection routes={routes} searchStatus='success' />
 }
