@@ -3,6 +3,7 @@ import { Carousel } from '../../components/Carousel/Carousel'
 import { designTokens } from 'design-tokens'
 import bannerImage from '../../assets/banner-image.svg'
 import { useNavigate } from 'react-router-dom'
+import { NewsCardContainer } from '../../components/NewsCard/NewsCardContainer'
 
 export function Home() {
     const navigate = useNavigate()
@@ -33,6 +34,28 @@ export function Home() {
             onClick: () => { }
         }
     ]
+    const newsCards = [
+        {
+            title: 'Casos de crimes',
+            img: 'https://placehold.co/600x400',
+            description: 'Descrição',
+        },
+        {
+            title: 'Casos de crimes',
+            img: 'https://placehold.co/600x400',
+            description: 'Descrição',
+        },
+        {
+            title: 'Casos de crimes',
+            img: 'https://placehold.co/600x400',
+            description: 'Descrição'
+        },
+        {
+            title: 'Casos de crimes',
+            img: 'https://placehold.co/600x400',
+            description: 'Descrição',
+        }
+    ]
 
     return (
         <div style={{
@@ -48,6 +71,7 @@ export function Home() {
                 onClick={bannerOnClick}
             />
             <Carousel cards={cards} />
+            <NewsCardContainer cards={newsCards} />
         </div>
     )
 }
