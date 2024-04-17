@@ -55,7 +55,7 @@ export function MapComponent(props: MapComponentProps) {
             })
 
             setMap(map)
-
+            loadData(-23.5581213, -46.661614).then(newData => setData(newData))
         })
     }, [])
 
