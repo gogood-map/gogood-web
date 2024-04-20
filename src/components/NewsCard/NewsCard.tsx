@@ -23,7 +23,7 @@ export function NewsCard(props: NewsCardProps) {
                 backgroundImage: `url(${img})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                height: '15vw'
+                height: '12vw'
             }}/>
 
             <div style={{

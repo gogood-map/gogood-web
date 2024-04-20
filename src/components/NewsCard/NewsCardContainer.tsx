@@ -13,9 +13,10 @@ export function NewsCardContainer(props: NewsCardContainerProps) {
             display: 'flex',
             justifyContent:'space-evenly',
             flexWrap: 'wrap',
-            width: '100%',
-            gap: designTokens.spacing.medium
-        }} >
+            width: '90%',
+            gap: designTokens.spacing.medium,
+            padding: designTokens.spacing.large
+                    }} >
             {cards.map((card, index) => (
                 <NewsCard key={index} {...card} />
             ))}

@@ -46,7 +46,7 @@ export function HomeBanner(props: HomeBannerProps) {
                 {subtitle && (
                     <p style={{
                         color: designTokens.color.text,
-                        fontSize: '20px',
+                        fontSize: '18px',
                         lineHeight: '29px',
                         marginTop: 0,
                         marginBottom: 0,
