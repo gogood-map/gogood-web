@@ -22,17 +22,20 @@ export function AboutSession(props: AboutSessionProps) {
             padding: designTokens.spacing.medium,
             backgroundImage: `url(${imageBg})`,
             backgroundSize: 'cover',
-            height: '100%'
+            height: '100%',
+            width: '100vw',
         }}>
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'row',
-                width: '100vw',
-                height: '100vh',
+                width: '100%',
+                maxWidth: '1376px',
+                height: '50vh',
                 padding: designTokens.spacing.large,
+                gap: designTokens.spacing.large,
             }}>
-                <div style={{ width: '50%', margin: '0 10%' }}>
+                <div style={{ width: '50%' }}>
 
                     <p style={{
                        fontSize: '16px',
@@ -62,7 +65,7 @@ export function AboutSession(props: AboutSessionProps) {
                         }}>{paragraph}</p>
                     ))}
                 </div>
-                <img src={image} alt="" style={{ width: '50%', height: '50%' }} />
+                <img src={image} alt="" style={{ width: '70%', height: '100%' }} />
             </div>
         </div>
     );
