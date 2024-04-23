@@ -92,7 +92,6 @@ export function MapComponent(props: MapComponentProps) {
                     strokeColor: index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error,
                     strokeOpacity: 1.0,
                     strokeWeight: 5,
-
                 })
                 listaPolyline.push(polylineRota)
                 polylineRota.setMap(map)
@@ -113,15 +112,14 @@ export function MapComponent(props: MapComponentProps) {
                 },
             })
             const json = await response.json()
-            return json.mapData.map((item: { latitude: number; longitude: number }) => new google.maps.LatLng(item.latitude, item.longitude))
+            return json.mapData.map((item: { latitude: number; longitude: number }) => {
+                new google.maps.LatLng(item.latitude, item.longitude)
+            })
         } catch (error) {
             console.error(error)
             return []
         }
     }
 
-
-
-
-    return <div id="map" style={{ width: '100%', height: '100%' }}></div>
+    return <div id="map" style={{ width: '100%', height: '100%' }} />
 }
