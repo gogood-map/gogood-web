@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom'
 import { Header } from '../../components/Header/Header'
 import { HeaderItem } from '../../components/HeaderItem/HeaderItem'
 import { designTokens } from 'design-tokens'
-import aboutBackground from '../../assets/about-background.svg'
 
 export function Layout() {
 
