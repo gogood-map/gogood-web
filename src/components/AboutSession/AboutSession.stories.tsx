@@ -5,6 +5,12 @@ export default {
     component: AboutSession,
 }
 
-export const session = () => <AboutSession image={"img"} subtitle={"sub"} title={"titulo"} body={'body'}>
-
-</AboutSession>
+export const session = () => {
+    <AboutSession
+        imageBg={"bg"}
+        image={"img"}
+        subtitle={"sub"}
+        title={"titulo"}
+        body={'body'}
+    />
+}
