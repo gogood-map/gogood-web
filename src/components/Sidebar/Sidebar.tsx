@@ -1,5 +1,6 @@
 import { FiLogOut, FiMenu } from 'react-icons/fi';
 import { ReactNode, useContext } from 'react'
+import { ReactNode, useContext } from 'react'
 import { designTokens } from 'design-tokens';
 import { SidebarItem } from '../SidebarItem/SidebarItem';
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
@@ -10,10 +11,18 @@ type SidebarProps = {
     children: ReactNode
     onClick: () => void
 }
+import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout';
 
+type SidebarProps = {
+    children: ReactNode
+    onClick: () => void
+}
+
+export function Sidebar({ children, onClick }: SidebarProps) {
 export function Sidebar({ children, onClick }: SidebarProps) {
     const navigate = useNavigate()
     const { logout } = useAuth()
+    const { expanded } = useContext(SidebarContext) as SidebarContextProps
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
     const buttonStyle = {
@@ -22,8 +31,12 @@ export function Sidebar({ children, onClick }: SidebarProps) {
         padding: 0,
         cursor: 'pointer',
         transition: 'transform 0.3s ease',
+        cursor: 'pointer',
+        transition: 'transform 0.3s ease',
     } as React.CSSProperties
 
+    const expandedStyle = {
+        transform: 'rotate(180deg)',
     const expandedStyle = {
         transform: 'rotate(180deg)',
     } as React.CSSProperties
@@ -59,6 +72,8 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                     height: '30px',
                 }}>
                     <button
+                        onClick={() => onClick()}
+                        style={expanded ? { ...buttonStyle, ...expandedStyle } : buttonStyle}
                         onClick={() => onClick()}
                         style={expanded ? { ...buttonStyle, ...expandedStyle } : buttonStyle}
                     >
