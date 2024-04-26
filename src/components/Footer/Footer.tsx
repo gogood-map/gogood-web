@@ -7,9 +7,10 @@ export function Footer() {
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
-            width: '100%',
+            width: '100vw',
             padding: designTokens.spacing.medium,
             backgroundColor: designTokens.color.secondary,
+            zIndex: 1,
         }}>
             <div>
                 <span style={{
