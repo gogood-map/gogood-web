@@ -13,7 +13,7 @@ export function HomeBanner(props: HomeBannerProps) {
     return (
         <div style={{
             display: 'flex',
-            width: '100%',
+            width: `calc(100% - ${designTokens.spacing.large} * 2)`,
             maxHeight: '550px',
             alignSelf: 'stretch',
             justifyContent: 'start',
@@ -21,6 +21,8 @@ export function HomeBanner(props: HomeBannerProps) {
             backgroundPosition: 'right',
             backgroundRepeat: 'no-repeat',
             backgroundSize: 'auto 100%',
+            paddingLeft: designTokens.spacing.large,
+            paddingRight: designTokens.spacing.large,
         }}>
             <div style={{
                 display: 'flex',

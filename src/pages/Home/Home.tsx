@@ -7,6 +7,7 @@ import { NewsCardContainer } from '../../components/NewsCard/NewsCardContainer'
 import aboutBackground from '../../assets/about-background.svg'
 import aboutIlustration from '../../assets/about-ilustration.svg'
 import { AboutSession } from '../../components/AboutSession/AboutSession'
+import { Footer } from '../../components/Footer/Footer'
 
 export function Home() {
     const navigate = useNavigate()
@@ -117,7 +118,7 @@ export function Home() {
                 body={aboutBody}
                 imageBg={aboutBackground}
             />
-            
+            <Footer />
         </div>
     )
 }

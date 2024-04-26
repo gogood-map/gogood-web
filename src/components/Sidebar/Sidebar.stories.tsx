@@ -12,7 +12,9 @@ const defaultIconSize = '28px';
 
 export const Default = () => {
     return (
-        <Sidebar>
+        <Sidebar onClick={() => {
+            console.log('clicked')
+        }} >
             <SidebarItem icon={<FiHome size={defaultIconSize} />} text="Início" active={true} alert />
             <SidebarItem icon={<FiMap size={defaultIconSize} />} text="Mapa" active={false} />
             <SidebarItem icon={<FiUser size={defaultIconSize} />} text="Perfil" active={false} />

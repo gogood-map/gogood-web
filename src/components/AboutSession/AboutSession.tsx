@@ -20,29 +20,39 @@ export function AboutSession(props: AboutSessionProps) {
             alignItems: 'center',
             flexDirection: 'column',
             padding: designTokens.spacing.medium,
-            backgroundImage: `url(${imageBg})`,
-            backgroundSize: 'cover',
             height: '100%',
-            width: '100vw',
+            width: '100%',
         }}>
+
             <div style={{
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'row',
-                width: '100%',
+                width: `calc(100% - ${designTokens.spacing.large} * 2)`,
                 maxWidth: '1376px',
-                height: '50vh',
                 padding: designTokens.spacing.large,
                 gap: designTokens.spacing.large,
+                height: 'fit-content',
+                zIndex: 1,
+                position: 'relative',
             }}>
-                <div style={{ width: '50%' }}>
+                <img src={imageBg} alt="" style={{
+                    position: 'absolute',
+                    marginTop: '-130px',
+                    height: `calc(100% + 130px)`,
+                    width: '100vw',
+                    objectFit: 'cover',
+                    objectPosition: 'top center',
+                    zIndex: -1,
+                }} />
+                <div style={{ width: '45%' }}>
 
                     <p style={{
-                       fontSize: '16px',
-                       color: '#089C71',
-                       fontWeight: designTokens.font.weight.bold,
-                       margin: '0',
-                       height: '16px'
+                        fontSize: '16px',
+                        color: '#089C71',
+                        fontWeight: designTokens.font.weight.bold,
+                        margin: '0',
+                        height: '16px'
                     }}>
                         {subtitle}
                     </p>
@@ -65,7 +75,7 @@ export function AboutSession(props: AboutSessionProps) {
                         }}>{paragraph}</p>
                     ))}
                 </div>
-                <img src={image} alt="" style={{ width: '70%', height: '100%' }} />
+                <img src={image} alt="" style={{ width: '55%', height: '100%' }} />
             </div>
         </div>
     );
