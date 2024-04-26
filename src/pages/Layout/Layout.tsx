@@ -18,7 +18,7 @@ export function Layout() {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
-            padding: '32px',
+            padding: '32px 32px 0px 32px',
             minHeight: '100vh',
             userSelect: 'none',
             overflow: 'hidden',
@@ -31,8 +31,7 @@ export function Layout() {
                 alignItems: 'center',
                 maxWidth: '1376px',
                 width: '100%',
-                gap: designTokens.spacing.large
-
+                gap: designTokens.spacing.large,
             }}>
                 <Header>
                     {navItems.map((item, index) => (
