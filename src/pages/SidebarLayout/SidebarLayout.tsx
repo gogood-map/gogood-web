@@ -2,7 +2,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { SidebarItem } from "../../components/SidebarItem/SidebarItem";
 import { FiHome, FiMap, FiSettings, FiUser } from "react-icons/fi";
-import { RiHistoryFill } from "react-icons/ri";
 import { designTokens } from "design-tokens";
 import { createContext, useState } from "react";
 
@@ -21,7 +20,6 @@ export function SidebarLayout() {
         { icon: <FiHome size={defaultIconSize} />, text: "Início", alert: true, onclick: () => { navigate('/') } },
         { icon: <FiMap size={defaultIconSize} />, text: "Mapa", onclick: () => { navigate('/mapa') } },
         { icon: <FiUser size={defaultIconSize} />, text: "Perfil", onclick: () => { navigate('/perfil') } },
-        { icon: <RiHistoryFill size={defaultIconSize} />, text: "Histórico", onclick: () => { navigate('/historico') } },
         { icon: <FiSettings size={defaultIconSize} />, text: "Ajustes", onclick: () => { navigate('/ajustes') } },
     ]
 
