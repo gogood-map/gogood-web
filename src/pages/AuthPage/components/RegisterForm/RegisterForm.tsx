@@ -1,6 +1,6 @@
-import { isAlpha, isEmail } from 'validator'
+import { isAlpha, isBefore, isEmail } from 'validator'
 import { designTokens } from 'design-tokens'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Stepper } from '../../../../components/Stepper/Stepper'
 import { AuthButton } from '../AuthButton/AuthButton'
@@ -27,22 +27,21 @@ export type GoogleResponse = {
     picture: string
     sub: string
 }
+
 export function RegisterForm() {
     const [formStep, setFormStep] = useState(0)
     const navigate = useNavigate()
     const { login } = useAuth()
+    const {
+        register, handleSubmit, watch, formState: { isValid, errors }
+    } = useForm({ mode: 'all' })
+
     const steps = [
         { title: 'Cadastro' },
         { title: 'Dados' },
         { title: 'Personalização' },
         { title: 'Concluído' }
     ]
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { isValid, errors }
-    } = useForm({ mode: 'all' })
 
     const onSubmit = (data: unknown) => {
         console.log(data)
@@ -50,21 +49,27 @@ export function RegisterForm() {
         navigate('/')
     }
 
-
+    useEffect(() => {
+        if (formStep === 3) {
+            setTimeout(() => {
+                navigate('/mapa')
+            }, 3000)
+        }
+    }, [formStep])
 
     const RadioInput = styled.input.attrs({ type: 'radio' })`
-    appearance: none;
-    accent-color: ${designTokens.color.primary};
-    border-radius: 100%;
-    border: 1px solid ${designTokens.color.border};
-    width: ${designTokens.spacing.medium};
-    height: ${designTokens.spacing.medium};
-    margin: 0 0 0 ${designTokens.spacing.tiny};
+        appearance: none;
+        accent-color: ${designTokens.color.primary};
+        border-radius: 100%;
+        border: 1px solid ${designTokens.color.border};
+        width: ${designTokens.spacing.medium};
+        height: ${designTokens.spacing.medium};
+        margin: 0 0 0 ${designTokens.spacing.tiny};
 
-    &:checked {
-      background-color: ${designTokens.color.primary};
-    }
-  `
+        &:checked {
+        background-color: ${designTokens.color.primary};
+        }
+    `
     const textInputStyle = {
         padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
         borderRadius: designTokens.borderRadius.medium,
@@ -226,7 +231,7 @@ export function RegisterForm() {
                             {...register('name', {
                                 required: { value: true, message: 'Nome obrigatório' },
                                 minLength: { value: 3, message: 'Nome deve ter no mínimo 3 caracteres' },
-                                validate: (value) => isAlpha(value) || 'Nome deve conter apenas letras'
+                                validate: (value) => isAlpha(value.replace(/\s/g, ""), 'pt-BR') || 'Nome deve conter apenas letras'
                             })}
                             placeholder='Seu nome'
                         />
@@ -299,7 +304,8 @@ export function RegisterForm() {
                             id='birthDate'
                             type='date'
                             {...register('birthDate', {
-                                required: { value: true, message: 'Data de nascimento obrigatória' }
+                                required: { value: true, message: 'Data de nascimento obrigatória' },
+                                validate: (value) => isBefore(value, new Date().toDateString()) || 'Data de nascimento inválida' 
                             })}
                         />
                         {errors.birthDate && watch('birthDate') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.birthDate.message as string}</span>}
@@ -369,7 +375,7 @@ export function RegisterForm() {
                         disabled={!watch('address') || !isValid}
                         onClickBack={() => setFormStep(formStep - 1)}
                         onClickNext={() => setFormStep(formStep + 1)}
-                        onClickSubmit={() => setFormStep(formStep + 1)}
+                        onClickSubmit={() => handleSubmit(onSubmit)()}
                     />
                 </section>
             )}
