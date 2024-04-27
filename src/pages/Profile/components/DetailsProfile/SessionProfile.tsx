@@ -15,15 +15,21 @@ const history = [
 const ListHistory = () =>{
     return(
         <>
-        {history.map((historico, index)=>{
-            {console.log(historico.dia)}
-            <p>{historico.dia}</p>
-            {historico.logradouros.map((logradouro, index)=>{
-                <li>
-                    {logradouro}
-                </li>
-            })}
-        })}
+            {history.map((historico, index)=>(
+                <div key={index} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderBottom: `1px solid ${designTokens.color.border}`,
+                    padding: 12
+                }}>
+                    <h2>{historico.dia}</h2>
+                    <ul>
+                        {historico.logradouros.map((logradouro, index) => (
+                            <li key={index}>{logradouro}</li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
         </>
     )
 }
