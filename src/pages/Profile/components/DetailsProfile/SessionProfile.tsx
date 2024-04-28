@@ -1,4 +1,7 @@
 import { designTokens } from "design-tokens";
+import { FaRoad } from "react-icons/fa";
+import { FaHistory } from "react-icons/fa";
+import { FaHouseChimney } from "react-icons/fa6";
 const favorites = 
 [
     "Rua Reinado do Cavalo Marinho, 10",
@@ -16,18 +19,35 @@ const ListHistory = () =>{
     return(
         <>
             {history.map((historico, index)=>(
-                <div key={index} style={{
+                <div  style={{
                     display: 'flex',
                     flexDirection: 'column',
                     borderBottom: `1px solid ${designTokens.color.border}`,
                     padding: 12
                 }}>
-                    <h2>{historico.dia}</h2>
-                    <ul>
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 8
+                    }}>
+                        <FaHistory /> <span style={{
+                            fontSize: designTokens.font.size.large,
+                            fontWeight: designTokens.font.weight.semiBold
+                        }}>{historico.dia}</span>
+                    </div>
+                   
+                    
                         {historico.logradouros.map((logradouro, index) => (
-                            <li key={index}>{logradouro}</li>
+                            <span style={{
+                                marginLeft: '24px',
+                                display:'flex',
+                                alignItems: 'center',
+                                gap: 8
+                            }}>
+                             <FaRoad /><p key={index}>{logradouro}</p>
+                            </span>
+                          
                         ))}
-                    </ul>
                 </div>
             ))}
         </>
@@ -37,6 +57,19 @@ const ListHistory = () =>{
 const ListFavorites = () =>{
     return(
         <>
+        
+        {favorites.map((favorito)=>{
+        return(
+            <div style={{
+                display:'flex',
+                alignItems: 'center',
+                gap: 8
+            }}>
+           <FaHouseChimney /> <span>{favorito}</span>
+            </div>
+        )
+
+        })}
         </>
     )
 }
