@@ -30,7 +30,7 @@ export const FormProfile = ()=>{
             backgroundColor: "white",
             boxShadow: `0px 4px 13.9px 0px ${designTokens.color.boxShadow}`,
             width: "426px",
-            height: "630px",
+            height: "580px",
             padding: "40px 32px",
             gap: 10,
             borderRadius: designTokens.borderRadius.large
@@ -91,10 +91,6 @@ export const FormProfile = ()=>{
               <input placeholder="02/11/1969" style={textInputStyle} type="date" />
             </div>
 
-            <div style={groupLabelInputStyle as React.CSSProperties}>
-              <label>Senha</label>
-              <input placeholder="pipipopo" style={textInputStyle} type="password" />
-            </div>
 
            <button style={{
             width: 140,
