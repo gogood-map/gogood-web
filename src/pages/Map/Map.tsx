@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { MapComponent } from './components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
+import axios from 'axios'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
+    const { user } = useAuth()
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
@@ -22,18 +25,22 @@ export function Map() {
     }
 
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
-        const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`)
-        if (!response.ok) {
-            return Promise.reject('Erro ao consultar rotas')
-        }   
-        const json = await response.json()
+        const response = await axios.get(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
+            timeout: 90000
+        })
 
-        return await json as RoutesResponse[]
+        if (response.status !== 200) {
+            return Promise.reject('Erro ao consultar rotas')
+        }
+
+        return response.data as RoutesResponse[]
     }
     return (
         <>
             <MapComponent routes={routes} />
-            <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
+            {user &&
+                <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
+            }
         </>
     )
 }
