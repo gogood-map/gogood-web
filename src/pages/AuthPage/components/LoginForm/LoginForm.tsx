@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
 import { GoogleResponse } from '../RegisterForm/RegisterForm'
-import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
+import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 
 export function LoginForm() {
     const navigate = useNavigate()
@@ -143,7 +143,7 @@ export function LoginForm() {
                                 name: userInfo.name,
                                 email: userInfo.email,
                                 picture: userInfo.picture
-                            }
+                            } as User
 
                             login(user, true)
                         }
