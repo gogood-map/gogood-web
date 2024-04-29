@@ -30,18 +30,20 @@ export function UserIcon() {
     return (
         <div style={isHovered ? { ...defaultStyle, ...hoverStyle } : defaultStyle}
             onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}            
+            onMouseLeave={() => setIsHovered(false)}
             onClick={() => {
                 console.log('Clicou no usuário!')
                 navigate('/perfil')
             }}
         >
             <span>{user?.name}</span>
-            <img src={user?.picture} alt='User' style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '50%'
-            }} />
+            {user?.picture &&
+                <img src={user.picture} alt='Imagem do usuário' style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%'
+                }} />
+            }
         </div>
     )
 }   
