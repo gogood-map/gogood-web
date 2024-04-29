@@ -10,6 +10,7 @@ import { jwtDecode } from 'jwt-decode'
 import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
+import axios from 'axios'
 
 export type GoogleResponse = {
     aud: string
@@ -28,12 +29,28 @@ export type GoogleResponse = {
     sub: string
 }
 
+export type RegisterGoogleUser = {
+    email: string
+    nome: string
+    googleId: string
+}
+
+export type RegisterUser = {
+    email: string
+    password: string
+    confirmPassword: string
+    name: string
+    gender: string
+    birthDate: string
+    address: string
+}
+
 export function RegisterForm() {
     const [formStep, setFormStep] = useState(0)
     const navigate = useNavigate()
     const { login } = useAuth()
     const {
-        register, handleSubmit, watch, formState: { isValid, errors }
+        register, watch, formState: { isValid, errors }
     } = useForm({ mode: 'all' })
 
     const steps = [
@@ -43,10 +60,18 @@ export function RegisterForm() {
         { title: 'Concluído' }
     ]
 
-    const onSubmit = (data: unknown) => {
-        console.log(data)
-        login(data as User, false)
-        navigate('/')
+    const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
+        axios.post('-- substituir pelo endpoint de autenticação --', data)
+            .then(response => {
+                const user = response.data as User
+                login(user, true)
+                setFormStep(3)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        console.table(data)
+        setFormStep(3)
     }
 
     useEffect(() => {
@@ -97,8 +122,7 @@ export function RegisterForm() {
             flexDirection: 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
-        }}
-            onSubmit={handleSubmit(onSubmit)}>
+        }}>
             <Stepper steps={steps} currentStep={formStep} />
             {formStep >= 0 && (
                 <section style={{
@@ -188,17 +212,16 @@ export function RegisterForm() {
                             onSuccess={response => {
                                 if (response.credential) {
                                     const userInfo = jwtDecode(response.credential) as GoogleResponse
-                                    const user = {
-                                        name: userInfo.name,
-                                        email: userInfo.email,
-                                        picture: userInfo.picture
-                                    } as User
-                                    login(user, false)
-                                    navigate('/')
+                                    const { email, name, sub } = userInfo
+                                    onSubmit({
+                                        email,
+                                        nome: name,
+                                        googleId: sub
+                                    } as RegisterGoogleUser)
                                 }
                             }}
                             shape='circle'
-                            onError={() => console.log('error')}
+                            onError={() => console.log('Erro ao logar com Google')}
                         />
                     </div>
                 </section>
@@ -305,7 +328,7 @@ export function RegisterForm() {
                             type='date'
                             {...register('birthDate', {
                                 required: { value: true, message: 'Data de nascimento obrigatória' },
-                                validate: (value) => isBefore(value, new Date().toDateString()) || 'Data de nascimento inválida' 
+                                validate: (value) => isBefore(value, new Date().toDateString()) || 'Data de nascimento inválida'
                             })}
                         />
                         {errors.birthDate && watch('birthDate') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.birthDate.message as string}</span>}
@@ -374,8 +397,15 @@ export function RegisterForm() {
                         steps={steps.length - 1}
                         disabled={!watch('address') || !isValid}
                         onClickBack={() => setFormStep(formStep - 1)}
-                        onClickNext={() => setFormStep(formStep + 1)}
-                        onClickSubmit={() => handleSubmit(onSubmit)()}
+                        onClickSubmit={() => onSubmit({
+                            email: watch('email'),
+                            password: watch('password'),
+                            confirmPassword: watch('confirmPassword'),
+                            name: watch('name'),
+                            gender: watch('gender'),
+                            birthDate: watch('birthDate'),
+                            address: watch('address')
+                        } as RegisterUser)}
                     />
                 </section>
             )}
