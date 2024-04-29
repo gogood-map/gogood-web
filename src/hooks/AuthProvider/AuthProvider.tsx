@@ -3,7 +3,10 @@ import React, { createContext, useContext, useState } from 'react'
 export type User = {
     name: string
     email: string
-    picture: string
+    gender: string
+    birthdate: string
+    address: string
+    picture: string | undefined
 }
 
 type AuthContextType = {
