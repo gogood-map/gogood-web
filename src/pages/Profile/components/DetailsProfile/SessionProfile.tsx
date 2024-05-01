@@ -2,7 +2,7 @@ import { designTokens } from "design-tokens";
 import { FaRoad } from "react-icons/fa";
 import { FaHistory } from "react-icons/fa";
 import { FaHouseChimney } from "react-icons/fa6";
-const favorites = 
+const favorites =
 [
     "Rua Reinado do Cavalo Marinho, 10",
     "Rua Haddock Lobo, 595",
@@ -18,7 +18,7 @@ const history = [
 const ListHistory = () =>{
     return(
         <>
-            {history.map((historico, index)=>(
+            {history.map((historico)=>(
                 <div  style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -35,8 +35,8 @@ const ListHistory = () =>{
                             fontWeight: designTokens.font.weight.semiBold
                         }}>{historico.dia}</span>
                     </div>
-                   
-                    
+
+
                         {historico.logradouros.map((logradouro, index) => (
                             <span style={{
                                 marginLeft: '24px',
@@ -46,7 +46,7 @@ const ListHistory = () =>{
                             }}>
                              <FaRoad /><p key={index}>{logradouro}</p>
                             </span>
-                          
+
                         ))}
                 </div>
             ))}
@@ -57,7 +57,7 @@ const ListHistory = () =>{
 const ListFavorites = () =>{
     return(
         <>
-        
+
         {favorites.map((favorito)=>{
         return(
             <div style={{
