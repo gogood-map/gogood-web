@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { MapComponent } from './components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
+import axios from 'axios'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
@@ -22,13 +23,16 @@ export function Map() {
     }
 
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
-        const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`)
-        if (!response.ok) {
+        const baseUrl = import.meta.env.VITE_BASE_URL
+        const response = await axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
+            timeout: 90000
+        })
+
+        if (response.status !== 200) {
             return Promise.reject('Erro ao consultar rotas')
         }
-        const json = await response.json()
 
-        return await json as RoutesResponse[]
+        return response.data as RoutesResponse[]
     }
     return (
         <>

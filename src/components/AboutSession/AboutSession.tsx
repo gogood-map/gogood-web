@@ -14,7 +14,7 @@ export function AboutSession(props: AboutSessionProps) {
     const paragraphs = body.split('\n');
 
     return (
-        <div style={{
+        <div id='sobre-nos' style={{
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

@@ -14,8 +14,7 @@ export const routes = (
         </Route>
         <Route path='' element={<SidebarLayout />}>
             <Route path='mapa' element={<Map />} />
-            <Route path='perfil' element={<Profile/>} />
-            <Route path='historico' element={<div />} />
+            <Route path='perfil' element={<Profile />} />
             <Route path='ajustes' element={<div />} />
         </Route>
         <Route path='cadastro' element={<AuthPage type='register' />} />

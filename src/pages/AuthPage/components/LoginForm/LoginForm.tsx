@@ -7,19 +7,39 @@ import { isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
 import { GoogleResponse } from '../RegisterForm/RegisterForm'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
+import axios from 'axios'
+
+export type LoginUser = {
+    entry: string,
+    password?: string
+}
 
 export function LoginForm() {
     const navigate = useNavigate()
     const { login } = useAuth()
     const {
         register,
-        handleSubmit,
         watch,
         formState: { errors, isValid }
     } = useForm({ mode: 'all' })
 
-    const onSubmit = (data: unknown) => {
-        console.log(data)
+    const onSubmit = async (data: LoginUser) => {
+        const baseUrl = import.meta.env.VITE_BASE_URL
+        const user = await axios.get(`${baseUrl}/usuarios/login`, {
+            params: {
+                entrada: data.entry,
+                senha: data.password
+            }
+        })
+
+        if (user.status === 200) {
+            login(user.data, true)
+            setTimeout(() => {
+                navigate('/mapa')
+            }, 1000)
+        } else {
+            console.error('Erro ao logar')
+        }
     }
 
     const textInputStyle = {
@@ -32,17 +52,14 @@ export function LoginForm() {
     }
 
     return (
-        <form
-            onSubmit={handleSubmit(onSubmit)}
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100%',
-                width: '100%',
-                justifyContent: 'center',
-                gap: designTokens.spacing.medium,
-            }}
-        >
+        <form style={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '100%',
+            justifyContent: 'center',
+            gap: designTokens.spacing.medium,
+        }}>
             <h1 style={{
                 color: designTokens.color.text,
                 fontSize: designTokens.font.size.extraLarge,
@@ -122,7 +139,12 @@ export function LoginForm() {
                 steps={1}
                 currentStep={1}
                 disabled={watch('email') === '' || watch('password') === '' || !isValid}
-                onClickSubmit={() => { }}
+                onClickSubmit={() => {
+                    onSubmit({
+                        entry: watch('email'),
+                        password: watch('password')
+                    })
+                }}
             />
             <div style={{
                 display: 'flex',
@@ -139,13 +161,11 @@ export function LoginForm() {
                     onSuccess={response => {
                         if (response.credential) {
                             const userInfo = jwtDecode(response.credential) as GoogleResponse
-                            const user = {
-                                name: userInfo.name,
-                                email: userInfo.email,
-                                picture: userInfo.picture
-                            }
+                            const userGoogleId = userInfo.sub
 
-                            login(user, true)
+                            onSubmit({
+                                entry: userGoogleId
+                            })
                         }
                     }}
                     shape='circle'
