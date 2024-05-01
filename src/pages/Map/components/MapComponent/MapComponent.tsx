@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse } from '../RoutesSelection/RoutesSelection'
 import { designTokens } from 'design-tokens'
+import axios from 'axios'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[]
@@ -98,27 +99,20 @@ export function MapComponent(props: MapComponentProps) {
             })
 
             setPolyline(listaPolyline)
-
         }
-
     }, [routes])
 
     const loadData = async (lat: number, lng: number) => {
-        try {
-            const response = await fetch(`https://gogood.brazilsouth.cloudapp.azure.com/consultar/local/${lat}/${lng}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
-            const json = await response.json()
-            return json.mapData.map((item: { latitude: number; longitude: number }) => {
-                new google.maps.LatLng(item.latitude, item.longitude)
-            })
-        } catch (error) {
-            console.error(error)
-            return []
+        const baseUrl = import.meta.env.VITE_BASE_URL
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`)
+
+        if (response.status !== 200) {
+            return Promise.reject('Erro ao consultar local')
         }
+
+        return response.data.mapData.map((item: { latitude: number; longitude: number }) => {
+            return new google.maps.LatLng(item.latitude, item.longitude)
+        })
     }
 
     return <div id="map" style={{ width: '100%', height: '100%' }} />
