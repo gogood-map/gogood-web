@@ -49,6 +49,7 @@ export function AuthButton(props: AuthButtonProps) {
                     padding: '0',
                 }} onClick={onClickNext}
                     disabled={disabled}
+                    type='button'
                     value={''}>
                     <img src={formNextButton} alt='Próximo' style={{
                         width: '100%',
@@ -67,7 +68,7 @@ export function AuthButton(props: AuthButtonProps) {
                     padding: '0',
                 }} onClick={onClickSubmit}
                     disabled={disabled}
-                    type='submit'
+                    type='button'
                     value={''}>
                     <img src={formNextButton} alt='Enviar' style={{
                         width: '100%',

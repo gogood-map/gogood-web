@@ -46,16 +46,14 @@ export function AuthPage(props: AuthPageProps) {
                     height: '100%'
                 }} />
             </button>
-            {type === 'register' && (
-                <AuthCard>
+            <AuthCard>
+                {type === 'register' && (
                     <RegisterForm />
-                </AuthCard>
-            )}
-            {type === 'login' && (
-                <AuthCard>
+                )}
+                {type === 'login' && (
                     <LoginForm />
-                </AuthCard>
-            )}
+                )}
+            </AuthCard>
 
         </div>
     )

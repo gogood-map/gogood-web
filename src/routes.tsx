@@ -5,6 +5,7 @@ import { Home } from './pages/Home/Home.tsx'
 import { NotFound } from './pages/NotFound/NotFound.tsx'
 import { SidebarLayout } from './pages/SidebarLayout/SidebarLayout.tsx'
 import { Map } from './pages/Map/Map.tsx'
+import { Profile } from './pages/Profile/Profile.tsx'
 
 export const routes = (
     <Routes>
@@ -13,8 +14,7 @@ export const routes = (
         </Route>
         <Route path='' element={<SidebarLayout />}>
             <Route path='mapa' element={<Map />} />
-            <Route path='perfil' element={<div />} />
-            <Route path='historico' element={<div />} />
+            <Route path='perfil' element={<Profile />} />
             <Route path='ajustes' element={<div />} />
         </Route>
         <Route path='cadastro' element={<AuthPage type='register' />} />
