@@ -47,23 +47,6 @@ export function MapComponent(props: MapComponentProps) {
                 fullscreenControl: false,
             })
 
-            consultaRota().then(async(rota:any)=>{
-                const {encoding} = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
-                const caminho = encoding.decodePath(rota.polyline)
-                const polyline = new google.maps.Polyline({
-                    path: caminho,
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 0.8,
-                    strokeWeight: 2,
-                    map: map
-                })
-
-                polyline.setMap(map)
-
-                console.log(caminho);
-
-            })
-
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 if (center) {
@@ -75,7 +58,6 @@ export function MapComponent(props: MapComponentProps) {
             loadData(-23.5581213, -46.661614).then(newData => setData(newData))
         })
     }, [])
-
 
 
     useEffect(() => {
