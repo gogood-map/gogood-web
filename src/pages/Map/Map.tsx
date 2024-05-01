@@ -3,12 +3,10 @@ import { MapComponent } from './components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
-import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
-    const { user } = useAuth()
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
@@ -25,7 +23,8 @@ export function Map() {
     }
 
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
-        const response = await axios.get(`https://gogood.brazilsouth.cloudapp.azure.com/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
+        const baseUrl = import.meta.env.VITE_BASE_URL
+        const response = await axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
             timeout: 90000
         })
 
@@ -38,9 +37,7 @@ export function Map() {
     return (
         <>
             <MapComponent routes={routes} />
-            {user &&
-                <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
-            }
+            <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
         </>
     )
 }
