@@ -38,7 +38,6 @@ export type RegisterGoogleUser = {
 export type RegisterUser = {
     email: string
     password: string
-    confirmPassword: string
     name: string
     gender: string
     birthDate: string
@@ -61,7 +60,8 @@ export function RegisterForm() {
     ]
 
     const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
-        axios.post('-- substituir pelo endpoint de autenticação --', data)
+        const baseUrl = import.meta.env.VITE_BASE_URL
+        axios.post(`${baseUrl}/usuarios`, data)
             .then(response => {
                 const user = response.data as User
                 login(user, true)
@@ -92,7 +92,7 @@ export function RegisterForm() {
         margin: 0 0 0 ${designTokens.spacing.tiny};
 
         &:checked {
-        background-color: ${designTokens.color.primary};
+            background-color: ${designTokens.color.primary};
         }
     `
     const textInputStyle = {
@@ -400,7 +400,6 @@ export function RegisterForm() {
                         onClickSubmit={() => onSubmit({
                             email: watch('email'),
                             password: watch('password'),
-                            confirmPassword: watch('confirmPassword'),
                             name: watch('name'),
                             gender: watch('gender'),
                             birthDate: watch('birthDate'),
