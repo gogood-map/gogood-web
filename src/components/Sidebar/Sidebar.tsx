@@ -41,7 +41,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 display: 'flex',
                 justifyContent: 'space-between',
                 flexDirection: 'column',
-                height: `calc(100vh - (${designTokens.spacing.large} * 2))`,
+                height: `calc(100% - (${designTokens.spacing.large} * 2))`,
                 backgroundColor: designTokens.color.background,
                 borderRadius: `0px ${designTokens.borderRadius.large} ${designTokens.borderRadius.large} 0px`,
                 paddingTop: designTokens.spacing.large,
