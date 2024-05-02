@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MapComponent } from './components/MapComponent/MapComponent'
+import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import axios from 'axios'

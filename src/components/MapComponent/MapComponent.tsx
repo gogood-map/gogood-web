@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
-import { RoutesResponse } from '../RoutesSelection/RoutesSelection'
+import { RoutesResponse } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import { designTokens } from 'design-tokens'
 import axios from 'axios'
 
