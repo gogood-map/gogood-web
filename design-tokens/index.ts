@@ -9,6 +9,7 @@ export const designTokens = {
         gray: '#8C8C8C',
         selected: '#008961',
         selectedLight: '#00B176',
+        selectedHover: '#00714A',
         boxShadow: 'rgba(0, 0, 0, 0.10)',
         cardShadow: '0 8px 22px rgba(0, 0, 0, 0.25)',
         text: '#334049',
