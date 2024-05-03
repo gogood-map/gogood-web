@@ -30,7 +30,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
 
     return (
         <aside style={{
-            height: '100%',
+            height: '100vh',
             width: 'min-content',
             position: 'fixed',
             top: '0',

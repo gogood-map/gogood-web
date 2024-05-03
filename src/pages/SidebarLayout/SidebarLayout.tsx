@@ -32,9 +32,8 @@ export function SidebarLayout() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 width: '100vw',
-                height: '100vh',
+                minHeight: '100vh',
                 userSelect: 'none',
-                overflow: 'hidden',
                 backgroundColor: designTokens.color.background,
             }}>
                 <Sidebar onClick={() => { setExpanded(!expanded) }}>
