@@ -2,70 +2,69 @@ import { designTokens } from 'design-tokens'
 import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { HistoryTable } from './components/HistoryTable/HistoryTable'
 import { HistoryNav } from './components/HitoryNav/HistoryNav'
+import { useState } from 'react'
+import { RoutesResponse } from '../Map/components/RoutesSelection/RoutesSelection'
+import { HistoryTableItemProps } from './components/HistoryTableItem/HistoryTableItem'
 
 export function History() {
-  const items = [
+  const [route, setRoute] = useState<RoutesResponse>()
+
+  const historyItems = [
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
-      onClick: () => console.log('clicked'),
     },
-  ]
+  ] as HistoryTableItemProps[]
+
+  const handleSelectRoute = (route: RoutesResponse) => {
+    setRoute(route)
+  }
 
   return (
     <div style={{
@@ -86,7 +85,7 @@ export function History() {
           width: '35%',
           height: `calc(100vh - 41px - (${designTokens.spacing.medium}) * 2)`,
         }}>
-          <HistoryTable items={items} />
+          <HistoryTable items={historyItems} onClick={handleSelectRoute} />
         </div>
         <div style={{
           margin: '20px',
@@ -96,7 +95,7 @@ export function History() {
           boxShadow: ` 0px 4px 4px 2px ${designTokens.color.boxShadow}`,
           overflow: 'hidden',
         }}>
-          <MapComponent />
+          <MapComponent routes={route ? [route] : undefined} />
         </div>
       </div>
     </div>

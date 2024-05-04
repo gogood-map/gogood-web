@@ -1,11 +1,12 @@
 import { designTokens } from 'design-tokens'
+import { FaHistory } from 'react-icons/fa'
 import { FaArrowRight } from 'react-icons/fa6'
 
 export type HistoryTableItemProps = {
   date: string
   origin: string
   destination: string
-  onClick: () => void
+  onClick?: () => void
 }
 
 export function HistoryTableItem(props: HistoryTableItemProps) {
@@ -20,13 +21,18 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
       paddingBottom: designTokens.spacing.small,
     }}>
       <h2 style={{
+        display: 'flex',
+        alignItems: 'center',
+        color: designTokens.color.text,
+        gap: designTokens.spacing.small,
         fontSize: designTokens.font.size.mediumLarge,
         fontWeight: designTokens.font.weight.semiBold,
         margin: 0,
       }}>
+        <FaHistory size={designTokens.font.size.mediumLarge}/>
         {date}
       </h2>
-      <div onClick={() => onClick} style={{
+      <div onClick={onClick} style={{
         display: 'flex',
         gap: designTokens.spacing.small,
         alignItems: 'center',
