@@ -20,7 +20,34 @@ export function MapComponent(props: MapComponentProps) {
         libraries: ['visualization'],
     })
 
-    // Função de debounce
+    const roustesColors = (routes: RoutesResponse[]) => {
+        let colors = routes.map(route => {
+            const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
+            if (ocorrenciasPorKm < 75) {
+                return designTokens.color.success
+            } else if (ocorrenciasPorKm < 150) {
+                return designTokens.color.alert
+            } else {
+                return designTokens.color.error
+            }
+        })
+
+        if (colors.every(color => color === designTokens.color.error)) {
+            colors[0] = designTokens.color.success
+            colors[1] = designTokens.color.alert
+        } else if (colors.every(color => color === designTokens.color.alert)) {
+            colors[0] = designTokens.color.success
+        } else if (colors.every(color => color === designTokens.color.success)) {
+            colors = colors
+        } else if (!colors.includes(designTokens.color.success)) {
+            colors[0] = designTokens.color.success
+            colors[1] = designTokens.color.alert
+        }
+
+        return colors
+
+    }
+
     const debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: NodeJS.Timeout
         return function executedFunction(...args: any[]) {
@@ -83,6 +110,7 @@ export function MapComponent(props: MapComponentProps) {
         }
         if (routes) {
             const listaPolyline: google.maps.Polyline[] = []
+            const colors = roustesColors(routes)
 
             routes.forEach(async (route, index) => {
                 const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
@@ -90,7 +118,7 @@ export function MapComponent(props: MapComponentProps) {
                 const polylineRota = new google.maps.Polyline({
                     path: caminho,
                     geodesic: true,
-                    strokeColor: index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error,
+                    strokeColor: colors[index],
                     strokeOpacity: 1.0,
                     strokeWeight: 5,
                 })
