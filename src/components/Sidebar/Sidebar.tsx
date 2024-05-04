@@ -48,7 +48,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 paddingBottom: designTokens.spacing.large,
                 paddingLeft: designTokens.spacing.medium,
                 paddingRight: designTokens.spacing.medium,
-                boxShadow: `0px 4px 4px 0px ${designTokens.color.boxShadow}`
+                boxShadow: `0px 4px 4px 4px ${designTokens.color.boxShadow}`
             }}>
                 <div style={{
                     display: 'flex',
