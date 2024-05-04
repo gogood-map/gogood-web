@@ -6,20 +6,26 @@ import axios from 'axios'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
+    const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
         consultaRota(origin, destination, travelMode)
-            .then((rotas) => {
-                setRoutes(rotas)
-                console.log(rotas)
+            .then((routes) => {
+                setRoutesView(routes)
+                setRoutes(routes)
+                console.log(routes)
                 setSearchStatus('success')
             })
             .catch((error) => {
                 console.error(error)
                 setSearchStatus('error')
             })
+    }
+
+    const handleSelectRoute = (route: RoutesResponse) => {
+        setRoutesView([route])
     }
 
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
@@ -36,8 +42,8 @@ export function Map() {
     }
     return (
         <>
-            <MapComponent routes={routes} />
-            <RouteSearchCard onSubmitSearch={handleSubmitSearch} routes={routes} searchStatus={searchStatus} />
+            <MapComponent routes={routesView} />
+            <RouteSearchCard onSubmitSearch={handleSubmitSearch} onSelectRoute={handleSelectRoute} routes={routes} searchStatus={searchStatus} />
         </>
     )
 }
