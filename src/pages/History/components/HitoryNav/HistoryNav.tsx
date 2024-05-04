@@ -4,7 +4,7 @@ import { SearchInput } from '../../../../components/SearchInput/SearchInput'
 
 export function HistoryNav() {
   return (
-    <div style={{
+    <nav style={{
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -13,10 +13,10 @@ export function HistoryNav() {
       marginLeft: '60px',
       height: '40px',
     }}>
-      <span style={{
+      <h2 style={{
         fontSize: designTokens.font.size.large,
         fontWeight: designTokens.font.weight.semiBold,
-      }}>Histórico</span>
+      }}>Histórico</h2>
 
       <SearchInput />
 
@@ -28,6 +28,6 @@ export function HistoryNav() {
       }}>
         <RiFilter3Line size={'28px'} />
       </button>
-    </div>
+    </nav>
   )
 }
