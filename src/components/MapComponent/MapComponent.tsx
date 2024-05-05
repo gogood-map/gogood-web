@@ -85,6 +85,8 @@ export function MapComponent(props: MapComponentProps) {
         if (routes) {
             const listaPolyline: google.maps.Polyline[] = []
 
+            // const routesReordered = routes.sort((a, b) => a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais)
+
             routes.forEach(async (route, index) => {
                 const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
                 const caminho = encoding.decodePath(route.polyline)
