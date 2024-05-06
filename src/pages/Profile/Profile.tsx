@@ -1,31 +1,33 @@
-import { FormProfile } from "./components/FormProfile/FormProfile";
-import { DetailsProfile } from "./components/DetailsProfile/SessionProfile";
+import { FormProfile } from './components/FormProfile/FormProfile'
+import { designTokens } from 'design-tokens'
+import { AddressSection } from './components/AddressSection/AdressSection'
 export const Profile = () => {
 
-  
+
   return (
     <main style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        height: '100%',
-        width: '88%',
-        alignItems: 'center'
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      minHeight: `calc(100% - ${designTokens.spacing.large} * 2)`,
+      width: `calc(100% - 60px - ${designTokens.spacing.large} * 2)`,
+      padding: designTokens.spacing.large,
+      marginLeft: '60px',
     }}>
+      <section style={{
+        width: '35%',
+        height: '100%',
+      }}>
+        <FormProfile />
+      </section>
 
-    <FormProfile/>
+      <section style={{
+        width: '65%',
+        height: '100%',
+      }}>
+        <AddressSection />
+      </section>
 
-     <section style={{
-        display: 'flex',
-        flexDirection: 'column',
-
-     }}>
-     
-     <DetailsProfile title="Histórico" type="history"/>
-     <DetailsProfile title="Favoritos" type="favorites"/>
-     
-     </section>
-     
     </main>
-  );
-};
+  )
+}
