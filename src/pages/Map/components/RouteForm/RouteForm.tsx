@@ -33,7 +33,7 @@ export function RouteForm(props: RouteFormProps) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: designTokens.color.gray,
+        backgroundColor: designTokens.color.ligthGray,
         padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
         borderRadius: designTokens.borderRadius.smallMedium,
         cursor: 'pointer',
@@ -41,7 +41,7 @@ export function RouteForm(props: RouteFormProps) {
 
     const selectedRouteLabelStyle = {
         backgroundColor: designTokens.color.secondary,
-        color: designTokens.color.gray,
+        color: designTokens.color.ligthGray,
     } as React.CSSProperties
 
     const iconSize = '24px'

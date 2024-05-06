@@ -4,6 +4,33 @@ import { RouteSearchCardContext, RouteSearchCardContextProps } from "../RouteSea
 import { RouteOption } from "../RouteOption/RouteOption";
 import { LoaderIcon } from "../../../../components/LoaderIcon/LoaderIcon";
 
+export function routesColors(routes: RoutesResponse[]) {
+    let colors = routes.map(route => {
+        const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia;
+        if (ocorrenciasPorKm < 75) {
+            return designTokens.color.success;
+        } else if (ocorrenciasPorKm < 150) {
+            return designTokens.color.alert;
+        } else {
+            return designTokens.color.error;
+        }
+    })
+
+    if (colors.every(color => color === designTokens.color.error)) {
+        colors[0] = designTokens.color.success;
+        colors[1] = designTokens.color.alert;
+    } else if (colors.every(color => color === designTokens.color.alert)) {
+        colors[0] = designTokens.color.success;
+    } else if (colors.every(color => color === designTokens.color.success)) {
+        colors = colors;
+    } else if (!colors.includes(designTokens.color.success)) {
+        colors[0] = designTokens.color.success;
+        colors[1] = designTokens.color.alert;
+    }
+
+    return colors;
+}
+
 export type RoutesResponse = {
     origem: string
     destino: string
@@ -21,10 +48,11 @@ export type RoutesResponse = {
 type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
+    onSelectRoute?: (route: RoutesResponse) => void
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes, searchStatus } = props
+    const { routes, searchStatus, onSelectRoute } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
@@ -57,6 +85,11 @@ export function RoutesSelection(props: RoutesSelectionProps) {
         }
 
         return totalMinutos;
+    }
+
+    const sendSelectedRoute = (route: RoutesResponse) => {
+        onSelectRoute && onSelectRoute(route);
+        console.table(route);
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
@@ -111,12 +144,12 @@ export function RoutesSelection(props: RoutesSelectionProps) {
 
                 {routes && searchStatus === 'success' && orderedRoutes(routes).map((route, index) => {
                     const durationInMinutes = stringToMinutes(route.duracao);
-                    const color = index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error;
+                    const color = routesColors(routes)[index];
                     const risk = index === 0 ? 'Menor Risco' : index === 1 ? 'Risco Médio' : 'Risco Alto';
-                    return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} />;
+                    return <RouteOption key={index} risk={risk} durationInMinutes={durationInMinutes} color={color} onClick={() => sendSelectedRoute(route)} />;
                 })}
 
-                {(!routes && searchStatus === 'loading') && <div style={{
+                {searchStatus === 'loading' && <div style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

@@ -30,7 +30,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
 
     return (
         <aside style={{
-            height: '100%',
+            height: '100vh',
             width: 'min-content',
             position: 'fixed',
             top: '0',
@@ -41,14 +41,14 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 display: 'flex',
                 justifyContent: 'space-between',
                 flexDirection: 'column',
-                height: `calc(100vh - (${designTokens.spacing.large} * 2))`,
+                height: `calc(100% - (${designTokens.spacing.large} * 2))`,
                 backgroundColor: designTokens.color.background,
                 borderRadius: `0px ${designTokens.borderRadius.large} ${designTokens.borderRadius.large} 0px`,
                 paddingTop: designTokens.spacing.large,
                 paddingBottom: designTokens.spacing.large,
                 paddingLeft: designTokens.spacing.medium,
                 paddingRight: designTokens.spacing.medium,
-                boxShadow: `0px 4px 4px 0px ${designTokens.color.boxShadow}`
+                boxShadow: `0px 4px 4px 4px ${designTokens.color.boxShadow}`
             }}>
                 <div style={{
                     display: 'flex',

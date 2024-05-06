@@ -31,7 +31,7 @@ export type GoogleResponse = {
 
 export type RegisterGoogleUser = {
     email: string
-    nome: string
+    name: string
     googleId: string
 }
 
@@ -60,8 +60,17 @@ export function RegisterForm() {
     ]
 
     const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
+        console.table(data)
         const baseUrl = import.meta.env.VITE_BASE_URL
-        axios.post(`${baseUrl}/usuarios`, data)
+        axios.post(`${baseUrl}/usuarios`, {
+            email: data.email,
+            nome: data.name,
+            senha: 'password' in data ? data.password : undefined,
+            genero: 'gender' in data ? data.gender : undefined,
+            dataNascimento: 'birthDate' in data ? data.birthDate : undefined,
+            endereco: 'address' in data ? data.address : undefined,
+            googleId: 'googleId' in data ? data.googleId : undefined
+        })
             .then(response => {
                 const user = response.data as User
                 login(user, true)
@@ -70,7 +79,6 @@ export function RegisterForm() {
             .catch(error => {
                 console.error(error)
             })
-        console.table(data)
         setFormStep(3)
     }
 
@@ -215,7 +223,7 @@ export function RegisterForm() {
                                     const { email, name, sub } = userInfo
                                     onSubmit({
                                         email,
-                                        nome: name,
+                                        name,
                                         googleId: sub
                                     } as RegisterGoogleUser)
                                 }
