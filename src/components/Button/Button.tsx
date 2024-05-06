@@ -2,7 +2,7 @@ import { designTokens } from 'design-tokens'
 
 export type ButtonProps = {
     label: string
-    type?: 'outline' | 'solid' | 'text'
+    type?: 'outline' | 'solid' | 'text' | 'primary'
     onClick: () => void
 }
 
@@ -11,6 +11,7 @@ export function Button(props: ButtonProps) {
     const isSolid = type === 'solid'
     const isOutline = type === 'outline'
     const isText = type === 'text'
+    const isPrimary = type === 'primary'
 
     const commonStyles = {
         paddingTop: designTokens.spacing.small,
@@ -28,15 +29,15 @@ export function Button(props: ButtonProps) {
         <>
             {(isSolid || !type) &&
                 <button onClick={onClick}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#1B242A'
-                }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#1B242A'
+                    }}
 
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = designTokens.color.secondary
-                }}
-                
-                    
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = designTokens.color.secondary
+                    }}
+
+
                     style={{
                         ...commonStyles,
                         backgroundColor: designTokens.color.secondary,
@@ -51,14 +52,14 @@ export function Button(props: ButtonProps) {
 
             {isOutline &&
                 <button onClick={onClick}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, .1)'
-                }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, .1)'
+                    }}
 
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = designTokens.color.white
-                }}
-                    
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = designTokens.color.white
+                    }}
+
                     style={{
                         ...commonStyles,
                         backgroundColor: 'transparent',
@@ -77,6 +78,19 @@ export function Button(props: ButtonProps) {
                         ...commonStyles,
                         backgroundColor: 'transparent',
                         color: designTokens.color.secondary,
+                        border: '1.5px solid transparent'
+                    }}>
+                    {label}
+                </button>
+            }
+
+            {isPrimary &&
+                <button onClick={onClick}
+                    style={{
+                        ...commonStyles,
+                        width: '100%',
+                        backgroundColor: designTokens.color.selectedLight,
+                        color: designTokens.color.white,
                         border: '1.5px solid transparent'
                     }}>
                     {label}
