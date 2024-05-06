@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
-import { RoutesResponse } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
-import { designTokens } from 'design-tokens'
+import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
 
 export type MapComponentProps = {
@@ -19,34 +18,6 @@ export function MapComponent(props: MapComponentProps) {
         version: 'weekly',
         libraries: ['visualization'],
     })
-
-    const roustesColors = (routes: RoutesResponse[]) => {
-        let colors = routes.map(route => {
-            const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
-            if (ocorrenciasPorKm < 75) {
-                return designTokens.color.success
-            } else if (ocorrenciasPorKm < 150) {
-                return designTokens.color.alert
-            } else {
-                return designTokens.color.error
-            }
-        })
-
-        if (colors.every(color => color === designTokens.color.error)) {
-            colors[0] = designTokens.color.success
-            colors[1] = designTokens.color.alert
-        } else if (colors.every(color => color === designTokens.color.alert)) {
-            colors[0] = designTokens.color.success
-        } else if (colors.every(color => color === designTokens.color.success)) {
-            colors = colors
-        } else if (!colors.includes(designTokens.color.success)) {
-            colors[0] = designTokens.color.success
-            colors[1] = designTokens.color.alert
-        }
-
-        return colors
-
-    }
 
     const debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: NodeJS.Timeout
@@ -97,6 +68,9 @@ export function MapComponent(props: MapComponentProps) {
                 data,
                 map,
                 maxIntensity: 7,
+                gradient: [
+                    'rgba(0,0,0,0)', 'yellow', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'red'
+                ]
             })
             setHeatmap(newHeatmap)
         }
@@ -110,7 +84,8 @@ export function MapComponent(props: MapComponentProps) {
         }
         if (routes) {
             const listaPolyline: google.maps.Polyline[] = []
-            const colors = roustesColors(routes)
+
+            // const routesReordered = routes.sort((a, b) => a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais)
 
             routes.forEach(async (route, index) => {
                 const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
@@ -118,7 +93,7 @@ export function MapComponent(props: MapComponentProps) {
                 const polylineRota = new google.maps.Polyline({
                     path: caminho,
                     geodesic: true,
-                    strokeColor: colors[index],
+                    strokeColor: routesColors(routes)[index],
                     strokeOpacity: 1.0,
                     strokeWeight: 5,
                 })
@@ -132,7 +107,12 @@ export function MapComponent(props: MapComponentProps) {
 
     const loadData = async (lat: number, lng: number) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
-        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`)
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
 
         if (response.status !== 200) {
             return Promise.reject('Erro ao consultar local')
