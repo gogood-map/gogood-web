@@ -1,9 +1,10 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import { Sidebar } from "../../components/Sidebar/Sidebar";
-import { SidebarItem } from "../../components/SidebarItem/SidebarItem";
-import { FiHome, FiMap, FiSettings, FiUser } from "react-icons/fi";
-import { designTokens } from "design-tokens";
-import { createContext, useState } from "react";
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Sidebar } from '../../components/Sidebar/Sidebar';
+import { SidebarItem } from '../../components/SidebarItem/SidebarItem';
+import { FiHome, FiMap, FiSettings, FiUser } from 'react-icons/fi';
+import { designTokens } from 'design-tokens';
+import { createContext, useState } from 'react';
+import { RiHistoryFill } from 'react-icons/ri'
 
 export type SidebarContextProps = {
     expanded: boolean;
@@ -17,10 +18,11 @@ export function SidebarLayout() {
     const navigate = useNavigate();
 
     const icons = [
-        { icon: <FiHome size={defaultIconSize} />, text: "Início", alert: true, onclick: () => { navigate('/') } },
-        { icon: <FiMap size={defaultIconSize} />, text: "Mapa", onclick: () => { navigate('/mapa') } },
-        { icon: <FiUser size={defaultIconSize} />, text: "Perfil", onclick: () => { navigate('/perfil') } },
-        { icon: <FiSettings size={defaultIconSize} />, text: "Ajustes", onclick: () => { navigate('/ajustes') } },
+        { icon: <FiHome size={defaultIconSize} />, text: 'Início', alert: true, onclick: () => { navigate('/') } },
+        { icon: <FiMap size={defaultIconSize} />, text: 'Mapa', onclick: () => { navigate('/mapa') } },
+        { icon: <FiUser size={defaultIconSize} />, text: 'Perfil', onclick: () => { navigate('/perfil') } },
+        { icon: <RiHistoryFill size={defaultIconSize} />, text: 'Histórico', onclick: () => { navigate('/historico') } },
+        { icon: <FiSettings size={defaultIconSize} />, text: 'Ajustes', onclick: () => { navigate('/ajustes') } },
     ]
 
     return (
@@ -30,9 +32,8 @@ export function SidebarLayout() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 width: '100vw',
-                height: '100vh',
+                minHeight: '100vh',
                 userSelect: 'none',
-                overflow: 'hidden',
                 backgroundColor: designTokens.color.background,
             }}>
                 <Sidebar onClick={() => { setExpanded(!expanded) }}>

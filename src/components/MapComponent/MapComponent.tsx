@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
-import { RoutesResponse } from '../RoutesSelection/RoutesSelection'
-import { designTokens } from 'design-tokens'
+import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
 
 export type MapComponentProps = {
@@ -20,7 +19,6 @@ export function MapComponent(props: MapComponentProps) {
         libraries: ['visualization'],
     })
 
-    // Função de debounce
     const debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: NodeJS.Timeout
         return function executedFunction(...args: any[]) {
@@ -70,6 +68,9 @@ export function MapComponent(props: MapComponentProps) {
                 data,
                 map,
                 maxIntensity: 7,
+                gradient: [
+                    'rgba(0,0,0,0)', 'yellow', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'red'
+                ]
             })
             setHeatmap(newHeatmap)
         }
@@ -84,13 +85,15 @@ export function MapComponent(props: MapComponentProps) {
         if (routes) {
             const listaPolyline: google.maps.Polyline[] = []
 
+            // const routesReordered = routes.sort((a, b) => a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais)
+
             routes.forEach(async (route, index) => {
                 const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
                 const caminho = encoding.decodePath(route.polyline)
                 const polylineRota = new google.maps.Polyline({
                     path: caminho,
                     geodesic: true,
-                    strokeColor: index === 0 ? designTokens.color.success : index === 1 ? designTokens.color.alert : designTokens.color.error,
+                    strokeColor: routesColors(routes)[index],
                     strokeOpacity: 1.0,
                     strokeWeight: 5,
                 })
@@ -104,7 +107,12 @@ export function MapComponent(props: MapComponentProps) {
 
     const loadData = async (lat: number, lng: number) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
-        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`)
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+            },
+        })
 
         if (response.status !== 200) {
             return Promise.reject('Erro ao consultar local')

@@ -75,15 +75,10 @@ export function LoginForm() {
                 flexDirection: 'column',
             }}>
 
-                <label
-                    htmlFor='email'
-                    style={{
-                        fontWeight: designTokens.font.weight.medium,
-                        color: designTokens.color.secondary,
-                    }}
-                >
-                    Email
-                </label>
+                <label htmlFor='email' style={{
+                    fontWeight: designTokens.font.weight.medium,
+                    color: designTokens.color.secondary,
+                }} > Email </label>
                 <input
                     id='email'
                     type='email'
@@ -108,15 +103,10 @@ export function LoginForm() {
                 flexDirection: 'column',
 
             }}>
-                <label
-                    htmlFor='password'
-                    style={{
-                        fontWeight: designTokens.font.weight.medium,
-                        color: designTokens.color.secondary,
-                    }}
-                >
-                    Senha
-                </label>
+                <label htmlFor='password' style={{
+                    fontWeight: designTokens.font.weight.medium,
+                    color: designTokens.color.secondary,
+                }}> Senha </label>
                 <input style={textInputStyle}
                     id='password'
                     type='password'
@@ -162,14 +152,11 @@ export function LoginForm() {
                         if (response.credential) {
                             const userInfo = jwtDecode(response.credential) as GoogleResponse
                             const userGoogleId = userInfo.sub
-
-                            onSubmit({
-                                entry: userGoogleId
-                            })
+                            onSubmit({ entry: userGoogleId })
                         }
                     }}
                     shape='circle'
-                    onError={() => console.log('error')}
+                    onError={() => console.error("Erro ao logar com Google")}
                 />
                 <div style={{
                     display: 'flex',
@@ -178,18 +165,18 @@ export function LoginForm() {
                     É novo na nossa plataforma?
                     <a
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.color = designTokens.color.secondary
+                            e.currentTarget.style.color = designTokens.color.text
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.color = designTokens.color.primary
+                            e.currentTarget.style.color = designTokens.color.selectedLight
                         }}
                         style={{
-                            color: designTokens.color.primary,
+                            color: designTokens.color.selectedLight,
                             textDecoration: 'underline',
                             cursor: 'pointer'
                         }}
                         onClick={() => { navigate('/cadastro') }}
-                    > Cadastro </a>
+                    > Cadastre-se </a>
 
                 </div>
             </div>

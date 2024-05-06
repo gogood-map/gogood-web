@@ -26,7 +26,7 @@ export function InformativeCard(props: InformativeCardProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         borderRadius: designTokens.borderRadius.large,
-        backgroundColor: designTokens.color.gray,
+        backgroundColor: designTokens.color.ligthGray,
         boxShadow: designTokens.color.cardShadow,
         transition: 'transform .5s ease',
         cursor: 'default',

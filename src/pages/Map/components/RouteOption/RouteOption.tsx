@@ -5,6 +5,7 @@ export type RouteOptionProps = {
     risk: string
     durationInMinutes: number
     color: string
+    onClick?: () => void
 }
 
 export function RouteOption(props: RouteOptionProps) {
