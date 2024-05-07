@@ -22,13 +22,13 @@ export function HistoryTable(props: HistoryTableProps) {
     }
 
     &::-webkit-scrollbar-track {
-      background: transparent;
-      border-radius: ${designTokens.borderRadius.medium};  // Adicione o border-radius aqui
+      background: ${designTokens.color.gray};
+      border-radius: ${designTokens.borderRadius.medium};
     }
 
     &::-webkit-scrollbar-thumb {
       background: ${designTokens.color.selected};
-      border-radius: ${designTokens.borderRadius.medium};  // Adicione o border-radius aqui
+      border-radius: ${designTokens.borderRadius.medium};
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -42,11 +42,11 @@ export function HistoryTable(props: HistoryTableProps) {
       flexDirection: 'column',
       gap: designTokens.spacing.medium,
       margin: designTokens.spacing.medium,
-      padding: `0 0 0 ${designTokens.spacing.medium}`,
+      padding: `${designTokens.spacing.medium}`,
       borderRadius: designTokens.borderRadius.medium,
       backgroundColor: designTokens.color.white,
       boxShadow: `0 4px 14px 2px ${designTokens.color.boxShadow}`,
-      height: `calc(100% - (${designTokens.spacing.medium} * 2))`,
+      height: `calc(100% - (${designTokens.spacing.medium} * 4))`,
     }}>
       <ScrolableDiv>
         {items.map((item, index) => (
