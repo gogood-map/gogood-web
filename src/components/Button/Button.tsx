@@ -86,6 +86,7 @@ export function Button(props: ButtonProps) {
 
             {isPrimary &&
                 <button onClick={onClick}
+                    type='button'
                     style={{
                         ...commonStyles,
                         width: '100%',

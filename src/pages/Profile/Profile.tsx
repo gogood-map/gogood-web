@@ -9,7 +9,7 @@ export const Profile = () => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      minHeight: `calc(100% - ${designTokens.spacing.large} * 2)`,
+      height: `calc(100vh - ${designTokens.spacing.large} * 2)`,
       width: `calc(100% - 60px - ${designTokens.spacing.large} * 2)`,
       padding: designTokens.spacing.large,
       marginLeft: '60px',
