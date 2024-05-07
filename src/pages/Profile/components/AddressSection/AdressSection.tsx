@@ -77,9 +77,6 @@ export function AddressSection() {
     },
   ]
 
-  const heightForm = document.getElementById('address-form')?.clientHeight
-    || document.getElementById('address-form')?.offsetHeight
-
   return (
     <div style={{
       display: 'flex',
@@ -96,7 +93,9 @@ export function AddressSection() {
       <div style={{
         width: '100%',
         flex: 1,
-        maxHeight: `calc(100% - ${designTokens.spacing.large} - ${heightForm}px)`,
+        overflowY: 'auto',
+        borderRadius: designTokens.borderRadius.large,
+        boxShadow: `0px 4px 14px 0px ${designTokens.color.boxShadow}`,
       }}>
         <AddressList addresses={adresses} />
       </div>
