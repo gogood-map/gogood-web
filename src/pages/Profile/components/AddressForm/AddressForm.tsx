@@ -4,9 +4,19 @@ import { BiHomeAlt2, BiHomeHeart } from 'react-icons/bi'
 import { IoSchoolOutline } from 'react-icons/io5'
 import { PiSuitcaseSimple } from 'react-icons/pi'
 import { Button } from '../../../../components/Button/Button'
+import { useState } from 'react'
+import axios from 'axios'
 
 export function AddressForm() {
-  const { register, watch } = useForm()
+  const { register, watch, setValue } = useForm()
+  const [form, setForm] = useState({
+    cep: '',
+    street: '',
+    number: '',
+    district: '',
+    city: '',
+    tag: ''
+  })
 
   const tagLabelStyle = {
     display: 'flex',
@@ -26,6 +36,40 @@ export function AddressForm() {
     backgroundColor: designTokens.color.secondary,
     color: 'white'
   } as React.CSSProperties
+
+  const handleKeyDownCep = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!(event.key === 'Backspace' || event.key === 'ArrowLeft'
+      || event.key === 'ArrowRight' || (event.key >= '0' && event.key <= '9'))
+    ) {
+      event.preventDefault()
+    }
+  }
+
+  const handleChangeCep = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const maskedCep = maskCep(event.target.value)
+    setForm({ ...form, cep: maskedCep })
+
+    if (maskedCep.length === 9) {
+      const cep = maskedCep.replace('-', '')
+      axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => {
+          const { logradouro, bairro, localidade } = response.data
+          setValue('street', logradouro)
+          setValue('district', bairro)
+          setValue('city', localidade)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    }
+  }
+
+  const maskCep = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{5})(\d{1,3})/, '$1-$2')
+      .replace(/(\d{5}-\d{3}).*/, '$1')
+  }
 
   return (
     <div style={{
@@ -60,13 +104,13 @@ export function AddressForm() {
             display: 'flex',
             flexDirection: 'column',
           }}>
-            <label htmlFor='address' style={{
+            <label htmlFor='cep' style={{
               fontSize: designTokens.font.size.smallMedium
             }}>CEP</label>
             <input
               type='text'
-              id='address'
-              {...register('address', { required: true })}
+              id='cep'
+              {...register('cep', { required: true, onChange: handleChangeCep })}
               style={{
                 padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
                 borderRadius: designTokens.borderRadius.medium,
@@ -76,6 +120,8 @@ export function AddressForm() {
                 height: '22px',
                 width: `calc(30% - ${designTokens.spacing.mediumLarge} * 2)`,
               }}
+              value={form.cep}
+              onKeyDown={handleKeyDownCep}
             />
           </div>
           <div style={{
@@ -116,7 +162,7 @@ export function AddressForm() {
               <input
                 type='text'
                 id='number'
-                {...register('number', { required: true })}
+                {...register('number', { required: true,  })}
                 style={{
                   padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
                   borderRadius: designTokens.borderRadius.medium,
@@ -251,7 +297,18 @@ export function AddressForm() {
           display: 'flex',
           width: '100%',
         }}>
-          <Button label='Adicionar' type='primary' onClick={() => { }} />
+          <Button label='Adicionar' type='primary' onClick={() => {
+            console.table(
+              {
+                cep: watch('cep'),
+                street: watch('street'),
+                number: watch('number'),
+                district: watch('district'),
+                city: watch('city'),
+                tag: watch('tag')
+              }
+            )
+          }} />
         </div>
       </form>
     </div>
