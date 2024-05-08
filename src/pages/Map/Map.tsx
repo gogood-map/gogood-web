@@ -28,10 +28,16 @@ export function Map() {
         setRoutesView([route])
     }
 
+    const handleClose = () => {
+        setRoutesView(undefined)
+        setRoutes(undefined)
+        setSearchStatus('none')
+    }
+
     const consultaRota = async (origin: string, destination: string, travelMode: string) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
         const response = await axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
-            timeout: 90000
+            timeout: 300000
         })
 
         if (response.status !== 200) {
@@ -40,10 +46,17 @@ export function Map() {
 
         return response.data as RoutesResponse[]
     }
+
     return (
         <>
             <MapComponent routes={routesView} />
-            <RouteSearchCard onSubmitSearch={handleSubmitSearch} onSelectRoute={handleSelectRoute} routes={routes} searchStatus={searchStatus} />
+            <RouteSearchCard
+                onSubmitSearch={handleSubmitSearch}
+                onSelectRoute={handleSelectRoute}
+                onClose={handleClose}
+                routes={routes}
+                searchStatus={searchStatus}
+            />
         </>
     )
 }
