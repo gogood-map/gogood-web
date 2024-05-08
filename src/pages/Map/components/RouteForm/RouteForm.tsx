@@ -65,11 +65,12 @@ export function RouteForm(props: RouteFormProps) {
                 backgroundColor: designTokens.color.background,
                 boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
                 transition: 'height 0.3s ease',
+                position: 'relative',
             }}>
                 <div style={{
                     position: 'absolute',
                     top: designTokens.spacing.tiny,
-                    right: 0,
+                    right: designTokens.spacing.tiny,
                     display: 'flex',
                     justifyContent: 'end',
                     alignItems: 'start',
