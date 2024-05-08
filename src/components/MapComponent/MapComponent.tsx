@@ -44,6 +44,7 @@ export function MapComponent(props: MapComponentProps) {
                 mapTypeControl: false,
                 streetViewControl: false,
                 fullscreenControl: false,
+                zoomControl: false,
             })
 
             map.addListener('center_changed', () => {
@@ -69,7 +70,13 @@ export function MapComponent(props: MapComponentProps) {
                 map,
                 maxIntensity: 7,
                 gradient: [
-                    'rgba(0,0,0,0)', 'yellow', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'rgba(255, 165, 0, 100)', 'red'
+                    'rgba(0,0,0,0)',
+                    'yellow',
+                    'rgba(255, 165, 0, 100)',
+                    'rgba(255, 165, 0, 100)',
+                    'rgba(255, 165, 0, 100)',
+                    'rgba(255, 165, 0, 100)',
+                    'red'
                 ]
             })
             setHeatmap(newHeatmap)
@@ -85,21 +92,25 @@ export function MapComponent(props: MapComponentProps) {
         if (routes) {
             const listaPolyline: google.maps.Polyline[] = []
 
-            // const routesReordered = routes.sort((a, b) => a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais)
+            for (let i = routes.length - 1; i >= 0; i--) {
+                createPolyline(routes[i], i)
+            }
 
-            routes.forEach(async (route, index) => {
-                const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
-                const caminho = encoding.decodePath(route.polyline)
-                const polylineRota = new google.maps.Polyline({
-                    path: caminho,
-                    geodesic: true,
-                    strokeColor: routesColors(routes)[index],
-                    strokeOpacity: 1.0,
-                    strokeWeight: 5,
-                })
-                listaPolyline.push(polylineRota)
-                polylineRota.setMap(map)
-            })
+            async function createPolyline(route: RoutesResponse, index: number) {
+                if (routes) {
+                    const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
+                    const caminho = encoding.decodePath(route.polyline)
+                    const polylineRota = new google.maps.Polyline({
+                        path: caminho,
+                        geodesic: true,
+                        strokeColor: routesColors(routes)[index],
+                        strokeOpacity: 1.0,
+                        strokeWeight: 5,
+                    })
+                    listaPolyline.push(polylineRota)
+                    polylineRota.setMap(map)
+                }
+            }
 
             setPolyline(listaPolyline)
         }
