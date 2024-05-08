@@ -25,7 +25,14 @@ export function Map() {
     }
 
     const handleSelectRoute = (route: RoutesResponse) => {
-        setRoutesView([route])
+        const newRoutes = routes?.map(r => {
+            return {
+                ...r,
+                polyline: r === route ? r.polyline : ''
+            }
+        })
+
+        setRoutesView(newRoutes)
     }
 
     const handleClose = () => {

@@ -116,11 +116,6 @@ export function RoutesSelection(props: RoutesSelectionProps) {
         return totalMinutos
     }
 
-    const sendSelectedRoute = (route: RoutesResponse) => {
-        onSelectRoute && onSelectRoute(route)
-        console.table(route)
-    }
-
     const height = routes && expandedCard && searchStatus === 'success'
         ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
@@ -190,7 +185,8 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                         risk={risk}
                         durationInMinutes={durationInMinutes}
                         color={color}
-                        onClick={() => sendSelectedRoute(route)}
+                        route={route}
+                        onSelectRoute={onSelectRoute}
                     />
                 })}
 

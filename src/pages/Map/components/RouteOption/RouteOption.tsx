@@ -1,15 +1,17 @@
 import { designTokens } from 'design-tokens'
 import { useState, CSSProperties } from 'react'
+import { RoutesResponse } from '../RoutesSelection/RoutesSelection'
 
 export type RouteOptionProps = {
     risk: string
     durationInMinutes: number
     color: string
-    onClick?: () => void
+    route?: RoutesResponse
+    onSelectRoute?: (route: RoutesResponse) => void
 }
 
 export function RouteOption(props: RouteOptionProps) {
-    const { risk, durationInMinutes, color } = props
+    const { risk, durationInMinutes, color, route, onSelectRoute } = props
     const [hovered, setHovered] = useState(false)
 
     const defaultStyle = {
@@ -30,9 +32,12 @@ export function RouteOption(props: RouteOptionProps) {
     } as CSSProperties
 
     return (
-        <div onMouseEnter={() => { setHovered(true) }}
+        <div
+            onMouseEnter={() => { setHovered(true) }}
             onMouseLeave={() => { setHovered(false) }}
-            style={ hovered ? {...defaultStyle, ...hoveredStyle} : {...defaultStyle}} >
+            style={hovered ? { ...defaultStyle, ...hoveredStyle } : { ...defaultStyle }}
+            onClick={() => { onSelectRoute && route && onSelectRoute(route) }}
+        >
             <div style={{
                 gap: designTokens.spacing.tiny,
                 display: 'flex',
