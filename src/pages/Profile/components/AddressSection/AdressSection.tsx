@@ -1,6 +1,7 @@
 import { designTokens } from 'design-tokens'
 import { AddressForm } from '../AddressForm/AddressForm'
 import { AddressList } from '../AddressList/AddressList'
+import { AddressCard, AddressCardProps } from '../AddressCard/AddressCard'
 
 export function AddressSection() {
 
@@ -77,13 +78,23 @@ export function AddressSection() {
     },
   ]
 
+  const addressCardExemple = {
+    street: 'Rua das Laranjeiras',
+    number: '123',
+    city: 'São Paulo',
+    state: 'SP',
+    cep: '12345-678',
+  } as AddressCardProps
+
   return (
     <div style={{
       display: 'flex',
       flexDirection: 'column',
       width: '100%',
       height: '100%',
+      position: 'relative',
     }}>
+      <AddressCard {...addressCardExemple} />
       <div id='address-form' style={{
         width: '100%',
         marginBottom: designTokens.spacing.large

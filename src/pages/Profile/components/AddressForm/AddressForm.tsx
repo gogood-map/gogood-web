@@ -7,15 +7,25 @@ import { Button } from '../../../../components/Button/Button'
 import { useState } from 'react'
 import axios from 'axios'
 
-export function AddressForm() {
+export type AddressFormProps = {
+  cep?: string
+  street?: string
+  number?: string
+  district?: string
+  city?: string
+  tag?: string
+}
+
+export function AddressForm(props: AddressFormProps) {
+  const { cep, street, number, district, city, tag } = props
   const { register, watch, setValue } = useForm()
   const [form, setForm] = useState({
-    cep: '',
-    street: '',
-    number: '',
-    district: '',
-    city: '',
-    tag: ''
+    cep: cep || '',
+    street: street || '',
+    number: number || '',
+    district: district || '',
+    city: city || '',
+    tag: tag || ''
   })
 
   const tagLabelStyle = {
