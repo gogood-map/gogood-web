@@ -41,13 +41,13 @@ export function Header(props: HeaderProps) {
         paddingBottom: designTokens.spacing.medium,
         paddingLeft: designTokens.spacing.large,
         paddingRight: designTokens.spacing.large
-
     }
 
     const handleClick = (path: string) => {
-        if (path === '#sobre-nos') {
+        if (path.startsWith('#')) {
+            const element = document.querySelector(path) as HTMLElement
             window.scrollTo({
-                top: document.getElementById('sobre-nos')?.offsetTop,
+                top: element?.offsetTop || 0,
                 behavior: 'smooth'
             })
             return
