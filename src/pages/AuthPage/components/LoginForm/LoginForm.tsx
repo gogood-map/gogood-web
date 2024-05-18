@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { GoogleResponse } from '../RegisterForm/RegisterForm'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export type LoginUser = {
     entry: string,
@@ -25,6 +26,7 @@ export function LoginForm() {
 
     const onSubmit = async (data: LoginUser) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
+        const notification = toast.loading('Entrando...')
         const user = await axios.get(`${baseUrl}/usuarios/login`, {
             params: {
                 entrada: data.entry,
@@ -34,11 +36,23 @@ export function LoginForm() {
 
         if (user.status === 200) {
             login(user.data, true)
+            toast.update(notification, {
+                render: 'Login realizado com sucesso',
+                type: 'success',
+                isLoading: false,
+                autoClose: 1000
+            })
             setTimeout(() => {
                 navigate('/mapa')
             }, 1000)
         } else {
-            console.error('Erro ao logar')
+            toast.update(notification, {
+                render: 'Erro ao fazer login',
+                type: 'error',
+                isLoading: false,
+                autoClose: 1000
+            })
+            console.error('Erro ao fazer login')
         }
     }
 

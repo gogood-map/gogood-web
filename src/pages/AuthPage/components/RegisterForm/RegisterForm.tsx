@@ -61,7 +61,7 @@ export function RegisterForm() {
     const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
         console.table(data)
         const baseUrl = import.meta.env.VITE_BASE_URL
-        const register = toast.loading('Cadastrando...', { autoClose: false })
+        const notification = toast.loading('Cadastrando...', { autoClose: false })
         axios.post(`${baseUrl}/usuarios`, {
             email: data.email,
             nome: data.name,
@@ -72,7 +72,7 @@ export function RegisterForm() {
         })
             .then(response => {
                 const user = response.data as User
-                toast.update(register, {
+                toast.update(notification, {
                     render: 'Cadastro realizado com sucesso!',
                     type: 'success',
                     isLoading: false,
@@ -82,7 +82,7 @@ export function RegisterForm() {
                 setFormStep(2)
             })
             .catch(error => {
-                toast.update(register, {
+                toast.update(notification, {
                     render: 'Erro ao cadastrar',
                     type: 'error',
                     isLoading: false,
