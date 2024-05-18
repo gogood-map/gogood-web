@@ -22,7 +22,7 @@ export function HistoryTable(props: HistoryTableProps) {
     }
 
     &::-webkit-scrollbar-track {
-      background: ${designTokens.color.gray};
+      background: ${designTokens.color.ligthGray};
       border-radius: ${designTokens.borderRadius.medium};
     }
 
