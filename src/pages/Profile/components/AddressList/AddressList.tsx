@@ -1,29 +1,33 @@
 import { designTokens } from 'design-tokens'
-import { PiMapPin } from 'react-icons/pi'
 import styled from 'styled-components'
+import { AddressItem } from '../AddressItem/AddressItem'
+import { useState } from 'react'
 
 export type Address = {
-  cep: string
+  zipCode: string
   street: string
-  number: number
+  number: string
   district: string
   city: string
+  tag?: string
 }
 
 export type AddressListProps = {
   addresses: Address[]
+  onSelect: (address: Address) => void
+  onAdd: () => void
 }
 
 export function AddressList(props: AddressListProps) {
-  const { addresses } = props
+  const { addresses, onSelect, onAdd } = props
+  const [addAddressHover, setAddAddressHover] = useState(false)
 
   const List = styled.ul`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    padding: 0;
+    padding-left: 0;
     margin: 0;
-    padding-left: ${designTokens.spacing.medium};
     gap: ${designTokens.spacing.small};
     height: 100%;
 
@@ -32,13 +36,13 @@ export function AddressList(props: AddressListProps) {
     }
 
     &::-webkit-scrollbar-track {
-      background: ${designTokens.color.gray};
-      border-radius: ${designTokens.borderRadius.medium};  // Adicione o border-radius aqui
+      background: ${designTokens.color.ligthGray};
+      border-radius: ${designTokens.borderRadius.medium};
     }
 
     &::-webkit-scrollbar-thumb {
       background: ${designTokens.color.selected};
-      border-radius: ${designTokens.borderRadius.medium};  // Adicione o border-radius aqui
+      border-radius: ${designTokens.borderRadius.medium};
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -58,25 +62,38 @@ export function AddressList(props: AddressListProps) {
       boxShadow: `0px 4px 14px 0px ${designTokens.color.boxShadow}`,
       gap: designTokens.spacing.medium,
     }}>
-      <h1 style={{
-        margin: 0,
-        fontSize: designTokens.font.size.large,
-        fontWeight: designTokens.font.weight.bold,
-      }}>Lista de endereços</h1>
+      <span style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}>
+        <h1 style={{
+          margin: 0,
+          fontSize: designTokens.font.size.extraLarge,
+          fontWeight: designTokens.font.weight.semiBold,
+        }}>Lista de endereços</h1>
+
+        <button onClick={onAdd}
+          onMouseEnter={() => setAddAddressHover(true)}
+          onMouseLeave={() => setAddAddressHover(false)}
+          style={{
+            padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
+            borderRadius: designTokens.borderRadius.medium,
+            backgroundColor: addAddressHover ? designTokens.color.selected : designTokens.color.selectedLight,
+            color: designTokens.color.white,
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: designTokens.font.size.mediumLarge,
+            fontWeight: designTokens.font.weight.medium,
+          }}> Adiconar endereço </button>
+      </span>
+
       <List>
         {addresses.map((address, index) => (
-          <li key={index} style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: designTokens.spacing.tiny,
-            listStyle: 'none',
-            fontSize: designTokens.font.size.medium,
-          }}>
-            <PiMapPin size={designTokens.font.size.large}/>  {address.street}, {address.number} - {address.district} - {address.city} - {address.cep}
-          </li>
+          <AddressItem key={index} address={address} onSelect={onSelect} />
         ))}
       </List>
-    </div>
+    </div >
   )
 }
