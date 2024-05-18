@@ -7,8 +7,7 @@ export type User = {
     email: string
     gender: string
     birthdate: string
-    address: string
-    picture: string | undefined
+    picture?: string
 }
 
 type AuthContextType = {
