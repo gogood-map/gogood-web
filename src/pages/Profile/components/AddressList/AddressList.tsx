@@ -2,6 +2,7 @@ import { designTokens } from 'design-tokens'
 import styled from 'styled-components'
 import { AddressItem } from '../AddressItem/AddressItem'
 import { useState } from 'react'
+import { FaPlus } from 'react-icons/fa6'
 
 export type Address = {
   zipCode: string
@@ -78,7 +79,10 @@ export function AddressList(props: AddressListProps) {
           onMouseEnter={() => setAddAddressHover(true)}
           onMouseLeave={() => setAddAddressHover(false)}
           style={{
-            padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
+            display: 'flex',
+            alignItems: 'center',
+            gap: designTokens.spacing.small,
+            padding: `${designTokens.spacing.small} ${designTokens.spacing.small}`,
             borderRadius: designTokens.borderRadius.medium,
             backgroundColor: addAddressHover ? designTokens.color.selected : designTokens.color.selectedLight,
             color: designTokens.color.white,
@@ -86,7 +90,7 @@ export function AddressList(props: AddressListProps) {
             cursor: 'pointer',
             fontSize: designTokens.font.size.mediumLarge,
             fontWeight: designTokens.font.weight.medium,
-          }}> Adiconar endereço </button>
+          }}> <FaPlus /> Adiconar endereço </button>
       </span>
 
       <List>
