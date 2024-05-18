@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 function App() {
-    const clientId = '112629213943-ltci50f3petj9rfckhofatc6sve64btj.apps.googleusercontent.com'
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
     return (
         <>
