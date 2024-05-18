@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
+import { toast } from 'react-toastify'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -41,7 +42,6 @@ export type RegisterUser = {
     name: string
     gender: string
     birthDate: string
-    address: string
 }
 
 export function RegisterForm() {
@@ -49,41 +49,52 @@ export function RegisterForm() {
     const navigate = useNavigate()
     const { login } = useAuth()
     const {
-        register, watch, formState: { isValid, errors }
+        register, watch, formState: { errors }
     } = useForm({ mode: 'all' })
 
     const steps = [
         { title: 'Cadastro' },
         { title: 'Dados' },
-        { title: 'Personalização' },
         { title: 'Concluído' }
     ]
 
     const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
         console.table(data)
         const baseUrl = import.meta.env.VITE_BASE_URL
+        const notification = toast.loading('Cadastrando...', { autoClose: false })
         axios.post(`${baseUrl}/usuarios`, {
             email: data.email,
             nome: data.name,
             senha: 'password' in data ? data.password : undefined,
             genero: 'gender' in data ? data.gender : undefined,
             dataNascimento: 'birthDate' in data ? data.birthDate : undefined,
-            endereco: 'address' in data ? data.address : undefined,
             googleId: 'googleId' in data ? data.googleId : undefined
         })
             .then(response => {
                 const user = response.data as User
+                toast.update(notification, {
+                    render: 'Cadastro realizado com sucesso!',
+                    type: 'success',
+                    isLoading: false,
+                    autoClose: 3000
+                })
                 login(user, true)
-                setFormStep(3)
+                setFormStep(2)
             })
             .catch(error => {
+                toast.update(notification, {
+                    render: 'Erro ao cadastrar',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 3000
+                })
                 console.error(error)
             })
-        setFormStep(3)
+        // setFormStep(2)
     }
 
     useEffect(() => {
-        if (formStep === 3) {
+        if (formStep === 2) {
             setTimeout(() => {
                 navigate('/mapa')
             }, 3000)
@@ -192,6 +203,7 @@ export function RegisterForm() {
                             type='password'
                             {...register('confirmPassword', {
                                 required: { value: true, message: 'Confirmação de senha obrigatória' },
+                                minLength: { value: 6, message: 'Senha deve ter no mínimo 6 caracteres' },
                                 validate: (value, { password }) => value === password || 'Senhas não conferem'
                             })}
                             placeholder='Confirme sua senha'
@@ -341,17 +353,24 @@ export function RegisterForm() {
                         />
                         {errors.birthDate && watch('birthDate') && <span style={{ color: 'red', fontSize: designTokens.font.size.small }}>{errors.birthDate.message as string}</span>}
                     </div>
+
                     <AuthButton
                         currentStep={formStep}
-                        steps={steps.length}
+                        steps={steps.length - 1}
                         disabled={(!watch('name') || !watch('gender') || !watch('birthDate'))
-                            || (errors.name ? true : false || errors.gender ? true : false || errors.birthDate ? true : false)}
+                            || !(!errors.name && !errors.gender && !errors.birthDate)}
                         onClickBack={() => setFormStep(formStep - 1)}
-                        onClickNext={() => setFormStep(formStep + 1)}
+                        onClickSubmit={() => onSubmit({
+                            email: watch('email'),
+                            password: watch('password'),
+                            name: watch('name'),
+                            gender: watch('gender'),
+                            birthDate: watch('birthDate'),
+                        } as RegisterUser)}
                     />
                 </section>
             )}
-            {formStep >= 2 && (
+            {/* {formStep >= 2 && (
                 <section style={{
                     display: formStep === 2 ? 'flex' : 'none',
                     width: '100%',
@@ -415,10 +434,10 @@ export function RegisterForm() {
                         } as RegisterUser)}
                     />
                 </section>
-            )}
-            {formStep >= 3 && (
+            )} */}
+            {formStep >= 2 && (
                 <section style={{
-                    display: formStep === 3 ? 'flex' : 'none',
+                    display: formStep === 2 ? 'flex' : 'none',
                     width: '100%',
                     flexDirection: 'column',
                 }}>
