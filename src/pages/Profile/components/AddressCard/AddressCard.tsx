@@ -1,28 +1,51 @@
 import { designTokens } from 'design-tokens'
-import { AddressForm } from '../AddressForm/AddressForm'
+import { AddressForm, AddressFormProps } from '../AddressForm/AddressForm'
+import { IoClose } from 'react-icons/io5'
 
 export type AddressCardProps = {
-  street: string
-  number: string
-  city: string
-  state: string
-  cep: string
+  address: AddressFormProps
+  updateForm?: boolean
+  onClickOut?: () => void
 }
 
 export function AddressCard(props: AddressCardProps) {
-  // const { street, number, city, state, cep } = props
+  const { address, updateForm, onClickOut } = props
+
+  const handleChildClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+  }
   return (
-    <div style={{
+    <div onClick={onClickOut} style={{
       display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
       flexDirection: 'column',
       position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: '80%',
-      gap: designTokens.spacing.small
+      minWidth: '100vw',
+      minHeight: '100vh',
+      gap: designTokens.spacing.small,
+      zIndex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
     }}>
-      <AddressForm {...props} />
+      <div onClick={handleChildClick} style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'fit-content',
+        width: '50%',
+        maxWidth: '876px',
+        position: 'relative',
+      }}>
+        <div onClick={onClickOut} style={{
+          display: 'flex',
+          position: 'absolute',
+          top: designTokens.spacing.medium,
+          right: designTokens.spacing.medium,
+          cursor: 'pointer',
+        }}>
+          <IoClose size={30} color={designTokens.color.text} />
+        </div>
+        <AddressForm update={updateForm} {...address} />
+      </div>
     </div>
   )
 }
