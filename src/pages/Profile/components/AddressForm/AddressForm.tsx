@@ -61,11 +61,9 @@ export function AddressForm(props: AddressFormProps) {
   const handleChangeZipCode = (event: React.ChangeEvent<HTMLInputElement>) => {
     const maskedZipCode = maskZipCode(event.target.value)
     setValue('zipCode', maskedZipCode)
-    console.log(maskedZipCode)
 
     if (maskedZipCode.length === 9) {
       const zipCode = maskedZipCode.replace('-', '')
-      console.log(zipCode)
       axios.get(`https://viacep.com.br/ws/${zipCode}/json/`)
         .then(response => {
           const { logradouro, bairro, localidade } = response.data
@@ -86,6 +84,24 @@ export function AddressForm(props: AddressFormProps) {
       .replace(/(\d{5}-\d{3}).*/, '$1')
   }
 
+  const handleSendAddres = () => {
+    const data = {
+      zipCode: watch('zipCode'),
+      street: watch('street'),
+      number: watch('number'),
+      district: watch('district'),
+      city: watch('city'),
+      tag: watch('tag')
+    }
+    console.table(data)
+
+    if (update) {
+      // send update request
+    } else {
+      // send add request
+    }
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -102,7 +118,7 @@ export function AddressForm(props: AddressFormProps) {
         fontSize: designTokens.font.size.large,
         fontWeight: designTokens.font.weight.bold,
         margin: 0,
-      }}>{update ? <>Atualizar endereço</> : <>Adicionar Endereço</>}</h1>
+      }}>{update ? <>Atualizar Endereço</> : <>Adicionar Endereço</>}</h1>
       <form style={{
         display: 'flex',
         flexDirection: 'column',
@@ -311,18 +327,7 @@ export function AddressForm(props: AddressFormProps) {
           display: 'flex',
           width: '100%',
         }}>
-          <Button label={update ? 'Atualizar' : 'Adicionar'} type='primary' onClick={() => {
-            console.table(
-              {
-                zipCode: watch('zipCode'),
-                street: watch('street'),
-                number: watch('number'),
-                district: watch('district'),
-                city: watch('city'),
-                tag: watch('tag'),
-              }
-            )
-          }} />
+          <Button label={update ? 'Atualizar' : 'Adicionar'} type='primary' onClick={handleSendAddres} />
         </div>
       </form>
     </div>
