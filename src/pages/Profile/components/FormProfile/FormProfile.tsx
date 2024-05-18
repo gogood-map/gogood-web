@@ -97,7 +97,7 @@ export const FormProfile = () => {
 
             <div style={groupLabelInputStyle as React.CSSProperties}>
               <label>Data de Nascimento</label>
-              <input placeholder='1969-11-02' style={textInputStyle} type='date' value='2003-11-02' />
+              <input placeholder='1969-11-02' style={textInputStyle} type='date' defaultValue='2003-11-02' />
             </div>
           </div>
           <button style={{
