@@ -1,13 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
+import { toast } from 'react-toastify'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
+
+    useEffect(() => {
+        toast.info('Dados atualizados até 2° semestre de 2023')
+    }, [])
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
