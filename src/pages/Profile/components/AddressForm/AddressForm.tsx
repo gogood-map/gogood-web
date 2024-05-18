@@ -4,19 +4,32 @@ import { BiHomeAlt2, BiHomeHeart } from 'react-icons/bi'
 import { IoSchoolOutline } from 'react-icons/io5'
 import { PiSuitcaseSimple } from 'react-icons/pi'
 import { Button } from '../../../../components/Button/Button'
-import { useState } from 'react'
 import axios from 'axios'
+import { useEffect } from 'react'
 
-export function AddressForm() {
-  const { register, watch, setValue } = useForm()
-  const [form, setForm] = useState({
-    cep: '',
-    street: '',
-    number: '',
-    district: '',
-    city: '',
-    tag: ''
-  })
+export type AddressFormProps = {
+  update?: boolean
+  zipCode?: string
+  street?: string
+  number?: string
+  district?: string
+  city?: string
+  tag?: string
+}
+
+export function AddressForm(props: AddressFormProps) {
+  const { zipCode, street, number, district, city, tag, update } = props
+  const { register, watch, setValue } = useForm({ mode: 'all' })
+
+
+  useEffect(() => {
+    zipCode && setValue('zipCode', zipCode)
+    street && setValue('street', street)
+    number && setValue('number', number)
+    district && setValue('district', district)
+    city && setValue('city', city)
+    tag && setValue('tag', tag)
+  }, [])
 
   const tagLabelStyle = {
     display: 'flex',
@@ -37,7 +50,7 @@ export function AddressForm() {
     color: 'white'
   } as React.CSSProperties
 
-  const handleKeyDownCep = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDownzipCode = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!(event.key === 'Backspace' || event.key === 'ArrowLeft'
       || event.key === 'ArrowRight' || (event.key >= '0' && event.key <= '9'))
     ) {
@@ -45,13 +58,13 @@ export function AddressForm() {
     }
   }
 
-  const handleChangeCep = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const maskedCep = maskCep(event.target.value)
-    setForm({ ...form, cep: maskedCep })
+  const handleChangeZipCode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const maskedZipCode = maskZipCode(event.target.value)
+    setValue('zipCode', maskedZipCode)
 
-    if (maskedCep.length === 9) {
-      const cep = maskedCep.replace('-', '')
-      axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+    if (maskedZipCode.length === 9) {
+      const zipCode = maskedZipCode.replace('-', '')
+      axios.get(`https://viacep.com.br/ws/${zipCode}/json/`)
         .then(response => {
           const { logradouro, bairro, localidade } = response.data
           setValue('street', logradouro)
@@ -64,11 +77,29 @@ export function AddressForm() {
     }
   }
 
-  const maskCep = (value: string) => {
+  const maskZipCode = (value: string) => {
     return value
       .replace(/\D/g, '')
       .replace(/(\d{5})(\d{1,3})/, '$1-$2')
       .replace(/(\d{5}-\d{3}).*/, '$1')
+  }
+
+  const handleSendAddres = () => {
+    const data = {
+      zipCode: watch('zipCode'),
+      street: watch('street'),
+      number: watch('number'),
+      district: watch('district'),
+      city: watch('city'),
+      tag: watch('tag')
+    }
+    console.table(data)
+
+    if (update) {
+      // send update request
+    } else {
+      // send add request
+    }
   }
 
   return (
@@ -87,7 +118,7 @@ export function AddressForm() {
         fontSize: designTokens.font.size.large,
         fontWeight: designTokens.font.weight.bold,
         margin: 0,
-      }}>Adicionar endereços</h1>
+      }}>{update ? <>Atualizar Endereço</> : <>Adicionar Endereço</>}</h1>
       <form style={{
         display: 'flex',
         flexDirection: 'column',
@@ -104,13 +135,13 @@ export function AddressForm() {
             display: 'flex',
             flexDirection: 'column',
           }}>
-            <label htmlFor='cep' style={{
+            <label htmlFor='zipCode' style={{
               fontSize: designTokens.font.size.smallMedium
             }}>CEP</label>
             <input
               type='text'
-              id='cep'
-              {...register('cep', { required: true, onChange: handleChangeCep })}
+              id='zipCode'
+              {...register('zipCode', { required: true, onChange: handleChangeZipCode })}
               style={{
                 padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
                 borderRadius: designTokens.borderRadius.medium,
@@ -120,8 +151,7 @@ export function AddressForm() {
                 height: '22px',
                 width: `calc(30% - ${designTokens.spacing.mediumLarge} * 2)`,
               }}
-              value={form.cep}
-              onKeyDown={handleKeyDownCep}
+              onKeyDown={handleKeyDownzipCode}
             />
           </div>
           <div style={{
@@ -162,7 +192,7 @@ export function AddressForm() {
               <input
                 type='text'
                 id='number'
-                {...register('number', { required: true,  })}
+                {...register('number', { required: true })}
                 style={{
                   padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
                   borderRadius: designTokens.borderRadius.medium,
@@ -232,7 +262,7 @@ export function AddressForm() {
         }}>
           <label style={{
             fontSize: designTokens.font.size.smallMedium
-          }} >Etiqueta (opcional)</label>
+          }}>Etiqueta (opcional)</label>
           <div style={{
             display: 'flex',
             flexDirection: 'row',
@@ -243,51 +273,51 @@ export function AddressForm() {
               id='home'
               type='radio'
               style={{ display: 'none' }}
-              value='home'
+              value='Casa'
               {...register('tag', { required: true })}
             />
             <input
               id='partner'
               type='radio'
               style={{ display: 'none' }}
-              value='partner'
+              value='Parceiro(a)'
               {...register('tag', { required: true })}
             />
             <input
               id='work'
               type='radio'
               style={{ display: 'none' }}
-              value='work'
+              value='Trabalho'
               {...register('tag', { required: true })}
             />
             <input
-              id='school'
+              id='college'
               type='radio'
               style={{ display: 'none' }}
-              value='school'
+              value='Faculdade'
               {...register('tag', { required: true })}
             />
             <input
               id='other'
               type='radio'
               style={{ display: 'none' }}
-              value='other'
+              value='Outro'
               {...register('tag', { required: true })}
             />
 
-            <label htmlFor='home' style={watch('tag') === 'home' ? selectedTagLabelStyle : tagLabelStyle}>
+            <label htmlFor='home' style={watch('tag') === 'Casa' ? selectedTagLabelStyle : tagLabelStyle}>
               <BiHomeAlt2 size={'18px'} style={{ marginTop: '-2px' }} /> Casa
             </label>
-            <label htmlFor='partner' style={watch('tag') === 'partner' ? selectedTagLabelStyle : tagLabelStyle}>
+            <label htmlFor='partner' style={watch('tag') === 'Parceiro(a)' ? selectedTagLabelStyle : tagLabelStyle}>
               <BiHomeHeart size={'18px'} style={{ marginTop: '-2px' }} /> Parceiro(a)
             </label>
-            <label htmlFor='work' style={watch('tag') === 'work' ? selectedTagLabelStyle : tagLabelStyle}>
+            <label htmlFor='work' style={watch('tag') === 'Trabalho' ? selectedTagLabelStyle : tagLabelStyle}>
               <PiSuitcaseSimple size={'18px'} /> Trabalho
             </label>
-            <label htmlFor='school' style={watch('tag') === 'school' ? selectedTagLabelStyle : tagLabelStyle}>
+            <label htmlFor='college' style={watch('tag') === 'Faculdade' ? selectedTagLabelStyle : tagLabelStyle}>
               <IoSchoolOutline size={'18px'} /> Faculdade
             </label>
-            <label htmlFor='other' style={watch('tag') === 'other' ? selectedTagLabelStyle : tagLabelStyle}>
+            <label htmlFor='other' style={watch('tag') === 'Outro' ? selectedTagLabelStyle : tagLabelStyle}>
               Outro
             </label>
           </div>
@@ -297,18 +327,7 @@ export function AddressForm() {
           display: 'flex',
           width: '100%',
         }}>
-          <Button label='Adicionar' type='primary' onClick={() => {
-            console.table(
-              {
-                cep: watch('cep'),
-                street: watch('street'),
-                number: watch('number'),
-                district: watch('district'),
-                city: watch('city'),
-                tag: watch('tag')
-              }
-            )
-          }} />
+          <Button label={update ? 'Atualizar' : 'Adicionar'} type='primary' onClick={handleSendAddres} />
         </div>
       </form>
     </div>
