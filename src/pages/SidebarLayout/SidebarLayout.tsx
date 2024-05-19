@@ -18,9 +18,9 @@ export function SidebarLayout() {
     const navigate = useNavigate();
 
     const icons = [
-        { icon: <FiHome size={defaultIconSize} />, text: 'Início', alert: true, onclick: () => { navigate('/') } },
+        { icon: <FiHome size={defaultIconSize} />, text: 'Início', onclick: () => { navigate('/') } },
         { icon: <FiMap size={defaultIconSize} />, text: 'Mapa', onclick: () => { navigate('/mapa') } },
-        { icon: <FiUser size={defaultIconSize} />, text: 'Perfil', onclick: () => { navigate('/perfil') } },
+        { icon: <FiUser size={defaultIconSize} />, text: 'Perfil', alert: true, onclick: () => { navigate('/perfil') } },
         { icon: <RiHistoryFill size={defaultIconSize} />, text: 'Histórico', onclick: () => { navigate('/historico') } },
         { icon: <FiSettings size={defaultIconSize} />, text: 'Ajustes', onclick: () => { navigate('/ajustes') } },
     ]

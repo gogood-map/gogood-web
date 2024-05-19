@@ -16,6 +16,16 @@ export const designTokens = {
         error: '#F11D00',
         success: '#10C200',
         alert: '#FFDB0F',
+        grayScale: {
+            100: '#F4F4F4',
+            200: '#E0E0E0',
+            300: '#C6C6C6',
+            400: '#8C8C8C',
+            500: '#4D4D4D',
+            600: '#333333',
+            700: '#1A1A1A',
+            800: '#000000',
+        }
     },
     spacing: {
         tiny: '4px',
