@@ -20,7 +20,6 @@ export function AddressSection(props: AddressFormProps) {
       <div style={{
         width: '100%',
         height: '100%',
-        overflowY: 'auto',
         borderRadius: designTokens.borderRadius.large,
         boxShadow: `0px 4px 14px 0px ${designTokens.color.boxShadow}`,
       }}>

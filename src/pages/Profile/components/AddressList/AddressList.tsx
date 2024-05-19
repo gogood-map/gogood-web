@@ -47,7 +47,7 @@ export function AddressList(props: AddressListProps) {
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: ${designTokens.color.text};
+      background: ${designTokens.color.selectedHover};
     }
   `
 
