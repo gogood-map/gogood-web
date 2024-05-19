@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { RouteOption } from '../RouteOption/RouteOption'
 import { LoaderIcon } from '../../../../components/LoaderIcon/LoaderIcon'
@@ -8,9 +8,9 @@ import { IoClose } from 'react-icons/io5'
 export function routesColors(routes: RoutesResponse[]) {
     let colors = routes.map(route => {
         const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
-        if (ocorrenciasPorKm < 75) {
+        if (ocorrenciasPorKm < 50) {
             return designTokens.color.success
-        } else if (ocorrenciasPorKm < 150) {
+        } else if (ocorrenciasPorKm < 75) {
             return designTokens.color.alert
         } else {
             return designTokens.color.error
@@ -35,9 +35,9 @@ export function routesColors(routes: RoutesResponse[]) {
 export function routesRisk(routes: RoutesResponse[]) {
     let risk = routes.map(route => {
         const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
-        if (ocorrenciasPorKm < 75) {
+        if (ocorrenciasPorKm < 50) {
             return 'Baixo Risco'
-        } else if (ocorrenciasPorKm < 150) {
+        } else if (ocorrenciasPorKm < 75) {
             return 'Médio Risco'
         } else {
             return 'Alto Risco'
@@ -77,12 +77,18 @@ type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSelectRoute?: (route: RoutesResponse) => void
+    onConfirmRoute?: (route: RoutesResponse) => void
     onClose?: () => void
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes, searchStatus, onSelectRoute, onClose } = props
+    const { routes, searchStatus, onSelectRoute, onClose, onConfirmRoute } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
+    const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
+
+    const handleClickRoute = (route: RoutesResponse) => () => {
+        setSelectedRoute(route)
+    }
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
         const durationA = a.qtdOcorrenciasTotais
@@ -117,9 +123,9 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}) + 33px + 36px)`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
-            ? 'calc(60px + 35px)'
+            ? ' '
             : '0px'
 
     return (
@@ -133,7 +139,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
             padding: (expandedCard && routes) || (expandedCard && searchStatus !== 'none')
-                ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
+                ? `${designTokens.spacing.medium}`
                 : `0px ${designTokens.spacing.medium}`,
             backgroundColor: designTokens.color.background,
             borderRadius: designTokens.borderRadius.medium,
@@ -187,6 +193,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                         color={color}
                         route={route}
                         onSelectRoute={onSelectRoute}
+                        onClick={handleClickRoute(route)}
                     />
                 })}
 
@@ -215,6 +222,29 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     Erro ao carregar rotas
                 </div>}
             </div>
+            {searchStatus === 'success' && <>
+                <div style={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '1px',
+                    backgroundColor: designTokens.color.border,
+                }} />
+                <button style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '100%',
+                    backgroundColor: designTokens.color.selectedLight,
+                    color: designTokens.color.white,
+                    padding: `${designTokens.spacing.small}`,
+                    borderRadius: designTokens.borderRadius.medium,
+                    fontSize: designTokens.font.size.medium,
+                    border: 'none',
+                    cursor: 'pointer',
+                }} onClick={() => {onConfirmRoute && selectedRoute && onConfirmRoute(selectedRoute)}}>
+                    Confirmar Rota
+                </button>
+            </>}
         </div>
     )
 }
