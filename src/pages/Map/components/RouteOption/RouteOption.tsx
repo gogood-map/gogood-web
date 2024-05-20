@@ -8,10 +8,11 @@ export type RouteOptionProps = {
     color: string
     route?: RoutesResponse
     onSelectRoute?: (route: RoutesResponse) => void
+    onClick?: () => void
 }
 
 export function RouteOption(props: RouteOptionProps) {
-    const { risk, durationInMinutes, color, route, onSelectRoute } = props
+    const { risk, durationInMinutes, color, route, onSelectRoute, onClick } = props
     const [hovered, setHovered] = useState(false)
 
     const defaultStyle = {
@@ -36,7 +37,10 @@ export function RouteOption(props: RouteOptionProps) {
             onMouseEnter={() => { setHovered(true) }}
             onMouseLeave={() => { setHovered(false) }}
             style={hovered ? { ...defaultStyle, ...hoveredStyle } : { ...defaultStyle }}
-            onClick={() => { onSelectRoute && route && onSelectRoute(route) }}
+            onClick={() => {
+                onSelectRoute && route && onSelectRoute(route)
+                onClick && onClick()
+            }}
         >
             <div style={{
                 gap: designTokens.spacing.tiny,

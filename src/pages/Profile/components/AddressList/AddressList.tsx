@@ -47,7 +47,7 @@ export function AddressList(props: AddressListProps) {
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: ${designTokens.color.text};
+      background: ${designTokens.color.selectedHover};
     }
   `
 
@@ -90,7 +90,7 @@ export function AddressList(props: AddressListProps) {
             cursor: 'pointer',
             fontSize: designTokens.font.size.mediumLarge,
             fontWeight: designTokens.font.weight.medium,
-          }}> <FaPlus /> Adiconar endereço </button>
+          }}> <FaPlus /> Adicionar endereço </button>
       </span>
 
       <List>

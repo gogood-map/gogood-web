@@ -1,7 +1,6 @@
 import { designTokens } from 'design-tokens'
 import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { HistoryTable } from './components/HistoryTable/HistoryTable'
-import { HistoryNav } from './components/HitoryNav/HistoryNav'
 import { useState } from 'react'
 import { RoutesResponse } from '../Map/components/RoutesSelection/RoutesSelection'
 import { HistoryTableItemProps } from './components/HistoryTableItem/HistoryTableItem'
@@ -14,51 +13,73 @@ export function History() {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'bike',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'automovel',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'bike',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'bike',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'automovel',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'a-pe',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'automovel',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'bike',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'trasporte-publico',
     },
     {
       date: 'Quinta-feira, 25 Jan, 2024',
       origin: 'Rua A, 123',
       destination: 'Rua B, 456',
+      locomotion: 'bike',
+    },
+    {
+      date: 'Quinta-feira, 25 Jan, 2024',
+      origin: 'Rua A, 123',
+      destination: 'Rua B, 456',
+      locomotion: 'automovel',
+    },
+    {
+      date: 'Quinta-feira, 25 Jan, 2024',
+      origin: 'Rua A, 123',
+      destination: 'Rua B, 456',
+      locomotion: 'trasporte-publico',
     },
   ] as HistoryTableItemProps[]
 
@@ -69,34 +90,28 @@ export function History() {
   return (
     <div style={{
       display: 'flex',
-      flexDirection: 'column',
-      minHeight: '100%',
-      width: '100%',
+      flexDirection: 'row',
+      height: `calc(100vh - (${designTokens.spacing.large} * 2))`,
+      width: `calc(100% - 60px - (${designTokens.spacing.large} * 2))`,
+      padding: designTokens.spacing.large,
+      gap: designTokens.spacing.large,
+      marginLeft: '60px',
       position: 'relative',
     }}>
-      <HistoryNav />
       <div style={{
-        display: 'flex',
-        marginLeft: '60px',
-        flex: 1,
-        position: 'relative',
+        width: '35%',
+        height: '100%',
       }}>
-        <div style={{
-          width: '35%',
-          height: `calc(100vh - 41px - (${designTokens.spacing.medium}) * 2)`,
-        }}>
-          <HistoryTable items={historyItems} onClick={handleSelectRoute} />
-        </div>
-        <div style={{
-          margin: '20px',
-          width: '65%',
-          height: 'calc(100% - 40px)',
-          borderRadius: designTokens.borderRadius.medium,
-          boxShadow: ` 0px 4px 4px 2px ${designTokens.color.boxShadow}`,
-          overflow: 'hidden',
-        }}>
-          <MapComponent routes={route ? [route] : undefined} />
-        </div>
+        <HistoryTable items={historyItems} onClick={handleSelectRoute} />
+      </div>
+      <div style={{
+        width: '65%',
+        height: '100%',
+        borderRadius: designTokens.borderRadius.medium,
+        boxShadow: ` 0px 4px 4px 2px ${designTokens.color.boxShadow}`,
+        overflow: 'hidden',
+      }}>
+        <MapComponent routes={route ? [route] : undefined} />
       </div>
     </div>
   )

@@ -2,9 +2,8 @@ import { designTokens } from 'design-tokens'
 import { Address } from '../AddressList/AddressList'
 import { CSSProperties, useState } from 'react'
 import { BiHomeAlt2, BiHomeHeart, BiSolidEditAlt } from 'react-icons/bi'
-import { PiSuitcaseSimple } from 'react-icons/pi'
+import { PiSuitcaseSimple, PiTag } from 'react-icons/pi'
 import { IoSchoolOutline } from 'react-icons/io5'
-import Icon from '../../../../../public/icon.svg'
 
 export type AddressItemProps = {
   address: Address
@@ -70,16 +69,8 @@ export function AddressItem(props: AddressItemProps) {
             {tag === 'Parceiro(a)' && <BiHomeHeart size={24} />}
             {tag === 'Trabalho' && <PiSuitcaseSimple size={24} />}
             {tag === 'Faculdade' && <IoSchoolOutline size={24} />}
-            {tag === 'Outro' && <img src={Icon} alt="Outro" style={{
-              width: '24px',
-              height: '24px',
-              borderRadius: '50%',
-            }} />}
-            {!tag && <img src={Icon} alt="Outro" style={{
-              width: '24px',
-              height: '24px',
-              borderRadius: '50%',
-            }} />}
+            {tag === 'Outro' && <PiTag size={24} />}
+            {!tag && <PiTag size={24} />}
           </div>
           <div style={{
             display: 'flex',

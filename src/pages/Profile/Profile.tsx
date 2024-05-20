@@ -131,13 +131,12 @@ export const Profile = () => {
       <main style={{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         height: `calc(100vh - ${designTokens.spacing.large} * 2)`,
         width: `calc(100% - 60px - ${designTokens.spacing.large} * 2)`,
         padding: designTokens.spacing.large,
         marginLeft: '60px',
+        gap: designTokens.spacing.large,
       }}>
-
         <section style={{
           width: '35%',
           height: '100%',

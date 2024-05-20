@@ -8,9 +8,9 @@ import { IoClose } from 'react-icons/io5'
 export function routesColors(routes: RoutesResponse[]) {
     let colors = routes.map(route => {
         const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
-        if (ocorrenciasPorKm < 75) {
+        if (ocorrenciasPorKm < 50) {
             return designTokens.color.success
-        } else if (ocorrenciasPorKm < 150) {
+        } else if (ocorrenciasPorKm < 75) {
             return designTokens.color.alert
         } else {
             return designTokens.color.error
@@ -35,9 +35,9 @@ export function routesColors(routes: RoutesResponse[]) {
 export function routesRisk(routes: RoutesResponse[]) {
     let risk = routes.map(route => {
         const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
-        if (ocorrenciasPorKm < 75) {
+        if (ocorrenciasPorKm < 50) {
             return 'Baixo Risco'
-        } else if (ocorrenciasPorKm < 150) {
+        } else if (ocorrenciasPorKm < 75) {
             return 'Médio Risco'
         } else {
             return 'Alto Risco'
@@ -119,7 +119,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     const height = routes && expandedCard && searchStatus === 'success'
         ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
-            ? 'calc(60px + 35px)'
+            ? ' '
             : '0px'
 
     return (
@@ -133,7 +133,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
             padding: (expandedCard && routes) || (expandedCard && searchStatus !== 'none')
-                ? `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`
+                ? `${designTokens.spacing.medium}`
                 : `0px ${designTokens.spacing.medium}`,
             backgroundColor: designTokens.color.background,
             borderRadius: designTokens.borderRadius.medium,
