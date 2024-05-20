@@ -7,10 +7,11 @@ export type RouteDetailsProps = {
   steps?: {
     instruction: string
   }[]
+  onShare?: () => void
 }
 
 export function RouteDetails(props: RouteDetailsProps) {
-  const { steps, visible } = props
+  const { steps, visible, onShare } = props
 
   const ListSteps = styled.div`
     display: flex;
@@ -36,6 +37,7 @@ export function RouteDetails(props: RouteDetailsProps) {
       background: ${designTokens.color.selectedHover};
     }
   `
+
   return (
     <div style={{
       display: 'flex',
@@ -75,7 +77,7 @@ export function RouteDetails(props: RouteDetailsProps) {
         <div style={{
           display: 'flex',
           alignItems: 'center',
-        }}>
+        }} onClick={onShare}>
           <BiSolidShareAlt size={24} />
         </div>
       </div>

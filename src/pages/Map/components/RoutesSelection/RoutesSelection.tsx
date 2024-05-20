@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { RouteOption } from '../RouteOption/RouteOption'
 import { LoaderIcon } from '../../../../components/LoaderIcon/LoaderIcon'
@@ -77,18 +77,12 @@ type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSelectRoute?: (route: RoutesResponse) => void
-    onConfirmRoute?: (route: RoutesResponse) => void
     onClose?: () => void
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes, searchStatus, onSelectRoute, onClose, onConfirmRoute } = props
+    const { routes, searchStatus, onSelectRoute, onClose } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
-    const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
-
-    const handleClickRoute = (route: RoutesResponse) => () => {
-        setSelectedRoute(route)
-    }
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
         const durationA = a.qtdOcorrenciasTotais
@@ -123,7 +117,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}) + 33px + 36px)`
+        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
             ? ' '
             : '0px'
@@ -193,7 +187,6 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                         color={color}
                         route={route}
                         onSelectRoute={onSelectRoute}
-                        onClick={handleClickRoute(route)}
                     />
                 })}
 
@@ -222,29 +215,6 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     Erro ao carregar rotas
                 </div>}
             </div>
-            {searchStatus === 'success' && <>
-                <div style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '1px',
-                    backgroundColor: designTokens.color.border,
-                }} />
-                <button style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    backgroundColor: designTokens.color.selectedLight,
-                    color: designTokens.color.white,
-                    padding: `${designTokens.spacing.small}`,
-                    borderRadius: designTokens.borderRadius.medium,
-                    fontSize: designTokens.font.size.medium,
-                    border: 'none',
-                    cursor: 'pointer',
-                }} onClick={() => {onConfirmRoute && selectedRoute && onConfirmRoute(selectedRoute)}}>
-                    Confirmar Rota
-                </button>
-            </>}
         </div>
     )
 }

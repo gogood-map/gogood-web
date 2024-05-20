@@ -9,10 +9,11 @@ import axios from 'axios'
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
+    const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
-    // const [travelMode, setTravelMode] = useState<string>('')
+    const [travelMode, setTravelMode] = useState<string>('')
     const baseUrl = import.meta.env.VITE_BASE_URL
 
     useEffect(() => {
@@ -21,6 +22,7 @@ export function Map() {
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
+        setTravelMode(travelMode)
         consultaRota(origin, destination, travelMode)
             .then((routes) => {
                 setRoutesView(routes)
@@ -48,6 +50,7 @@ export function Map() {
             }
         })
 
+        setSelectedRoute(route)
         setSteps(newSteps)
         setRoutesView(newRoutes)
         setVisibleInstructions(true)
@@ -60,7 +63,7 @@ export function Map() {
         setSearchStatus('none')
     }
 
-    const handleConfirmRoute = (route: RoutesResponse) => {
+    const handleShare= (route: RoutesResponse | undefined) => {
         if (!route) {
             toast.error('Selecione uma rota para visualizar as instruções')
             return
@@ -69,12 +72,14 @@ export function Map() {
         axios.post(`${baseUrl}/rotas/compartilhar`, {
             origem: route.origem,
             destino: route.destino,
-            // tipoTransporte: route.tipoTransporte
+            tipoTransporte: travelMode
         }).then((response) => {
-            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${response.data}`)
-            toast.success('Rota compartilhada com sucesso')
+            const url = JSON.stringify(response.data.url)
+            const urlCompartilhamento = url.split('"')[3]
+            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${urlCompartilhamento}`)
+            toast.success('Copiado para a área de transferência')
         }).catch((error) => {
-            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${error}`)
+            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${error.status}`)
             toast.error('Erro ao compartilhar rota')
         })
 
@@ -98,12 +103,11 @@ export function Map() {
             <RouteSearchCard
                 onSubmitSearch={handleSubmitSearch}
                 onSelectRoute={handleSelectRoute}
-                onConfirmRoute={handleConfirmRoute}
                 onClose={handleClose}
                 routes={routes}
                 searchStatus={searchStatus}
             />
-            <RouteDetails visible={visibleInstructions} steps={steps} />
+            <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => {handleShare(selectedRoute)}} />
         </>
     )
 }
