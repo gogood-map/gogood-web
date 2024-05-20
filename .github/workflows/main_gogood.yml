@@ -24,17 +24,17 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build --if-present
+          npm run build
           npm run test --if-present
 
-      - name: Zip dist folder for deployment
-        run: zip -r dist.zip dist/
+      - name: Zip artifact for deployment
+        run: zip -r release.zip dist
 
-      - name: Upload dist folder as artifact for deployment job
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: dist-app
-          path: dist.zip
+          name: node-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,10 +49,10 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: dist-app
+          name: node-app
 
-      - name: Unzip dist folder for deployment
-        run: unzip dist.zip -d .
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -67,4 +67,4 @@ jobs:
         with:
           app-name: 'gogood'
           slot-name: 'Production'
-          package: .
+          package: dist
