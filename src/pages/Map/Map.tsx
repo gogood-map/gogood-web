@@ -15,25 +15,43 @@ export function Map() {
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
     const [travelMode, setTravelMode] = useState<string>('')
     const baseUrl = import.meta.env.VITE_BASE_URL
+    const pathParams = new URLSearchParams(window.location.search)
 
     useEffect(() => {
         toast.info('Dados atualizados até 2° semestre de 2023')
+        const idRota = pathParams.get('id-rota')
+
+        if (idRota) {
+            axios.get(`${baseUrl}/rotas/compartilhar/${idRota}`)
+                .then((response) => {
+                    const route = response.data as RoutesResponse[]
+                    console.log(route)
+                    setRoutesView(route)
+                    setRoutes(route)
+                    setSearchStatus('success')
+                })
+                .catch((error) => {
+                    console.error(error)
+                    toast.error('Erro ao carregar rota')
+                })
+        }
     }, [])
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
         setSearchStatus('loading')
         setTravelMode(travelMode)
-        consultaRota(origin, destination, travelMode)
-            .then((routes) => {
-                setRoutesView(routes)
-                setRoutes(routes)
-                console.log(routes)
-                setSearchStatus('success')
-            })
-            .catch((error) => {
-                console.error(error)
-                setSearchStatus('error')
-            })
+
+        axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
+            timeout: 300000
+        }).then((routes) => {
+            setRoutesView(routes.data as RoutesResponse[])
+            setRoutes(routes.data as RoutesResponse[])
+            console.log(routes)
+            setSearchStatus('success')
+        }).catch((error) => {
+            console.error(error)
+            setSearchStatus('error')
+        })
     }
 
     const handleSelectRoute = (route: RoutesResponse) => {
@@ -63,7 +81,7 @@ export function Map() {
         setSearchStatus('none')
     }
 
-    const handleShare= (route: RoutesResponse | undefined) => {
+    const handleShare = (route: RoutesResponse | undefined) => {
         if (!route) {
             toast.error('Selecione uma rota para visualizar as instruções')
             return
@@ -72,29 +90,15 @@ export function Map() {
         axios.post(`${baseUrl}/rotas/compartilhar`, {
             origem: route.origem,
             destino: route.destino,
-            tipoTransporte: travelMode
+            tipoTransporte: travelMode.replace('-', '_'),
         }).then((response) => {
-            const url = JSON.stringify(response.data.url)
-            const urlCompartilhamento = url.split('"')[3]
-            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${urlCompartilhamento}`)
+            navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${response.data.url}`)
             toast.success('Copiado para a área de transferência')
         }).catch((error) => {
             navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${error.status}`)
             toast.error('Erro ao compartilhar rota')
         })
 
-    }
-
-    const consultaRota = async (origin: string, destination: string, travelMode: string) => {
-        const response = await axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
-            timeout: 300000
-        })
-
-        if (response.status !== 200) {
-            return Promise.reject('Erro ao consultar rotas')
-        }
-
-        return response.data as RoutesResponse[]
     }
 
     return (
@@ -107,7 +111,7 @@ export function Map() {
                 routes={routes}
                 searchStatus={searchStatus}
             />
-            <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => {handleShare(selectedRoute)}} />
+            <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>
     )
 }
