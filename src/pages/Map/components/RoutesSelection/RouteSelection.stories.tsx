@@ -43,5 +43,5 @@ const routes = [
 ] as RoutesResponse[]
 
 export const Default = () => {
-    return <RoutesSelection routes={routes} searchStatus='success' />
+    return <RoutesSelection onClose={() => {console.log('fechou')}} onSelectRoute={() => {console.log('selecionou')}} routes={routes} searchStatus='success' />
 }

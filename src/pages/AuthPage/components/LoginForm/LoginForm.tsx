@@ -24,36 +24,36 @@ export function LoginForm() {
         formState: { errors, isValid }
     } = useForm({ mode: 'all' })
 
-    const onSubmit = async (data: LoginUser) => {
+    const onSubmit = (data: LoginUser) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
         const notification = toast.loading('Entrando...')
-        const user = await axios.get(`${baseUrl}/usuarios/login`, {
+        axios.get(`${baseUrl}/usuarios/login`, {
             params: {
                 entrada: data.entry,
                 senha: data.password
             }
         })
-
-        if (user.status === 200) {
-            login(user.data, true)
-            toast.update(notification, {
-                render: 'Login realizado com sucesso',
-                type: 'success',
-                isLoading: false,
-                autoClose: 1000
+            .then(response => {
+                toast.update(notification, {
+                    render: 'Login realizado com sucesso',
+                    type: 'success',
+                    isLoading: false,
+                    autoClose: 1000
+                })
+                login(response.data, false)
+                setTimeout(() => {
+                    navigate('/mapa')
+                }, 1000)
             })
-            setTimeout(() => {
-                navigate('/mapa')
-            }, 1000)
-        } else {
-            toast.update(notification, {
-                render: 'Erro ao fazer login',
-                type: 'error',
-                isLoading: false,
-                autoClose: 1000
+            .catch(error => {
+                toast.update(notification, {
+                    render: 'Erro ao fazer login',
+                    type: 'error',
+                    isLoading: false,
+                    autoClose: 1000
+                })
+                console.error('Erro ao fazer login', error)
             })
-            console.error('Erro ao fazer login')
-        }
     }
 
     const textInputStyle = {

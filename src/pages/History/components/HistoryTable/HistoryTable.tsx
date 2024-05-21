@@ -13,9 +13,11 @@ export function HistoryTable(props: HistoryTableProps) {
 
   const ScrolableDiv = styled.div`
     overflow-y: auto;
-    width: 100%;
-    padding-top: ${designTokens.spacing.small};
-    padding-bottom: ${designTokens.spacing.small};
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin-left: ${designTokens.spacing.medium};
+    gap: ${designTokens.spacing.tiny};
 
     &::-webkit-scrollbar {
       width: 8px;
@@ -41,13 +43,19 @@ export function HistoryTable(props: HistoryTableProps) {
       display: 'flex',
       flexDirection: 'column',
       gap: designTokens.spacing.medium,
-      margin: designTokens.spacing.medium,
       padding: `${designTokens.spacing.medium}`,
       borderRadius: designTokens.borderRadius.medium,
       backgroundColor: designTokens.color.white,
-      boxShadow: `0 4px 14px 2px ${designTokens.color.boxShadow}`,
-      height: `calc(100% - (${designTokens.spacing.medium} * 4))`,
+      boxShadow: `0px 4px 13.9px 0px ${designTokens.color.boxShadow}`,
+      height: `calc(100% - (${designTokens.spacing.medium} * 2))`,
     }}>
+      <h1 style={{
+        margin: 0,
+        fontSize: designTokens.font.size.extraLarge,
+        fontWeight: designTokens.font.weight.semiBold,
+      }}>
+        Histórico de rotas
+      </h1>
       <ScrolableDiv>
         {items.map((item, index) => (
           <HistoryTableItem
