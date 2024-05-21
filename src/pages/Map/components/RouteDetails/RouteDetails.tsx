@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { BiSolidShareAlt } from 'react-icons/bi'
+import { PiCopySimple } from 'react-icons/pi'
 import styled from 'styled-components'
 
 export type RouteDetailsProps = {
@@ -78,7 +78,7 @@ export function RouteDetails(props: RouteDetailsProps) {
           display: 'flex',
           alignItems: 'center',
         }} onClick={onShare}>
-          <BiSolidShareAlt size={24} />
+          <PiCopySimple size={24} />
         </div>
       </div>
       <ListSteps>
