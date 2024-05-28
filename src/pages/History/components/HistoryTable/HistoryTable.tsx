@@ -2,6 +2,8 @@ import { designTokens } from 'design-tokens'
 import { HistoryTableItem, HistoryTableItemProps } from '../HistoryTableItem/HistoryTableItem'
 import styled from 'styled-components'
 import { RoutesResponse } from '../../../Map/components/RoutesSelection/RoutesSelection'
+import { Queue } from '../../../../utils/Queue/Queue'
+import { useEffect, useState } from 'react'
 
 export type HistoryTableProps = {
   items: HistoryTableItemProps[]
@@ -10,6 +12,14 @@ export type HistoryTableProps = {
 
 export function HistoryTable(props: HistoryTableProps) {
   const { items, onClick } = props
+  const historyQueue = Queue<HistoryTableItemProps>()
+  const [renderItems, setRenderItems] = useState<HistoryTableItemProps[]>([])
+
+  useEffect(() => {
+    items.slice(-10).forEach(item => historyQueue.enqueue(item))
+    setRenderItems(historyQueue.getQueue())
+    console.log(historyQueue.getQueue())
+  }, [items])
 
   const ScrolableDiv = styled.div`
     overflow-y: auto;
@@ -57,15 +67,19 @@ export function HistoryTable(props: HistoryTableProps) {
         Histórico de rotas
       </h1>
       <ScrolableDiv>
-        {items.map((item, index) => (
-          <HistoryTableItem
-            key={index}
-            date={item.date}
-            origin={item.origin}
-            destination={item.destination}
-            onClick={() => onClick && onClick(item as unknown as RoutesResponse)}
-          />
-        ))}
+        {renderItems.length > 0 ? (
+          renderItems.map((item, index) => (
+            <HistoryTableItem
+              key={index}
+              date={item.date}
+              origin={item.origin}
+              destination={item.destination}
+              onClick={() => onClick && onClick(item as unknown as RoutesResponse)}
+            />
+          ))
+        ) : (
+          <p>Não há registros de histórico</p>
+        )}
       </ScrolableDiv>
     </div>
   )
