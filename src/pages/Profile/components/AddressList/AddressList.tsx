@@ -1,8 +1,9 @@
 import { designTokens } from 'design-tokens'
 import styled from 'styled-components'
 import { AddressItem } from '../AddressItem/AddressItem'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
+import { Stack } from '../../../../utils/Stack/Stack'
 
 export type Address = {
   zipCode: string
@@ -21,7 +22,14 @@ export type AddressListProps = {
 
 export function AddressList(props: AddressListProps) {
   const { addresses, onSelect, onAdd } = props
+  const addressStack = Stack<Address>()
+  const [renderAddresses, setRenderAddresses] = useState<Address[]>([])
   const [addAddressHover, setAddAddressHover] = useState(false)
+
+  useEffect(() => {
+    addresses.forEach(address => addressStack.push(address))
+    setRenderAddresses(addressStack.getStack())
+  }, [addresses])
 
   const List = styled.ul`
     overflow-y: auto;
@@ -94,7 +102,7 @@ export function AddressList(props: AddressListProps) {
       </span>
 
       <List>
-        {addresses.map((address, index) => (
+        {renderAddresses.map((address, index) => (
           <AddressItem key={index} address={address} onSelect={onSelect} />
         ))}
       </List>
