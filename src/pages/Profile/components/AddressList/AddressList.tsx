@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { AddressItem } from '../AddressItem/AddressItem'
 import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
-import { Stack } from '../../../../utils/data-structure/Stack/Stack'
+import { Stack } from '../../../../utils/data-structure/stack/stack'
 
 export type Address = {
   zipCode: string
