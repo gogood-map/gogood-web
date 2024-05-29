@@ -68,7 +68,7 @@ export function RegisterForm() {
             senha: 'password' in data ? data.password : undefined,
             genero: 'gender' in data ? data.gender : undefined,
             dataNascimento: 'birthDate' in data ? data.birthDate : undefined,
-            googleId: 'googleId' in data ? data.googleId : undefined
+            token: 'googleId' in data ? data.googleId : undefined
         })
             .then(response => {
                 const user = response.data as User
