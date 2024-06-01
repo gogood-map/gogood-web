@@ -10,24 +10,52 @@ interface DashboardProps {
     subtitle?: string;
 }
 
-
+interface LocationData {
+    suburb: string;
+    city: string;
+    city_district?: string; // Agora city_district é opcional
+}
 
 const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
-    const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+    const [locationData, setLocationData] = useState<{ suburb: string; city_district: string } | null>(null);
 
     useEffect(() => {
-        // Verifica se o navegador suporta a API de Geolocalização
+        const fetchLocationData = async (latitude: number, longitude: number) => {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse.php?lat=${latitude}&lon=${longitude}&zoom=18&format=jsonv2`);
+                const data = await response.json();
+                console.log('Dados de localização completos:', data);
+        
+                // Extrair o nome do bairro (suburb)
+                const suburb = data.address.village || data.address.suburb || 'Desconhecido';
+                console.log('Subúrbio:', suburb);
+        
+                // Extrair o nome da cidade (city)
+                const city = data.address.city || 'Desconhecido';
+                console.log('Cidade:', city);
+        
+                // Extrair o nome do distrito da cidade (city_district)
+                const city_district = data.address.city_district || '';
+                console.log('Distrito da Cidade:', city_district);
+        
+                const locationInfo = {
+                    suburb,
+                    city,
+                    city_district // Agora tratamos city_district como opcional
+                };
+                setLocationData(locationInfo);
+                localStorage.setItem('locationData', JSON.stringify(locationInfo));
+            } catch (error) {
+                console.error('Erro ao obter dados de localização:', error);
+            }
+        };
+        
+
         if ('geolocation' in navigator) {
-            // Obtém a localização do usuário
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const locationData = {
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    };
-                    setUserLocation(locationData);
-                    // Armazenar a localização no localStorage
-                    localStorage.setItem('userLocation', JSON.stringify(locationData));
+                    const { latitude, longitude } = position.coords;
+                    fetchLocationData(latitude, longitude);
                 },
                 (error) => {
                     console.error('Erro ao obter a localização:', error.message);
@@ -37,7 +65,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
             console.error('Geolocalização não é suportada pelo navegador.');
         }
     }, []);
-
 
     const data = {
         labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
@@ -55,7 +82,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                 pointHoverBackgroundColor: 'rgba(255, 255, 255, 0.8)',
                 pointHoverBorderColor: '#14C38E',
                 pointHoverRadius: 10,
-                pointRadius: 6.5, 
+                pointRadius: 6.5,
             },
         ],
     };
