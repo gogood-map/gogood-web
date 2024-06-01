@@ -1,6 +1,5 @@
 import { designTokens } from 'design-tokens'
 import { useState } from 'react'
-import { BiSolidShareAlt } from 'react-icons/bi'
 import { FaHistory } from 'react-icons/fa'
 import { FaArrowRight } from 'react-icons/fa6'
 import { IoArrowForward } from 'react-icons/io5'
@@ -92,38 +91,20 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
         flexDirection: 'row',
         gap: designTokens.spacing.tiny,
       }}>
-        <button style={{
+
+        <div style={{
           display: hovered ? 'flex' : 'none',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '40px',
-          height: '40px',
           backgroundColor: designTokens.color.grayScale[300],
           color: designTokens.color.text,
           padding: `${designTokens.spacing.small}`,
           borderRadius: designTokens.borderRadius.medium,
-          fontSize: designTokens.font.size.medium,
-          border: 'none',
-          cursor: 'pointer',
-        }}>
-          <BiSolidShareAlt size={designTokens.font.size.large} />
-        </button>
-        <button style={{
-          display: hovered ? 'flex' : 'none',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '40px',
-          height: '40px',
-          backgroundColor: designTokens.color.grayScale[300],
-          color: designTokens.color.text,
-          padding: `${designTokens.spacing.small}`,
-          borderRadius: designTokens.borderRadius.medium,
-          fontSize: designTokens.font.size.medium,
           border: 'none',
           cursor: 'pointer',
         }} onClick={onClick}>
           <IoArrowForward size={designTokens.font.size.large} />
-        </button>
+        </div>
       </div>
     </div>
   )
