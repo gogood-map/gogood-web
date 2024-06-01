@@ -1,4 +1,4 @@
-type stack<T> = {
+type Stack<T> = {
   items: T[]
   push: (item: T) => void
   pop: () => T | undefined
@@ -7,7 +7,7 @@ type stack<T> = {
   getStack: () => T[]
 }
 
-export function Stack<T>(): stack<T> {
+export function stack<T>(): Stack<T> {
   const stack: T[] = []
 
   return {

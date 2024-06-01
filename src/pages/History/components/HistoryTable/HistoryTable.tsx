@@ -2,7 +2,7 @@ import { designTokens } from 'design-tokens'
 import { HistoryTableItem, HistoryTableItemProps } from '../HistoryTableItem/HistoryTableItem'
 import styled from 'styled-components'
 import { RoutesResponse } from '../../../Map/components/RoutesSelection/RoutesSelection'
-import { Queue } from '../../../../utils/data-structure/Queue/Queue'
+import { queue } from '../../../../utils/data-structure/Queue/Queue'
 import { useEffect, useState } from 'react'
 
 export type HistoryTableProps = {
@@ -12,7 +12,7 @@ export type HistoryTableProps = {
 
 export function HistoryTable(props: HistoryTableProps) {
   const { items, onClick } = props
-  const historyQueue = Queue<HistoryTableItemProps>()
+  const historyQueue = queue<HistoryTableItemProps>()
   const [renderItems, setRenderItems] = useState<HistoryTableItemProps[]>([])
 
   useEffect(() => {

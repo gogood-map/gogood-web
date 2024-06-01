@@ -1,4 +1,4 @@
-type queue<T> = {
+type Queue<T> = {
   items: T[]
   enqueue: (item: T) => void
   dequeue: () => T | undefined
@@ -7,7 +7,7 @@ type queue<T> = {
   getQueue: () => T[]
 }
 
-export function Queue<T>(): queue<T> {
+export function queue<T>(): Queue<T> {
   const queue: T[] = []
 
   return {
