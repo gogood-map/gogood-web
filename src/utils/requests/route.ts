@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { RouteResponse } from '../types/route'
+import { RouteResponse, SharedRouteResponse } from '../types/route'
 
 const baseURL = import.meta.env.VITE_BASE_URL
 
@@ -13,7 +13,7 @@ export const getRoute = async (
 
 export const createSharedRoute = async (
   origin: string, destination: string, travelMode: string
-): Promise<AxiosResponse<string>> => {
+): Promise<AxiosResponse<SharedRouteResponse>> => {
   return await axios.post(`${baseURL}/rotas/compartilhar`, {
     origem: origin,
     destino: destination,

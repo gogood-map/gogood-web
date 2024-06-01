@@ -17,3 +17,7 @@ export type RouteRequest = {
   destino: string
   tipoTransporte: string
 }
+
+export type SharedRouteResponse = {
+  url: string
+}

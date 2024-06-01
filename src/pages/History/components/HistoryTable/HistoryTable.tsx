@@ -2,7 +2,7 @@ import { designTokens } from 'design-tokens'
 import { HistoryTableItem, HistoryTableItemProps } from '../HistoryTableItem/HistoryTableItem'
 import styled from 'styled-components'
 import { RoutesResponse } from '../../../Map/components/RoutesSelection/RoutesSelection'
-import { Queue } from '../../../../utils/data-structure/queue/queue'
+import { Queue } from '../../../../utils/data-structure/Queue/Queue'
 import { useEffect, useState } from 'react'
 
 export type HistoryTableProps = {
