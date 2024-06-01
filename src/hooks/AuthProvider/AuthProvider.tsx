@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react'
 
 export type User = {
     id: number
-    token: string
+    token?: string
     name: string
     email: string
     gender: string
