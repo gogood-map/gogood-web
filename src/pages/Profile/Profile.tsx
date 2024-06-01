@@ -143,14 +143,12 @@ export const Profile = () => {
         }}>
           <FormProfile />
         </section>
-
         <section style={{
           width: '65%',
           height: '100%',
         }}>
           <AddressSection adresses={adresses} onSelect={handleSelectAddress} onAdd={handleAddAddress} />
         </section>
-
       </main>
     </>
   )

@@ -48,7 +48,7 @@ export function PopUp(props: PopUpProps) {
           cursor: 'pointer',
           color: designTokens.color.secondary,
         }} onClick={onClose}>
-          <IoClose size={32} />
+          <IoClose size={30} />
         </div>
         {children}
       </div>
