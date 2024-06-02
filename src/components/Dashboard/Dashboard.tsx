@@ -97,11 +97,11 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
     }, [locationData]);
 
     const data = {
-        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        labels: months,
         datasets: [
             {
                 label: 'Escala de crimes',
-                data: [5, 10, 15, 20, 25, 30, 16, 14, 20, 18, 22, 25],
+                data: qtyOccurrence,
                 fill: false,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: '#14C38E',
