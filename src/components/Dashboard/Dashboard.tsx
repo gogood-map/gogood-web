@@ -19,6 +19,7 @@ interface LocationData {
 
 const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
     const [locationData, setLocationData] = useState<{ suburb: string, city: string } | null>(null);
+    const [months, setMonths] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchLocationData = async (latitude: number, longitude: number) => {
@@ -72,7 +73,16 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
         if (locationData) {
             axios.get(`${baseURL}/ocorrencias/regiao?cidade=${parsedLocationData.city}&bairro=${parsedLocationData.suburb}`)
             .then((response) => {
-                console.log('Dados de ocorrências:', response.data);
+                response.data.forEach((item: any) => {
+                    const anomes = item.anoMes // 2021-01
+                    const mes = Number(anomes.split('-')[1]); // 01
+
+                    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+                    setMonths((months) => [...months, meses[mes - 1]]);
+                })
+
+                console.log('Meses:', months);
             }).catch((error) => {
                 console.error('Erro ao obter dados de ocorrências:', error);
             });
