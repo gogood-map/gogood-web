@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { designTokens } from 'design-tokens';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -17,16 +17,25 @@ interface LocationData {
     city_district?: string; // Agora city_district é opcional
 }
 
+type ResponseDataType = {
+    anoMes: string
+    count: number
+}
+
 const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
     const [locationData, setLocationData] = useState<{ suburb: string, city: string } | null>(null);
     const [months, setMonths] = useState<string[]>([]);
     const [qtyOccurrence, setQtyOccurrence] = useState<number[]>([]);
     const [completeRequest, setCompleteRequest] = useState<boolean>(false);
 
+    const occurrencesRequest = async (city: string, suburb: string): Promise<AxiosResponse<ResponseDataType[]>> => {
+        const baseURL = import.meta.env.VITE_BASE_URL;
+        return await axios.get(`${baseURL}/ocorrencias/regiao?cidade=${city}&bairro=${suburb}`);
+    }
+
     useEffect(() => {
         const fetchLocationData = async (latitude: number, longitude: number) => {
             try {
-                const baseURL = import.meta.env.VITE_BASE_URL;
                 const response = await axios.get(`https://nominatim.openstreetmap.org/reverse.php?lat=${latitude}&lon=${longitude}&zoom=18&format=jsonv2`);
                 const data = await response.data;
                 console.log('Dados de localização completos:', data);
@@ -46,12 +55,17 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                 setLocationData(locationInfo);
                 sessionStorage.setItem('locationData', JSON.stringify(locationInfo));
 
-                axios.get(`${baseURL}/ocorrencias/regiao?cidade=${locationInfo.city}&bairro=${locationInfo.suburb}`)
+                occurrencesRequest(city, suburb)
                     .then((response) => {
                         setMonths([]);
                         setQtyOccurrence([]);
 
-                        response.data.forEach((item: any) => {
+                        console.log('Resposta:', response.data);
+
+                        response.data.forEach((item: {
+                            anoMes: string;
+                            count: number;
+                        }) => {
                             const anomes = item.anoMes // 2021-01
                             const mes = Number(anomes.split('-')[1]); // 01
                             const qtd = Number(item.count); // 5
@@ -63,9 +77,6 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                         })
 
                         setCompleteRequest(true);
-
-                        console.log('Meses:', months);
-                        console.log('Quantidade de ocorrências:', qtyOccurrence);
                     }).catch((error) => {
                         console.error('Erro ao obter dados de ocorrências:', error);
                     });
