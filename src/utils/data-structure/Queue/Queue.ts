@@ -5,6 +5,7 @@ type Queue<T> = {
   peek: () => T | undefined
   size: () => number
   getQueue: () => T[]
+  clear: () => void
 }
 
 export function queue<T>(): Queue<T> {
@@ -26,6 +27,9 @@ export function queue<T>(): Queue<T> {
     },
     getQueue: () => {
       return queue
+    },
+    clear: () => {
+      queue.forEach(() => queue.shift())
     }
   }
 }
