@@ -54,8 +54,21 @@ export function MapComponent(props: MapComponentProps) {
                 }
             })
 
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    }
+                    map.setCenter(pos)
+                }, () => {
+                    map.setCenter({ lat: -23.5581213, lng: -46.661614 })
+                })
+            } else {
+                map.setCenter({ lat: -23.5581213, lng: -46.661614 })
+            }
+
             setMap(map)
-            loadData(-23.5581213, -46.661614).then(newData => setData(newData))
         })
     }, [])
 
