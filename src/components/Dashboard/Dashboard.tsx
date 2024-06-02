@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { designTokens } from 'design-tokens';
+import axios from 'axios';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -17,39 +18,36 @@ interface LocationData {
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
-    const [locationData, setLocationData] = useState<{ suburb: string; city_district: string } | null>(null);
+    const [locationData, setLocationData] = useState<{ suburb: string, city: string } | null>(null);
 
     useEffect(() => {
         const fetchLocationData = async (latitude: number, longitude: number) => {
             try {
-                const response = await fetch(`https://nominatim.openstreetmap.org/reverse.php?lat=${latitude}&lon=${longitude}&zoom=18&format=jsonv2`);
-                const data = await response.json();
+                const response = await axios.get(`https://nominatim.openstreetmap.org/reverse.php?lat=${latitude}&lon=${longitude}&zoom=18&format=jsonv2`);
+                const data = await response.data;
                 console.log('Dados de localização completos:', data);
-        
+
                 // Extrair o nome do bairro (suburb)
                 const suburb = data.address.village || data.address.suburb || 'Desconhecido';
                 console.log('Subúrbio:', suburb);
-        
+
                 // Extrair o nome da cidade (city)
                 const city = data.address.city || 'Desconhecido';
                 console.log('Cidade:', city);
-        
-                // Extrair o nome do distrito da cidade (city_district)
-                const city_district = data.address.city_district || '';
-                console.log('Distrito da Cidade:', city_district);
-        
+
                 const locationInfo = {
                     suburb,
-                    city,
-                    city_district // Agora tratamos city_district como opcional
+                    city
                 };
                 setLocationData(locationInfo);
-                localStorage.setItem('locationData', JSON.stringify(locationInfo));
+                sessionStorage.setItem('locationData', JSON.stringify(locationInfo));
+
+
             } catch (error) {
                 console.error('Erro ao obter dados de localização:', error);
             }
         };
-        
+
 
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition(
@@ -65,6 +63,21 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
             console.error('Geolocalização não é suportada pelo navegador.');
         }
     }, []);
+
+    useEffect(() => {
+        const locationData = sessionStorage.getItem('locationData');
+        const parsedLocationData = locationData ? JSON.parse(locationData) : null;
+        const baseURL = import.meta.env.VITE_BASE_URL;
+
+        if (locationData) {
+            axios.get(`${baseURL}/ocorrencias/regiao?cidade=${parsedLocationData.city}&bairro=${parsedLocationData.suburb}`)
+            .then((response) => {
+                console.log('Dados de ocorrências:', response.data);
+            }).catch((error) => {
+                console.error('Erro ao obter dados de ocorrências:', error);
+            });
+        }
+    }, [locationData]);
 
     const data = {
         labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
