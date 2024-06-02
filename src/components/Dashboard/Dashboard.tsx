@@ -21,6 +21,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
     const [locationData, setLocationData] = useState<{ suburb: string, city: string } | null>(null);
     const [months, setMonths] = useState<string[]>([]);
     const [qtyOccurrence, setQtyOccurrence] = useState<number[]>([]);
+    const [completeRequest, setCompleteRequest] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchLocationData = async (latitude: number, longitude: number) => {
@@ -87,6 +88,8 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                     setMonths((months) => [...months, meses[mes - 1]]);
                     setQtyOccurrence((qtyOccurrence) => [...qtyOccurrence, qtd]);
                 })
+
+                setCompleteRequest(true);
 
                 console.log('Meses:', months);
                 console.log('Quantidade de ocorrências:', qtyOccurrence);
@@ -183,7 +186,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                 {subtitle}
             </div>
             <div style={{ height: '400px', width: '90%' }}>
-                <Line data={data} options={options} />
+                {completeRequest && <Line data={data} options={options} />}
             </div>
         </div>
     );
