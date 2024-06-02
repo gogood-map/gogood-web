@@ -26,6 +26,7 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
     useEffect(() => {
         const fetchLocationData = async (latitude: number, longitude: number) => {
             try {
+                const baseURL = import.meta.env.VITE_BASE_URL;
                 const response = await axios.get(`https://nominatim.openstreetmap.org/reverse.php?lat=${latitude}&lon=${longitude}&zoom=18&format=jsonv2`);
                 const data = await response.data;
                 console.log('Dados de localização completos:', data);
@@ -45,6 +46,29 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
                 setLocationData(locationInfo);
                 sessionStorage.setItem('locationData', JSON.stringify(locationInfo));
 
+                axios.get(`${baseURL}/ocorrencias/regiao?cidade=${locationInfo.city}&bairro=${locationInfo.suburb}`)
+                    .then((response) => {
+                        setMonths([]);
+                        setQtyOccurrence([]);
+
+                        response.data.forEach((item: any) => {
+                            const anomes = item.anoMes // 2021-01
+                            const mes = Number(anomes.split('-')[1]); // 01
+                            const qtd = Number(item.count); // 5
+
+                            const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+                            setMonths((months) => [...months, meses[mes - 1]]);
+                            setQtyOccurrence((qtyOccurrence) => [...qtyOccurrence, qtd]);
+                        })
+
+                        setCompleteRequest(true);
+
+                        console.log('Meses:', months);
+                        console.log('Quantidade de ocorrências:', qtyOccurrence);
+                    }).catch((error) => {
+                        console.error('Erro ao obter dados de ocorrências:', error);
+                    });
 
             } catch (error) {
                 console.error('Erro ao obter dados de localização:', error);
@@ -67,37 +91,37 @@ const Dashboard: React.FC<DashboardProps> = ({ title, subtitle }) => {
         }
     }, []);
 
-    useEffect(() => {
-        const locationData = sessionStorage.getItem('locationData');
-        const parsedLocationData = locationData ? JSON.parse(locationData) : null;
-        const baseURL = import.meta.env.VITE_BASE_URL;
+    // useEffect(() => {
+    //     const locationData = sessionStorage.getItem('locationData');
+    //     const parsedLocationData = locationData ? JSON.parse(locationData) : null;
+    //     const baseURL = import.meta.env.VITE_BASE_URL;
 
-        if (locationData) {
-            axios.get(`${baseURL}/ocorrencias/regiao?cidade=${parsedLocationData.city}&bairro=${parsedLocationData.suburb}`)
-            .then((response) => {
-                setMonths([]);
-                setQtyOccurrence([]);
+    //     if (locationData) {
+    //         axios.get(`${baseURL}/ocorrencias/regiao?cidade=${parsedLocationData.city}&bairro=${parsedLocationData.suburb}`)
+    //             .then((response) => {
+    //                 setMonths([]);
+    //                 setQtyOccurrence([]);
 
-                response.data.forEach((item: any) => {
-                    const anomes = item.anoMes // 2021-01
-                    const mes = Number(anomes.split('-')[1]); // 01
-                    const qtd = Number(item.count); // 5
+    //                 response.data.forEach((item: any) => {
+    //                     const anomes = item.anoMes // 2021-01
+    //                     const mes = Number(anomes.split('-')[1]); // 01
+    //                     const qtd = Number(item.count); // 5
 
-                    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+    //                     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 
-                    setMonths((months) => [...months, meses[mes - 1]]);
-                    setQtyOccurrence((qtyOccurrence) => [...qtyOccurrence, qtd]);
-                })
+    //                     setMonths((months) => [...months, meses[mes - 1]]);
+    //                     setQtyOccurrence((qtyOccurrence) => [...qtyOccurrence, qtd]);
+    //                 })
 
-                setCompleteRequest(true);
+    //                 setCompleteRequest(true);
 
-                console.log('Meses:', months);
-                console.log('Quantidade de ocorrências:', qtyOccurrence);
-            }).catch((error) => {
-                console.error('Erro ao obter dados de ocorrências:', error);
-            });
-        }
-    }, [locationData]);
+    //                 console.log('Meses:', months);
+    //                 console.log('Quantidade de ocorrências:', qtyOccurrence);
+    //             }).catch((error) => {
+    //                 console.error('Erro ao obter dados de ocorrências:', error);
+    //             });
+    //     }
+    // }, [locationData]);
 
     const data = {
         labels: months,
