@@ -94,6 +94,8 @@ export function RegisterForm() {
                 autoClose: 3000
             })
             console.error(error)
+        }).finally(() => {
+            toast.dismiss(notification)
         })
     }
 

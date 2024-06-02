@@ -57,6 +57,8 @@ export function LoginForm() {
                     autoClose: 1000
                 })
                 console.error('Erro ao fazer login', error)
+            }).finally(() => {
+                toast.dismiss(notification)
             })
     }
 
