@@ -247,7 +247,7 @@ export function RegisterForm() {
                                 }
                             }}
                             shape='circle'
-                            onError={() => console.log('Erro ao logar com Google')}
+                            onError={() => console.error('Erro ao logar com Google')}
                         />
                     </div>
                 </section>

@@ -32,7 +32,6 @@ export function UserIcon() {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={() => {
-                console.log('Clicou no usuário!')
                 navigate('/perfil')
             }}
         >
@@ -46,4 +45,4 @@ export function UserIcon() {
             }
         </div>
     )
-}   
+}
