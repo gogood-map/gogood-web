@@ -32,7 +32,7 @@ export function AddressCard(props: AddressCardProps) {
         flexDirection: 'column',
         height: 'fit-content',
         width: '50%',
-        maxWidth: '872px',
+        maxWidth: '876px',
         position: 'relative',
       }}>
         <div onClick={onClickOut} style={{

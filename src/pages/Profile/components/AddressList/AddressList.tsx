@@ -35,18 +35,18 @@ export function AddressList(props: AddressListProps) {
   }, [addresses])
 
   const handleExclude = (addressId: number) => {
-    const excludeNotification = toast.loading('Excluindo endereço...', { autoClose: false })
+    const notification = toast.loading('Excluindo endereço...', { autoClose: false })
 
     deleteAddress(addressId).then(() => {
       toast.success('Endereço excluído com sucesso!', {
-        toastId: excludeNotification, autoClose: 2000
+        toastId: notification, autoClose: 2000
       })
     }).catch(() => {
       toast.error('Erro ao excluir endereço!', {
-        toastId: excludeNotification, autoClose: 2000
+        toastId: notification, autoClose: 2000
       })
     }).finally(() => {
-      toast.dismiss(excludeNotification)
+      toast.dismiss(notification)
     })
   }
 
