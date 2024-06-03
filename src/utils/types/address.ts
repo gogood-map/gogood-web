@@ -16,3 +16,12 @@ export type CreateAddress = {
   cidade: string
   tipoEndereco?: string
 }
+
+export type UpdateAddress = {
+  cep?: string
+  rua?: string
+  numero?: string
+  bairro?: string
+  cidade?: string
+  tipoEndereco?: string
+}
