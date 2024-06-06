@@ -9,10 +9,13 @@ import { DashboardContainer } from '../../components/DashboardContainer/DashBoar
 import { DashboardCard } from '../../components/DashboardCard/DashboardCard'
 import { designTokens } from 'design-tokens'
 import { useEffect, useState } from 'react'
+import { getCitySuburb, getDashboard } from '../../utils/requests/dashboard'
+import { toast } from 'react-toastify'
 
 export function Home() {
     const [data, setData] = useState<number[]>([])
     const [labels, setLabels] = useState<string[]>([])
+    const [title, setTitle] = useState<string>('')
     const navigate = useNavigate()
 
     const bannerTitle = 'Segurança e tranquilidade em cada jornada.'
@@ -23,57 +26,73 @@ export function Home() {
     const aboutTitle = 'Sobre a Gogood'
     const aboutBody = 'Você está pronto para uma nova era de navegação? Por trás da interface simples e intuitiva da nossa plataforma, está uma poderosa combinação de tecnologia avançada e dados precisos. Utilizamos algoritmos inteligentes para analisar todas as opções de rota e fornecer a você a melhor escolha possível.\n\n E o melhor de tudo? Você pode relaxar e aproveitar a viagem, sabendo que está em boas mãos. Nossa plataforma é projetada para proporcionar uma experiência de navegação tranquila, para que você possa se concentrar no que realmente importa: aproveitar o momento e explorar novos lugares.'
 
-    const bruteData = [{
-        label: 'Janeiro',
-        value: 10,
-    }, {
-        label: 'Fevereiro',
-        value: 20,
-    }, {
-        label: 'Março',
-        value: 30,
-    }, {
-        label: 'Abril',
-        value: 40,
-    }, {
-        label: 'Maio',
-        value: 50,
-    }, {
-        label: 'Junho',
-        value: 60,
-    }, {
-        label: 'Julho',
-        value: 70,
-    }, {
-        label: 'Agosto',
-        value: 80,
-    }, {
-        label: 'Setembro',
-        value: 90,
-    }, {
-        label: 'Outubro',
-        value: 100,
-    }, {
-        label: 'Novembro',
-        value: 110,
-    }, {
-        label: 'Dezembro',
-        value: 120,
-    }]
+    // const bruteData = [{
+    //     label: 'Janeiro',
+    //     value: 10,
+    // }, {
+    //     label: 'Fevereiro',
+    //     value: 20,
+    // }, {
+    //     label: 'Março',
+    //     value: 30,
+    // }, {
+    //     label: 'Abril',
+    //     value: 40,
+    // }, {
+    //     label: 'Maio',
+    //     value: 50,
+    // }, {
+    //     label: 'Junho',
+    //     value: 60,
+    // }, {
+    //     label: 'Julho',
+    //     value: 70,
+    // }, {
+    //     label: 'Agosto',
+    //     value: 80,
+    // }, {
+    //     label: 'Setembro',
+    //     value: 90,
+    // }, {
+    //     label: 'Outubro',
+    //     value: 100,
+    // }, {
+    //     label: 'Novembro',
+    //     value: 110,
+    // }, {
+    //     label: 'Dezembro',
+    //     value: 120,
+    // }]
+
 
     useEffect(() => {
-        const data = bruteData.map(({ value }) => value)
-        const labels = bruteData.map(({ label }) => label)
-        setData(data)
-        setLabels(labels)
-
-        fakeRequest().then(data => {
-            const dataResponse = data.map(({ value }) => value)
-            const labels = data.map(({ label }) => label)
+        getDashboard('São Paulo', 'Cerqueira César').then(({ data }) => {
+            const dataResponse = data.map(({ count }) => count)
+            const labels = data.map(({ anoMes }) => anoMes)
             setData(dataResponse)
             setLabels(labels)
+            setTitle('Escala de furtos em São Paulo - Cerqueira César')
 
-
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    getCitySuburb(position.coords.latitude, position.coords.longitude)
+                        .then(({ data }) => {
+                            setTitle(`Escala de furtos em ${data.city} - ${data.suburb}`)
+                            getDashboard(data.city, data.suburb).then(({ data }) => {
+                                const dataResponse = data.map(({ count }) => count)
+                                const labels = data.map(({ anoMes }) => anoMes)
+                                setData(dataResponse)
+                                setLabels(labels)
+                            }).catch(() => {
+                                toast.error('Erro ao buscar dados da dashboard')
+                            })
+                        }).catch(() => {
+                            toast.error('Erro ao buscar dados de localização')
+                        })
+                })
+            }
+        }).catch(() => {
+            toast.error('Erro ao buscar dados da dashboard')
         })
     }, [])
 
@@ -93,7 +112,13 @@ export function Home() {
             />
 
             <DashboardContainer>
-                <DashboardCard  data={data} labels={labels} title='Escala de furtos' height='50vh' type='line' />
+                <DashboardCard
+                    data={data}
+                    labels={labels}
+                    title={title}
+                    height='50vh'
+                    type='line'
+                />
             </DashboardContainer>
 
             <AboutSession
@@ -108,62 +133,62 @@ export function Home() {
     )
 }
 
-async function fakeRequest(): Promise<{ label: string, value: number }[]>{
-    const fakeData = [
-        {
-            label: 'Janeiro',
-            value: 10,
-        },
-        {
-            label: 'Fevereiro',
-            value: 20,
-        },
-        {
-            label: 'Março',
-            value: 30,
-        },
-        {
-            label: 'Abril',
-            value: 40,
-        },
-        {
-            label: 'Maio',
-            value: 50,
-        },
-        {
-            label: 'Junho',
-            value: 60,
-        },
-        {
-            label: 'Julho',
-            value: 70,
-        },
-        {
-            label: 'Agosto',
-            value: 70,
-        },
-        {
-            label: 'Setembro',
-            value: 90,
-        },
-        {
-            label: 'Outubro',
-            value: 100,
-        },
-        {
-            label: 'Novembro',
-            value: 110,
-        },
-        {
-            label: 'Dezembro',
-            value: 120,
-        },
-    ]
+// async function fakeRequest(): Promise<{ label: string, value: number }[]>{
+//     const fakeData = [
+//         {
+//             label: 'Janeiro',
+//             value: 10,
+//         },
+//         {
+//             label: 'Fevereiro',
+//             value: 20,
+//         },
+//         {
+//             label: 'Março',
+//             value: 30,
+//         },
+//         {
+//             label: 'Abril',
+//             value: 40,
+//         },
+//         {
+//             label: 'Maio',
+//             value: 50,
+//         },
+//         {
+//             label: 'Junho',
+//             value: 60,
+//         },
+//         {
+//             label: 'Julho',
+//             value: 70,
+//         },
+//         {
+//             label: 'Agosto',
+//             value: 70,
+//         },
+//         {
+//             label: 'Setembro',
+//             value: 90,
+//         },
+//         {
+//             label: 'Outubro',
+//             value: 100,
+//         },
+//         {
+//             label: 'Novembro',
+//             value: 110,
+//         },
+//         {
+//             label: 'Dezembro',
+//             value: 120,
+//         },
+//     ]
 
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(fakeData)
-        }, 2000)
-    })
+//     return new Promise(resolve => {
+//         setTimeout(() => {
+//             resolve(fakeData)
+//         }, 2000)
+//     })
 
-}
+// }
