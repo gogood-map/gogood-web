@@ -7,7 +7,7 @@ type Stack<T> = {
   getStack: () => T[]
 }
 
-export function Stack<T>(): Stack<T> {
+export function stack<T>(): Stack<T> {
   const stack: T[] = []
 
   return {

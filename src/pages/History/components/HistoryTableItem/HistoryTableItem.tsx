@@ -1,8 +1,6 @@
 import { designTokens } from 'design-tokens'
 import { useState } from 'react'
-import { BiSolidShareAlt } from 'react-icons/bi'
 import { FaHistory } from 'react-icons/fa'
-import { FaArrowRight } from 'react-icons/fa6'
 import { IoArrowForward } from 'react-icons/io5'
 
 export type HistoryTableItemProps = {
@@ -16,6 +14,11 @@ export type HistoryTableItemProps = {
 export function HistoryTableItem(props: HistoryTableItemProps) {
   const { date, origin, destination, onClick } = props
   const [hovered, setHovered] = useState(false)
+
+  const dateObj = new Date(date)
+  const options: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
+  const dateStr = dateObj.toLocaleDateString('pt-BR', options)
+  const formattedDate = dateStr[0].toUpperCase() + dateStr.slice(1)
 
   return (
     <div
@@ -33,23 +36,10 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
         backgroundColor: hovered ? designTokens.color.ligthGray : designTokens.color.white,
         position: 'relative',
       }}>
-      {/* <div style={{
-        position: 'absolute',
-        top: '100%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        opacity: hovered ? 1 : 0,
-        visibility: hovered ? 'visible' : 'hidden',
-        backgroundColor: designTokens.color.ligthGray,
-        borderRadius: designTokens.borderRadius.medium,
-        transition: 'visibility 0s, opacity 0.3s, transform 0.3s',
-        padding: `0 ${designTokens.spacing.small}`,
-        marginTop: designTokens.spacing.tiny,
-        zIndex: 1,
-      }}>Mostrar no mapa</div> */}
       <div style={{
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        flex: 1,
       }}>
         <h2 style={{
           display: 'flex',
@@ -61,27 +51,32 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
           margin: 0,
         }}>
           <FaHistory size={designTokens.font.size.mediumLarge} />
-          {date}
+          {formattedDate}
         </h2>
-        <div onClick={onClick} style={{
+        <div style={{
           display: 'flex',
-          gap: designTokens.spacing.small,
-          alignItems: 'center',
-          marginLeft: designTokens.spacing.small,
-          cursor: 'pointer',
+          flexDirection: 'column',
+          marginLeft: designTokens.spacing.medium,
         }}>
           <span style={{
             color: designTokens.color.text,
             fontSize: designTokens.font.size.medium,
+            fontWeight: designTokens.font.weight.medium,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '250px',
           }}>
             {origin}
           </span>
-          <FaArrowRight style={{
-            color: designTokens.color.text,
-          }} />
           <span style={{
             color: designTokens.color.text,
             fontSize: designTokens.font.size.medium,
+            fontWeight: designTokens.font.weight.medium,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            maxWidth: '250px',
           }}>
             {destination}
           </span>
@@ -92,38 +87,20 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
         flexDirection: 'row',
         gap: designTokens.spacing.tiny,
       }}>
-        <button style={{
+        <div style={{
           display: hovered ? 'flex' : 'none',
           justifyContent: 'center',
           alignItems: 'center',
-          width: '40px',
-          height: '40px',
           backgroundColor: designTokens.color.grayScale[300],
           color: designTokens.color.text,
           padding: `${designTokens.spacing.small}`,
+          marginRight: designTokens.spacing.tiny,
           borderRadius: designTokens.borderRadius.medium,
-          fontSize: designTokens.font.size.medium,
-          border: 'none',
-          cursor: 'pointer',
-        }}>
-          <BiSolidShareAlt size={designTokens.font.size.large} />
-        </button>
-        <button style={{
-          display: hovered ? 'flex' : 'none',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '40px',
-          height: '40px',
-          backgroundColor: designTokens.color.grayScale[300],
-          color: designTokens.color.text,
-          padding: `${designTokens.spacing.small}`,
-          borderRadius: designTokens.borderRadius.medium,
-          fontSize: designTokens.font.size.medium,
           border: 'none',
           cursor: 'pointer',
         }} onClick={onClick}>
           <IoArrowForward size={designTokens.font.size.large} />
-        </button>
+        </div>
       </div>
     </div>
   )

@@ -4,87 +4,102 @@ import { HistoryTable } from './components/HistoryTable/HistoryTable'
 import { useState } from 'react'
 import { RoutesResponse } from '../Map/components/RoutesSelection/RoutesSelection'
 import { HistoryTableItemProps } from './components/HistoryTableItem/HistoryTableItem'
+import { RouteRequest } from '../../utils/types/route'
+import { getRoute } from '../../utils/requests/route'
 
 export function History() {
-  const [route, setRoute] = useState<RoutesResponse>()
+  const [route, setRoute] = useState<RoutesResponse[]>()
 
-  const historyItems = [
+  const historyResponse = [
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'bike',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'bike',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'automovel',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'automovel',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'bike',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'bike',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'bike',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'bike',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'automovel',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'automovel',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'a-pe',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'a-pe',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'automovel',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'automovel',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'bike',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'bike',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'trasporte-publico',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'trasporte-publico',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'bike',
+      create_at: '2024-12-31',
+      origem: 'Rua Aasdadadasdadsasdasdadasddasd, 123',
+      destino: 'Rua asdadsasdadadsasdasdasdasdasB, 456',
+      meio_locomocao: 'bike',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'automovel',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'automovel',
     },
     {
-      date: 'Quinta-feira, 25 Jan, 2024',
-      origin: 'Rua A, 123',
-      destination: 'Rua B, 456',
-      locomotion: 'trasporte-publico',
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'trasporte-publico',
     },
-  ] as HistoryTableItemProps[]
+  ]
 
-  const handleSelectRoute = (route: RoutesResponse) => {
-    setRoute(route)
+  const historyItems: HistoryTableItemProps[] = historyResponse.map((item) => ({
+    date: item.create_at,
+    origin: item.origem,
+    destination: item.destino,
+    locomotion: item.meio_locomocao as 'bike' | 'automovel' | 'a-pe' | 'transporte-publico',
+  }))
+
+
+  const handleSelectRoute = (route: RouteRequest) => {
+    getRoute(route.origem, route.destino, route.tipoTransporte)
+    .then((response) => {
+      setRoute(response.data)
+    }).catch((error) => {
+      console.error(error)
+    })
   }
 
   return (
@@ -111,7 +126,7 @@ export function History() {
         boxShadow: ` 0px 4px 4px 2px ${designTokens.color.boxShadow}`,
         overflow: 'hidden',
       }}>
-        <MapComponent routes={route ? [route] : undefined} />
+        <MapComponent routes={route ? route : undefined} />
       </div>
     </div>
   )

@@ -1,25 +1,53 @@
 import { designTokens } from 'design-tokens'
 import { HistoryTableItem, HistoryTableItemProps } from '../HistoryTableItem/HistoryTableItem'
 import styled from 'styled-components'
-import { RoutesResponse } from '../../../Map/components/RoutesSelection/RoutesSelection'
-import { Queue } from '../../../../utils/Queue/Queue'
+import { queue } from '../../../../utils/data-structure/Queue/Queue'
 import { useEffect, useState } from 'react'
+import { RouteRequest } from '../../../../utils/types/route'
+import { Button } from '../../../../components/Button/Button'
+import { deleteHistoryByUser } from '../../../../utils/requests/history'
+import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
+import { toast } from 'react-toastify'
 
 export type HistoryTableProps = {
   items: HistoryTableItemProps[]
-  onClick?: (route: RoutesResponse) => void
+  onClick: (route: RouteRequest) => void
 }
 
 export function HistoryTable(props: HistoryTableProps) {
   const { items, onClick } = props
-  const historyQueue = Queue<HistoryTableItemProps>()
+  const { user } = useAuth()
+  const historyQueue = queue<HistoryTableItemProps>()
   const [renderItems, setRenderItems] = useState<HistoryTableItemProps[]>([])
 
   useEffect(() => {
-    items.slice(-10).forEach(item => historyQueue.enqueue(item))
+    items.forEach(item => historyQueue.enqueue(item))
     setRenderItems(historyQueue.getQueue())
-    console.log(historyQueue.getQueue())
-  }, [items])
+  }, [])
+
+  const handleDeleteHistory = () => {
+    const deleteNotification = toast.loading('Apagando histórico...', { autoClose: false })
+    if (user) {
+      deleteHistoryByUser(user.id).then(() => {
+        toast.update(deleteNotification, {
+          render: 'Histórico apagado com sucesso!',
+          type: 'success',
+          autoClose: 2000,
+        })
+        historyQueue.clear()
+        setRenderItems([])
+      }).catch((err) => {
+        console.error(err)
+        toast.update(deleteNotification, {
+          render: 'Erro ao apagar histórico',
+          type: 'error',
+          autoClose: 2000,
+        })
+      }).finally(() => {
+        toast.dismiss(deleteNotification)
+      })
+    }
+  }
 
   const ScrolableDiv = styled.div`
     overflow-y: auto;
@@ -59,13 +87,21 @@ export function HistoryTable(props: HistoryTableProps) {
       boxShadow: `0px 4px 13.9px 0px ${designTokens.color.boxShadow}`,
       height: `calc(100% - (${designTokens.spacing.medium} * 2))`,
     }}>
-      <h1 style={{
-        margin: 0,
-        fontSize: designTokens.font.size.extraLarge,
-        fontWeight: designTokens.font.weight.semiBold,
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
       }}>
-        Histórico de rotas
-      </h1>
+        <h1 style={{
+          margin: 0,
+          fontSize: designTokens.font.size.extraLarge,
+          fontWeight: designTokens.font.weight.semiBold,
+        }}>
+          Histórico de rotas
+        </h1>
+        <Button label='Apagar tudo' type='text' onClick={handleDeleteHistory} />
+      </div>
       <ScrolableDiv>
         {renderItems.length > 0 ? (
           renderItems.map((item, index) => (
@@ -74,7 +110,11 @@ export function HistoryTable(props: HistoryTableProps) {
               date={item.date}
               origin={item.origin}
               destination={item.destination}
-              onClick={() => onClick && onClick(item as unknown as RoutesResponse)}
+              onClick={() => onClick({
+                origem: item.origin,
+                destino: item.destination,
+                tipoTransporte: item.locomotion || 'automovel'
+              })}
             />
           ))
         ) : (

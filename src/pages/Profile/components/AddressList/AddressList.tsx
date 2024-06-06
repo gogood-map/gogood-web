@@ -3,9 +3,12 @@ import styled from 'styled-components'
 import { AddressItem } from '../AddressItem/AddressItem'
 import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
-import { Stack } from '../../../../utils/Stack/Stack'
+import { stack } from '../../../../utils/data-structure/Stack/Stack'
+import { deleteAddress } from '../../../../utils/requests/address'
+import { toast } from 'react-toastify'
 
 export type Address = {
+  id: number
   zipCode: string
   street: string
   number: string
@@ -22,7 +25,7 @@ export type AddressListProps = {
 
 export function AddressList(props: AddressListProps) {
   const { addresses, onSelect, onAdd } = props
-  const addressStack = Stack<Address>()
+  const addressStack = stack<Address>()
   const [renderAddresses, setRenderAddresses] = useState<Address[]>([])
   const [addAddressHover, setAddAddressHover] = useState(false)
 
@@ -31,13 +34,29 @@ export function AddressList(props: AddressListProps) {
     setRenderAddresses(addressStack.getStack())
   }, [addresses])
 
+  const handleExclude = (addressId: number) => {
+    const notification = toast.loading('Excluindo endereço...', { autoClose: false })
+
+    deleteAddress(addressId).then(() => {
+      toast.success('Endereço excluído com sucesso!', {
+        toastId: notification, autoClose: 2000
+      })
+    }).catch(() => {
+      toast.error('Erro ao excluir endereço!', {
+        toastId: notification, autoClose: 2000
+      })
+    }).finally(() => {
+      toast.dismiss(notification)
+    })
+  }
+
   const List = styled.ul`
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     padding-left: 0;
     margin: 0;
-    gap: ${designTokens.spacing.small};
+    gap: ${designTokens.spacing.tiny};
     height: 100%;
 
     &::-webkit-scrollbar {
@@ -103,7 +122,7 @@ export function AddressList(props: AddressListProps) {
 
       <List>
         {renderAddresses.map((address, index) => (
-          <AddressItem key={index} address={address} onSelect={onSelect} />
+          <AddressItem key={index} address={address} onSelect={onSelect} onExclude={() => handleExclude(address.id)} />
         ))}
       </List>
     </div >

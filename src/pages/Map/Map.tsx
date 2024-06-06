@@ -4,7 +4,7 @@ import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import { toast } from 'react-toastify'
 import { RouteDetails } from './components/RouteDetails/RouteDetails'
-import axios from 'axios'
+import { createSharedRoute, getRoute, getSharedRoute } from '../../utils/requests/route'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
@@ -14,18 +14,16 @@ export function Map() {
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
     const [travelMode, setTravelMode] = useState<string>('')
-    const baseUrl = import.meta.env.VITE_BASE_URL
     const pathParams = new URLSearchParams(window.location.search)
 
     useEffect(() => {
         toast.info('Dados atualizados até 2° semestre de 2023')
-        const idRota = pathParams.get('id-rota')
+        const routeId = pathParams.get('id-rota')
 
-        if (idRota) {
-            axios.get(`${baseUrl}/rotas/compartilhar/${idRota}`)
+        if (routeId) {
+            getSharedRoute(routeId)
                 .then((response) => {
                     const route = response.data as RoutesResponse[]
-                    console.log(route)
                     setRoutesView(route)
                     setRoutes(route)
                     setSearchStatus('success')
@@ -41,12 +39,9 @@ export function Map() {
         setSearchStatus('loading')
         setTravelMode(travelMode)
 
-        axios.get(`${baseUrl}/rotas/${travelMode}?origem=${origin}&destino=${destination}`, {
-            timeout: 300000
-        }).then((routes) => {
+        getRoute(origin, destination, travelMode).then((routes) => {
             setRoutesView(routes.data as RoutesResponse[])
             setRoutes(routes.data as RoutesResponse[])
-            console.log(routes)
             setSearchStatus('success')
         }).catch((error) => {
             console.error(error)
@@ -87,11 +82,11 @@ export function Map() {
             return
         }
 
-        axios.post(`${baseUrl}/rotas/compartilhar`, {
-            origem: route.origem,
-            destino: route.destino,
-            tipoTransporte: travelMode.replace('-', '_'),
-        }).then((response) => {
+        createSharedRoute(
+            route.origem,
+            route.destino,
+            travelMode.replace('-', '_')
+        ).then((response) => {
             navigator.clipboard.writeText(`${window.location.origin}/mapa?id-rota=${response.data.url}`)
             toast.success('Copiado para a área de transferência')
         }).catch((error) => {
