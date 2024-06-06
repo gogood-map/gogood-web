@@ -23,6 +23,7 @@ export function HomeBanner(props: HomeBannerProps) {
             backgroundSize: 'auto 100%',
             paddingLeft: designTokens.spacing.large,
             paddingRight: designTokens.spacing.large,
+            marginBottom: designTokens.spacing.large,
         }}>
             <div style={{
                 display: 'flex',
@@ -71,7 +72,7 @@ export function HomeBanner(props: HomeBannerProps) {
                         zIndex: 1,
                         transition: 'background-color .2s ease-in-out',
                         cursor:'pointer',
-                    }} 
+                    }}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#147454'
                     }}
