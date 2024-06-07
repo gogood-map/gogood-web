@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
+import { getCitySuburb } from '../../utils/requests/dashboard'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[]
@@ -60,7 +61,11 @@ export function MapComponent(props: MapComponentProps) {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     }
-                    map.setCenter(pos)
+                    getCitySuburb(pos.lat, pos.lng).then(({ data }) => {
+                        if (data.address.country === 'Brasil') {
+                            map.setCenter(pos)
+                        }
+                    })
                 }, () => {
                     map.setCenter({ lat: -23.5581213, lng: -46.661614 })
                 })

@@ -69,21 +69,19 @@ export function Home() {
         getDashboard('São Paulo', 'Cerqueira César').then(({ data }) => {
             const dataResponse = data.map(({ count }) => count)
             const labels = data.map(({ anoMes }) => anoMes)
-            setData(dataResponse)
-            setLabels(labels)
+            setData(dataResponse.reverse())
+            setLabels(labels.reverse())
             setTitle('Escala de furtos em São Paulo - Cerqueira César')
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    console.log(position.coords.latitude, position.coords.longitude)
                     getCitySuburb(position.coords.latitude, position.coords.longitude)
                         .then(({ data }) => {
-                            console.log(data)
                             getDashboard(data.address.city, data.address.suburb).then(({ data }) => {
                                 const dataResponse = data.map(({ count }) => count)
                                 const labels = data.map(({ anoMes }) => anoMes)
-                                setData(dataResponse)
-                                setLabels(labels)
+                                setData(dataResponse.reverse())
+                                setLabels(labels.reverse())
                             }).catch(() => {
                                 toast.error('Erro ao buscar dados da dashboard para localização atual')
                             }).finally(() => {
