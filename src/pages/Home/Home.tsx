@@ -75,10 +75,8 @@ export function Home() {
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    console.log(position.coords.latitude, position.coords.longitude)
                     getCitySuburb(position.coords.latitude, position.coords.longitude)
                         .then(({ data }) => {
-                            console.log(data)
                             getDashboard(data.address.city, data.address.suburb).then(({ data }) => {
                                 const dataResponse = data.map(({ count }) => count)
                                 const labels = data.map(({ anoMes }) => anoMes)

@@ -61,7 +61,6 @@ export function MapComponent(props: MapComponentProps) {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
                     }
-                    console.log(pos)
                     getCitySuburb(pos.lat, pos.lng).then(({ data }) => {
                         if (data.address.country === 'Brasil') {
                             map.setCenter(pos)
