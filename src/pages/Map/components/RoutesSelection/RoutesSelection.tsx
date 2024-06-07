@@ -104,6 +104,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                 case 'horas':
                     totalMinutos += value * 60
                     break
+                case 'min':
                 case 'minuto':
                 case 'minutos':
                     totalMinutos += value
