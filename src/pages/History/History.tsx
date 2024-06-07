@@ -94,7 +94,6 @@ export function History() {
 
 
   const handleSelectRoute = (route: RouteRequest) => {
-    console.log(route)
     getRoute(route.origem, route.destino, route.tipoTransporte)
       .then((response) => {
         setRoute(response.data)
