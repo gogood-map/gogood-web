@@ -24,7 +24,6 @@ export function Map() {
             getSharedRoute(routeId)
                 .then((response) => {
                     const route = response.data as RoutesResponse[]
-                    console.log(route)
                     setRoutesView(route)
                     setRoutes(route)
                     setSearchStatus('success')
@@ -43,7 +42,6 @@ export function Map() {
         getRoute(origin, destination, travelMode).then((routes) => {
             setRoutesView(routes.data as RoutesResponse[])
             setRoutes(routes.data as RoutesResponse[])
-            console.log(routes)
             setSearchStatus('success')
         }).catch((error) => {
             console.error(error)

@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - gogood
 on:
   push:
     branches:
-      - tr-improving-perfomance
+      - main
   workflow_dispatch:
 
 jobs:
@@ -20,15 +20,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.x'
+          
+      - name: Set environment variables
+        run: |
+          echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.VITE_GOOGLE_CLIENT_ID }}" >> $GITHUB_ENV
+          echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" >> $GITHUB_ENV
+          echo "VITE_BASE_URL=${{ secrets.VITE_BASE_URL }}" >> $GITHUB_ENV
 
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build --if-present
+          npm run build
           npm run test --if-present
+        env:
+          VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_BASE_URL: ${{ secrets.VITE_BASE_URL}}
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip dist
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -53,13 +63,13 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
+
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8C88A5AB111D4808AE07B0FEE65E466C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_E9F8C522D4FA42FC91998FA3CD697376 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0119EBBC4D74471CB8D448D72EB976FC }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8C03CAC70ACE471A9AC723B0563423DE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C32902F6AFDB4C29B4E3657EA864D669 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_ABAF9F31175C44D180ECF3BB68655726 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -67,5 +77,4 @@ jobs:
         with:
           app-name: 'gogood'
           slot-name: 'Production'
-          package: .
-          
+          package: dist

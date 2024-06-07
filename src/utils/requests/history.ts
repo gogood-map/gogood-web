@@ -13,6 +13,6 @@ export const createHistory = async (history: History)
   return await axios.post(`${baseURL}/history`, history)
 }
 
-export const deleteHistoryByUser = async (userId: string) => {
+export const deleteHistoryByUser = async (userId: number) => {
   return await axios.delete(`${baseURL}/history/${userId}`)
 }

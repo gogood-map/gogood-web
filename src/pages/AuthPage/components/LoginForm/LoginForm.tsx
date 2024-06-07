@@ -18,11 +18,7 @@ export type LoginUser = {
 export function LoginForm() {
     const navigate = useNavigate()
     const { login } = useAuth()
-    const {
-        register,
-        watch,
-        formState: { errors, isValid }
-    } = useForm({ mode: 'all' })
+    const { register, watch, formState: { errors, isValid } } = useForm({ mode: 'all' })
 
     const onSubmit = (data: LoginUser) => {
         const notification = toast.loading('Entrando...')
@@ -57,6 +53,8 @@ export function LoginForm() {
                     autoClose: 1000
                 })
                 console.error('Erro ao fazer login', error)
+            }).finally(() => {
+                toast.dismiss(notification)
             })
     }
 

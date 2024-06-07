@@ -3,15 +3,12 @@ import { designTokens } from 'design-tokens'
 export type ButtonProps = {
     label: string
     type?: 'outline' | 'solid' | 'text' | 'primary'
+    color?: string
     onClick: () => void
 }
 
 export function Button(props: ButtonProps) {
-    const { label, type, onClick } = props
-    const isSolid = type === 'solid'
-    const isOutline = type === 'outline'
-    const isText = type === 'text'
-    const isPrimary = type === 'primary'
+    const { label, type, color, onClick } = props
 
     const commonStyles = {
         paddingTop: designTokens.spacing.small,
@@ -27,7 +24,7 @@ export function Button(props: ButtonProps) {
 
     return (
         <>
-            {(isSolid || !type) &&
+            {(type === 'solid' || !type) &&
                 <button onClick={onClick}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#1B242A'
@@ -37,20 +34,18 @@ export function Button(props: ButtonProps) {
                         e.currentTarget.style.backgroundColor = designTokens.color.secondary
                     }}
 
-
                     style={{
                         ...commonStyles,
                         backgroundColor: designTokens.color.secondary,
                         color: designTokens.color.white,
                         border: `1.5px solid ${designTokens.color.secondary}`,
                         transition: 'background-color .2s ease-in-out',
-
                     }}>
                     {label}
                 </button>
             }
 
-            {isOutline &&
+            {type === 'outline' &&
                 <button onClick={onClick}
                     onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, .1)'
@@ -72,7 +67,7 @@ export function Button(props: ButtonProps) {
                 </button>
             }
 
-            {isText &&
+            {type === 'text' &&
                 <button onClick={onClick}
                     style={{
                         ...commonStyles,
@@ -84,15 +79,17 @@ export function Button(props: ButtonProps) {
                 </button>
             }
 
-            {isPrimary &&
+            {type === 'primary' &&
                 <button onClick={onClick}
                     type='button'
+                    onMouseEnter={(e) => {e.currentTarget.style.filter = 'brightness(80%)'}}
+                    onMouseLeave={(e) => {e.currentTarget.style.filter = 'brightness(100%)'}}
                     style={{
                         ...commonStyles,
                         width: '100%',
-                        backgroundColor: designTokens.color.selectedLight,
+                        backgroundColor: color || designTokens.color.selectedLight,
                         color: designTokens.color.white,
-                        border: '1.5px solid transparent'
+                        border: 'none'
                     }}>
                     {label}
                 </button>

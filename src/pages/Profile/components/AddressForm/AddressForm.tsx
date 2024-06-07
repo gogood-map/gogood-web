@@ -6,8 +6,12 @@ import { PiSuitcaseSimple } from 'react-icons/pi'
 import { Button } from '../../../../components/Button/Button'
 import axios from 'axios'
 import { useEffect } from 'react'
+import { createAddress, updateAddress } from '../../../../utils/requests/address'
+import { UpdateAddress } from '../../../../utils/types/address'
+import { toast } from 'react-toastify'
 
 export type AddressFormProps = {
+  id?: number
   update?: boolean
   zipCode?: string
   street?: string
@@ -18,9 +22,8 @@ export type AddressFormProps = {
 }
 
 export function AddressForm(props: AddressFormProps) {
-  const { zipCode, street, number, district, city, tag, update } = props
+  const { id, zipCode, street, number, district, city, tag, update } = props
   const { register, watch, setValue } = useForm({ mode: 'all' })
-
 
   useEffect(() => {
     zipCode && setValue('zipCode', zipCode)
@@ -93,12 +96,57 @@ export function AddressForm(props: AddressFormProps) {
       city: watch('city'),
       tag: watch('tag')
     }
-    console.table(data)
 
     if (update) {
-      // send update request
+      if (id) {
+        const notification = toast.loading('Atualizando endereço...')
+        updateAddress(id, {
+          cep: data.zipCode,
+          rua: data.street,
+          numero: data.number,
+          bairro: data.district,
+          cidade: data.city,
+          tipoEndereco: data.tag
+        } as UpdateAddress).then(() => {
+          toast.update(notification, {
+            render: 'Endereço atualizado com sucesso!',
+            type: 'success',
+            autoClose: 2000
+          })
+        }).catch(() => {
+          toast.update(notification, {
+            render: 'Erro ao atualizar endereço!',
+            type: 'error',
+            autoClose: 2000
+          })
+        }).finally(() => {
+          toast.dismiss(notification)
+        })
+      }
     } else {
-      // send add request
+      const notification = toast.loading('Adicionando endereço...')
+      createAddress({
+        cep: data.zipCode,
+        rua: data.street,
+        numero: data.number,
+        bairro: data.district,
+        cidade: data.city,
+        tipoEndereco: data.tag
+      }).then(() => {
+        toast.update(notification, {
+          render: 'Endereço adicionado com sucesso!',
+          type: 'success',
+          autoClose: 2000
+        })
+      }).catch(() => {
+        toast.update(notification, {
+          render: 'Erro ao adicionar endereço!',
+          type: 'error',
+          autoClose: 2000
+        })
+      }).finally(() => {
+        toast.dismiss(notification)
+      })
     }
   }
 

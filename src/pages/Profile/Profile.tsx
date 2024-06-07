@@ -9,14 +9,7 @@ import { Address } from './components/AddressList/AddressList'
 export const Profile = () => {
   const [showCard, setShowCard] = useState(false)
   const [updateForm, setUpdateForm] = useState(false)
-  const [addressCard, setAddressCard] = useState<AddressFormProps | null>({
-    street: 'Rua das Laranjeiras',
-    number: '123',
-    city: 'São Paulo',
-    zipCode: '12345-678',
-    district: 'Centro',
-    tag: 'Casa',
-  })
+  const [addressCard, setAddressCard] = useState<AddressFormProps | null>(null)
 
   const handleCardClickOut = () => {
     setShowCard(false)
@@ -127,7 +120,11 @@ export const Profile = () => {
 
   return (
     <>
-      {showCard && <AddressCard updateForm={updateForm} address={{...addressCard}} onClickOut={handleCardClickOut} />}
+      {showCard && <AddressCard
+        updateForm={updateForm}
+        address={{ ...addressCard }}
+        onClickOut={handleCardClickOut}
+      />}
       <main style={{
         display: 'flex',
         flexDirection: 'row',
@@ -143,14 +140,12 @@ export const Profile = () => {
         }}>
           <FormProfile />
         </section>
-
         <section style={{
           width: '65%',
           height: '100%',
         }}>
           <AddressSection adresses={adresses} onSelect={handleSelectAddress} onAdd={handleAddAddress} />
         </section>
-
       </main>
     </>
   )

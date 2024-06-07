@@ -1,13 +1,14 @@
-type queue<T> = {
+type Queue<T> = {
   items: T[]
   enqueue: (item: T) => void
   dequeue: () => T | undefined
   peek: () => T | undefined
   size: () => number
   getQueue: () => T[]
+  clear: () => void
 }
 
-export function Queue<T>(): queue<T> {
+export function queue<T>(): Queue<T> {
   const queue: T[] = []
 
   return {
@@ -26,6 +27,9 @@ export function Queue<T>(): queue<T> {
     },
     getQueue: () => {
       return queue
+    },
+    clear: () => {
+      queue.forEach(() => queue.shift())
     }
   }
 }
