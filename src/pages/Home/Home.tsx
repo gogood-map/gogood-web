@@ -77,14 +77,17 @@ export function Home() {
                 navigator.geolocation.getCurrentPosition((position) => {
                     getCitySuburb(position.coords.latitude, position.coords.longitude)
                         .then(({ data }) => {
-                            setTitle(`Escala de furtos em ${data.city} - ${data.suburb}`)
                             getDashboard(data.city, data.suburb).then(({ data }) => {
                                 const dataResponse = data.map(({ count }) => count)
                                 const labels = data.map(({ anoMes }) => anoMes)
                                 setData(dataResponse)
                                 setLabels(labels)
                             }).catch(() => {
-                                toast.error('Erro ao buscar dados da dashboard')
+                                toast.error('Erro ao buscar dados da dashboard para localização atual')
+                            }).finally(() => {
+                                if (data.city && data.suburb) {
+                                    setTitle(`Escala de furtos em ${data.city} - ${data.suburb}`)
+                                }
                             })
                         }).catch(() => {
                             toast.error('Erro ao buscar dados de localização')
