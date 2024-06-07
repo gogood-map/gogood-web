@@ -7,7 +7,7 @@ export type HistoryTableItemProps = {
   date: string
   origin: string
   destination: string
-  locomotion?: 'bike' | 'automovel' | 'a-pe' | 'transporte-publico'
+  locomotion?: 'bike' | 'veiculo' | 'a-pe' | 'transporte-publico'
   onClick?: () => void
 }
 

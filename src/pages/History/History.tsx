@@ -13,21 +13,15 @@ export function History() {
   const historyResponse = [
     {
       create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'bike',
+      origem: 'Estação Consoleção',
+      destino: 'Faculdade SPTECH',
+      meio_locomocao: 'veiculo',
     },
     {
       create_at: '2024-12-31',
       origem: 'Rua A, 123',
       destino: 'Rua B, 456',
-      meio_locomocao: 'automovel',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'bike',
+      meio_locomocao: 'veiculo',
     },
     {
       create_at: '2024-12-31',
@@ -39,7 +33,13 @@ export function History() {
       create_at: '2024-12-31',
       origem: 'Rua A, 123',
       destino: 'Rua B, 456',
-      meio_locomocao: 'automovel',
+      meio_locomocao: 'bike',
+    },
+    {
+      create_at: '2024-12-31',
+      origem: 'Rua A, 123',
+      destino: 'Rua B, 456',
+      meio_locomocao: 'veiculo',
     },
     {
       create_at: '2024-12-31',
@@ -51,7 +51,7 @@ export function History() {
       create_at: '2024-12-31',
       origem: 'Rua A, 123',
       destino: 'Rua B, 456',
-      meio_locomocao: 'automovel',
+      meio_locomocao: 'veiculo',
     },
     {
       create_at: '2024-12-31',
@@ -75,7 +75,7 @@ export function History() {
       create_at: '2024-12-31',
       origem: 'Rua A, 123',
       destino: 'Rua B, 456',
-      meio_locomocao: 'automovel',
+      meio_locomocao: 'veiculo',
     },
     {
       create_at: '2024-12-31',
@@ -89,17 +89,18 @@ export function History() {
     date: item.create_at,
     origin: item.origem,
     destination: item.destino,
-    locomotion: item.meio_locomocao as 'bike' | 'automovel' | 'a-pe' | 'transporte-publico',
+    locomotion: item.meio_locomocao as 'bike' | 'veiculo' | 'a-pe' | 'transporte-publico',
   }))
 
 
   const handleSelectRoute = (route: RouteRequest) => {
+    console.log(route)
     getRoute(route.origem, route.destino, route.tipoTransporte)
-    .then((response) => {
-      setRoute(response.data)
-    }).catch((error) => {
-      console.error(error)
-    })
+      .then((response) => {
+        setRoute(response.data)
+      }).catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
