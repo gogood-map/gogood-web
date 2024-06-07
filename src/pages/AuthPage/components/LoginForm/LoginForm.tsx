@@ -18,11 +18,7 @@ export type LoginUser = {
 export function LoginForm() {
     const navigate = useNavigate()
     const { login } = useAuth()
-    const {
-        register,
-        watch,
-        formState: { errors, isValid }
-    } = useForm({ mode: 'all' })
+    const { register, watch, formState: { errors, isValid } } = useForm({ mode: 'all' })
 
     const onSubmit = (data: LoginUser) => {
         const notification = toast.loading('Entrando...')

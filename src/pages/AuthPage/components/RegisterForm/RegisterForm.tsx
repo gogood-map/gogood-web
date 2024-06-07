@@ -65,10 +65,10 @@ export function RegisterForm() {
         createUser({
             email: data.email,
             nome: data.name,
-            senha: 'password' in data ? data.password : undefined,
-            dataNascimento: 'birthDate' in data ? data.birthDate : undefined,
-            genero: 'gender' in data ? data.gender : undefined,
-            token: 'googleId' in data ? data.googleId : undefined
+            ...(data as RegisterUser).password && { senha: (data as RegisterUser).password },
+            ...(data as RegisterUser).gender && { genero: (data as RegisterUser).gender },
+            ...(data as RegisterUser).birthDate && { dataNascimento: (data as RegisterUser).birthDate },
+            ...(data as RegisterGoogleUser).googleId && { token: (data as RegisterGoogleUser).googleId }
         }).then(response => {
             const user = response.data as UserResponse
             toast.update(notification, {
@@ -370,6 +370,7 @@ export function RegisterForm() {
                             email: watch('email'),
                             password: watch('password'),
                             name: watch('name'),
+                            gender: watch('gender'),
                             birthDate: watch('birthDate'),
                         } as RegisterUser)}
                     />
