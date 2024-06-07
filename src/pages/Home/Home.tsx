@@ -75,9 +75,11 @@ export function Home() {
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
+                    console.log(position.coords.latitude, position.coords.longitude)
                     getCitySuburb(position.coords.latitude, position.coords.longitude)
                         .then(({ data }) => {
-                            getDashboard(data.city, data.suburb).then(({ data }) => {
+                            console.log(data)
+                            getDashboard(data.address.city, data.address.suburb).then(({ data }) => {
                                 const dataResponse = data.map(({ count }) => count)
                                 const labels = data.map(({ anoMes }) => anoMes)
                                 setData(dataResponse)
@@ -85,8 +87,8 @@ export function Home() {
                             }).catch(() => {
                                 toast.error('Erro ao buscar dados da dashboard para localização atual')
                             }).finally(() => {
-                                if (data.city && data.suburb) {
-                                    setTitle(`Escala de furtos em ${data.city} - ${data.suburb}`)
+                                if (data.address.city && data.address.suburb) {
+                                    setTitle(`Escala de furtos em ${data.address.city} - ${data.address.suburb}`)
                                 }
                             })
                         }).catch(() => {
