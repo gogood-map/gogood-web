@@ -11,7 +11,8 @@ import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import { toast } from 'react-toastify'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
-import axios from 'axios'
+import { createUser } from '../../../../utils/requests/user'
+import { UserResponse } from '../../../../utils/types/user'
 
 export type GoogleResponse = {
     aud: string
@@ -59,38 +60,43 @@ export function RegisterForm() {
     ]
 
     const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
-        console.table(data)
-        const baseUrl = import.meta.env.VITE_BASE_URL
         const notification = toast.loading('Cadastrando...', { autoClose: false })
-        axios.post(`${baseUrl}/usuarios`, {
+
+        createUser({
             email: data.email,
             nome: data.name,
-            senha: 'password' in data ? data.password : undefined,
-            genero: 'gender' in data ? data.gender : undefined,
-            dataNascimento: 'birthDate' in data ? data.birthDate : undefined,
-            googleId: 'googleId' in data ? data.googleId : undefined
+            ...(data as RegisterUser).password && { senha: (data as RegisterUser).password },
+            ...(data as RegisterUser).gender && { genero: (data as RegisterUser).gender },
+            ...(data as RegisterUser).birthDate && { dataNascimento: (data as RegisterUser).birthDate },
+            ...(data as RegisterGoogleUser).googleId && { token: (data as RegisterGoogleUser).googleId }
+        }).then(response => {
+            const user = response.data as UserResponse
+            toast.update(notification, {
+                render: 'Cadastro realizado com sucesso!',
+                type: 'success',
+                isLoading: false,
+                autoClose: 3000
+            })
+            login({
+                id: user.id,
+                name: user.nome,
+                email: user.email,
+                birthdate: user.dataNascimento,
+                token: user.token,
+                picture: user.foto
+            } as User, true)
+            setFormStep(2)
+        }).catch(error => {
+            toast.update(notification, {
+                render: 'Erro ao cadastrar',
+                type: 'error',
+                isLoading: false,
+                autoClose: 3000
+            })
+            console.error(error)
+        }).finally(() => {
+            toast.dismiss(notification)
         })
-            .then(response => {
-                const user = response.data as User
-                toast.update(notification, {
-                    render: 'Cadastro realizado com sucesso!',
-                    type: 'success',
-                    isLoading: false,
-                    autoClose: 3000
-                })
-                login(user, true)
-                setFormStep(2)
-            })
-            .catch(error => {
-                toast.update(notification, {
-                    render: 'Erro ao cadastrar',
-                    type: 'error',
-                    isLoading: false,
-                    autoClose: 3000
-                })
-                console.error(error)
-            })
-        // setFormStep(2)
     }
 
     useEffect(() => {
@@ -241,7 +247,7 @@ export function RegisterForm() {
                                 }
                             }}
                             shape='circle'
-                            onError={() => console.log('Erro ao logar com Google')}
+                            onError={() => console.error('Erro ao logar com Google')}
                         />
                     </div>
                 </section>
@@ -357,7 +363,7 @@ export function RegisterForm() {
                     <AuthButton
                         currentStep={formStep}
                         steps={steps.length - 1}
-                        disabled={(!watch('name') || !watch('gender') || !watch('birthDate'))
+                        disabled={(!watch('name')|| !watch('birthDate')) || !watch('gender')
                             || !(!errors.name && !errors.gender && !errors.birthDate)}
                         onClickBack={() => setFormStep(formStep - 1)}
                         onClickSubmit={() => onSubmit({

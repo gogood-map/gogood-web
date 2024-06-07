@@ -6,33 +6,24 @@ import { jwtDecode } from 'jwt-decode'
 import { isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
 import { GoogleResponse } from '../RegisterForm/RegisterForm'
-import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
-import axios from 'axios'
+import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
+import { getUserByLogin } from '../../../../utils/requests/user'
 import { toast } from 'react-toastify'
 
 export type LoginUser = {
     entry: string,
-    password?: string
+    password: string
 }
 
 export function LoginForm() {
     const navigate = useNavigate()
     const { login } = useAuth()
-    const {
-        register,
-        watch,
-        formState: { errors, isValid }
-    } = useForm({ mode: 'all' })
+    const { register, watch, formState: { errors, isValid } } = useForm({ mode: 'all' })
 
     const onSubmit = (data: LoginUser) => {
-        const baseUrl = import.meta.env.VITE_BASE_URL
         const notification = toast.loading('Entrando...')
-        axios.get(`${baseUrl}/usuarios/login`, {
-            params: {
-                entrada: data.entry,
-                senha: data.password
-            }
-        })
+
+        getUserByLogin(data.entry, data.password)
             .then(response => {
                 toast.update(notification, {
                     render: 'Login realizado com sucesso',
@@ -40,10 +31,19 @@ export function LoginForm() {
                     isLoading: false,
                     autoClose: 1000
                 })
-                login(response.data, false)
+                const data = response.data
+                login({
+                    id: data.id,
+                    name: data.nome,
+                    email: data.email,
+                    token: data.token,
+                    birthdate: data.dataNascimento,
+                    gender: data.genero,
+                    picture: data.foto
+                } as User, false)
                 setTimeout(() => {
                     navigate('/mapa')
-                }, 1000)
+                }, 1500)
             })
             .catch(error => {
                 toast.update(notification, {
@@ -53,6 +53,8 @@ export function LoginForm() {
                     autoClose: 1000
                 })
                 console.error('Erro ao fazer login', error)
+            }).finally(() => {
+                toast.dismiss(notification)
             })
     }
 
@@ -166,7 +168,7 @@ export function LoginForm() {
                         if (response.credential) {
                             const userInfo = jwtDecode(response.credential) as GoogleResponse
                             const userGoogleId = userInfo.sub
-                            onSubmit({ entry: userGoogleId })
+                            onSubmit({ entry: userInfo.email, password: userGoogleId })
                         }
                     }}
                     shape='circle'

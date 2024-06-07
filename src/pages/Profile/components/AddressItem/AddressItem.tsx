@@ -3,17 +3,24 @@ import { Address } from '../AddressList/AddressList'
 import { CSSProperties, useState } from 'react'
 import { BiHomeAlt2, BiHomeHeart, BiSolidEditAlt } from 'react-icons/bi'
 import { PiSuitcaseSimple, PiTag } from 'react-icons/pi'
-import { IoSchoolOutline } from 'react-icons/io5'
+import { IoSchoolOutline, IoTrashOutline } from 'react-icons/io5'
 
 export type AddressItemProps = {
   address: Address
   onSelect: (address: Address) => void
+  onExclude: () => void
 }
 
 export function AddressItem(props: AddressItemProps) {
-  const { address: { zipCode, city, district, number, street, tag }, onSelect } = props
+  const { address: { zipCode, city, district, number, street, tag }, onSelect, onExclude } = props
   const [hover, setHover] = useState(false)
   const [editHover, setEditHover] = useState(false)
+  const [excludeHover, setExcludeHover] = useState(false)
+
+  const handleExcludeClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    onExclude()
+  }
 
   const addressDefaultStyle = {
     display: 'flex',
@@ -28,7 +35,7 @@ export function AddressItem(props: AddressItemProps) {
     borderRadius: designTokens.borderRadius.medium,
   } as CSSProperties
 
-  const editButtonDefaultStyle = {
+  const buttonDefaultStyle = {
     display: hover ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
@@ -81,14 +88,30 @@ export function AddressItem(props: AddressItemProps) {
             <span>{tag}</span>
           </div>
         </div>
-        <div
-          onMouseEnter={() => setEditHover(true)}
-          onMouseLeave={() => setEditHover(false)}
-          style={editHover
-            ? { ...editButtonDefaultStyle, backgroundColor: designTokens.color.grayScale[400] }
-            : editButtonDefaultStyle
-          }>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: designTokens.spacing.small,
+        }}>
+          <div
+            onMouseEnter={() => setEditHover(true)}
+            onMouseLeave={() => setEditHover(false)}
+            style={editHover
+              ? { ...buttonDefaultStyle, backgroundColor: designTokens.color.grayScale[400] }
+              : buttonDefaultStyle
+            } onClick={handleExcludeClick}>
+            <IoTrashOutline size={24} />
+          </div>
+          <div
+            onMouseEnter={() => setExcludeHover(true)}
+            onMouseLeave={() => setExcludeHover(false)}
+            style={excludeHover
+              ? { ...buttonDefaultStyle, backgroundColor: designTokens.color.grayScale[400] }
+              : buttonDefaultStyle
+            }>
             <BiSolidEditAlt size={24} />
+          </div>
+
         </div>
       </div>
     </li>
