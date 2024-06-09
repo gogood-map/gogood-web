@@ -7,11 +7,11 @@ import { isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
 import { GoogleResponse } from '../RegisterForm/RegisterForm'
 import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
-import { getUserByLogin } from '../../../../utils/requests/user'
+import { getGoogleUserByLogin, getUserByLogin } from '../../../../utils/requests/user'
 import { toast } from 'react-toastify'
 
 export type LoginUser = {
-    entry: string,
+    email: string,
     password: string
 }
 
@@ -23,7 +23,7 @@ export function LoginForm() {
     const onSubmit = (data: LoginUser) => {
         const notification = toast.loading('Entrando...')
 
-        getUserByLogin(data.entry, data.password)
+        getUserByLogin(data.email, data.password)
             .then(response => {
                 toast.update(notification, {
                     render: 'Login realizado com sucesso',
@@ -33,13 +33,12 @@ export function LoginForm() {
                 })
                 const data = response.data
                 login({
-                    id: data.id,
+                    id: data.userId,
                     name: data.nome,
                     email: data.email,
                     token: data.token,
-                    birthdate: data.dataNascimento,
+                    birthdate: data.dt_nascimento,
                     gender: data.genero,
-                    picture: data.foto
                 } as User, false)
                 setTimeout(() => {
                     navigate('/mapa')
@@ -57,6 +56,43 @@ export function LoginForm() {
                 toast.dismiss(notification)
             })
     }
+
+    const onGoogleSubmit = (email: string, googleId: string) => {
+        const notification = toast.loading('Entrando...')
+
+        getGoogleUserByLogin(email, googleId).then(response => {
+            toast.update(notification, {
+                render: 'Login realizado com sucesso',
+                type: 'success',
+                isLoading: false,
+                autoClose: 1000
+            })
+            const data = response.data
+            login({
+                id: data.userId,
+                name: data.nome,
+                email: data.email,
+                token: data.token,
+                birthdate: data.dt_nascimento,
+                gender: data.genero || 'não especificado',
+            } as User, false)
+            setTimeout(() => {
+                navigate('/mapa')
+            }, 1500)
+        }).catch(error => {
+            toast.update(notification, {
+                render: 'Erro ao fazer login',
+                type: 'error',
+                isLoading: false,
+                autoClose: 1000
+            })
+            console.error('Erro ao fazer login', error)
+        }).finally(() => {
+            toast.dismiss(notification)
+        })
+    }
+
+
 
     const textInputStyle = {
         padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
@@ -147,7 +183,7 @@ export function LoginForm() {
                 disabled={watch('email') === '' || watch('password') === '' || !isValid}
                 onClickSubmit={() => {
                     onSubmit({
-                        entry: watch('email'),
+                        email: watch('email'),
                         password: watch('password')
                     })
                 }}
@@ -167,8 +203,7 @@ export function LoginForm() {
                     onSuccess={response => {
                         if (response.credential) {
                             const userInfo = jwtDecode(response.credential) as GoogleResponse
-                            const userGoogleId = userInfo.sub
-                            onSubmit({ entry: userInfo.email, password: userGoogleId })
+                            onGoogleSubmit(userInfo.email, userInfo.sub)
                         }
                     }}
                     shape='circle'

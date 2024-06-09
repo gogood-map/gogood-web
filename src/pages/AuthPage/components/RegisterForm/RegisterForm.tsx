@@ -11,7 +11,7 @@ import { User, useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import { toast } from 'react-toastify'
 import completeRegister from '../../../../assets/complete-register.svg'
 import styled from 'styled-components'
-import { createUser } from '../../../../utils/requests/user'
+import { createGoogleUser, createUser } from '../../../../utils/requests/user'
 import { UserResponse } from '../../../../utils/types/user'
 
 export type GoogleResponse = {
@@ -59,16 +59,15 @@ export function RegisterForm() {
         { title: 'Concluído' }
     ]
 
-    const onSubmit = (data: RegisterUser | RegisterGoogleUser) => {
+    const onSubmit = (data: RegisterUser) => {
         const notification = toast.loading('Cadastrando...', { autoClose: false })
 
         createUser({
-            email: data.email,
             nome: data.name,
-            ...(data as RegisterUser).password && { senha: (data as RegisterUser).password },
-            ...(data as RegisterUser).gender && { genero: (data as RegisterUser).gender },
-            ...(data as RegisterUser).birthDate && { dataNascimento: (data as RegisterUser).birthDate },
-            ...(data as RegisterGoogleUser).googleId && { token: (data as RegisterGoogleUser).googleId }
+            email: data.email,
+            senha: data.password,
+            genero: data.gender,
+            dt_Nascimento: data.birthDate,
         }).then(response => {
             const user = response.data as UserResponse
             toast.update(notification, {
@@ -78,13 +77,13 @@ export function RegisterForm() {
                 autoClose: 3000
             })
             login({
-                id: user.id,
+                id: user.userId,
                 name: user.nome,
                 email: user.email,
-                birthdate: user.dataNascimento,
+                birthdate: user.dt_nascimento,
                 token: user.token,
-                picture: user.foto
-            } as User, true)
+                gender: user.genero || 'não especificado',
+            } as User, false)
             setFormStep(2)
         }).catch(error => {
             toast.update(notification, {
@@ -95,7 +94,39 @@ export function RegisterForm() {
             })
             console.error(error)
         }).finally(() => {
-            toast.dismiss(notification)
+            setTimeout(() => {
+                toast.dismiss(notification)
+            }, 3000)
+        })
+    }
+
+    const onGoogleSubmit = (data: RegisterGoogleUser) => {
+        const notification = toast.loading('Cadastrando...', { autoClose: false })
+
+        createGoogleUser({
+            nome: data.name,
+            email: data.email,
+            google_id: data.googleId,
+        }).then(() => {
+            toast.update(notification, {
+                render: 'Cadastro realizado com sucesso!',
+                type: 'success',
+                isLoading: false,
+                autoClose: 3000
+            })
+            navigate('/login')
+        }).catch(error => {
+            toast.update(notification, {
+                render: 'Erro ao cadastrar',
+                type: 'error',
+                isLoading: false,
+                autoClose: 3000
+            })
+            console.error(error)
+        }).finally(() => {
+            setTimeout(() => {
+                toast.dismiss(notification)
+            }, 3000)
         })
     }
 
@@ -103,7 +134,7 @@ export function RegisterForm() {
         if (formStep === 2) {
             setTimeout(() => {
                 navigate('/mapa')
-            }, 3000)
+            }, 5000)
         }
     }, [formStep])
 
@@ -239,11 +270,11 @@ export function RegisterForm() {
                                 if (response.credential) {
                                     const userInfo = jwtDecode(response.credential) as GoogleResponse
                                     const { email, name, sub } = userInfo
-                                    onSubmit({
+                                    onGoogleSubmit({
                                         email,
                                         name,
                                         googleId: sub
-                                    } as RegisterGoogleUser)
+                                    })
                                 }
                             }}
                             shape='circle'
@@ -363,7 +394,7 @@ export function RegisterForm() {
                     <AuthButton
                         currentStep={formStep}
                         steps={steps.length - 1}
-                        disabled={(!watch('name')|| !watch('birthDate')) || !watch('gender')
+                        disabled={(!watch('name') || !watch('birthDate')) || !watch('gender')
                             || !(!errors.name && !errors.gender && !errors.birthDate)}
                         onClickBack={() => setFormStep(formStep - 1)}
                         onClickSubmit={() => onSubmit({
@@ -376,71 +407,6 @@ export function RegisterForm() {
                     />
                 </section>
             )}
-            {/* {formStep >= 2 && (
-                <section style={{
-                    display: formStep === 2 ? 'flex' : 'none',
-                    width: '100%',
-                    flexDirection: 'column',
-                    gap: designTokens.spacing.medium
-                }}>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: designTokens.spacing.tiny
-                    }}>
-                        <h1 style={{
-                            color: designTokens.color.text,
-                            fontSize: designTokens.font.size.extraLarge,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            width: '100%',
-                            margin: 0,
-                        }}>
-                            Personalização
-                        </h1>
-                        <p style={{
-                            color: designTokens.color.text,
-                            fontSize: designTokens.font.size.smallMedium,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                            width: '100%',
-                            margin: 0,
-
-                        }}>Estamos quase lá! Só mais algumas informações para conhecermos um pouco melhor de você.</p>
-                    </div>
-                    <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}>
-                        <label htmlFor='address'>Endereço</label>
-                        <input style={textInputStyle}
-                            id='address'
-                            type='text'
-                            {...register('address', {
-                                required: { value: true, message: 'Endereço obrigatório' },
-                            })}
-                            placeholder='Seu endereço'
-                        />
-                        {errors.address && watch('address') && <span style={{ color: designTokens.color.error, fontSize: designTokens.font.size.small }}>{errors.address.message as string}</span>}
-                    </div>
-                    <AuthButton
-                        currentStep={formStep}
-                        steps={steps.length - 1}
-                        disabled={!watch('address') || !isValid}
-                        onClickBack={() => setFormStep(formStep - 1)}
-                        onClickSubmit={() => onSubmit({
-                            email: watch('email'),
-                            password: watch('password'),
-                            name: watch('name'),
-                            gender: watch('gender'),
-                            birthDate: watch('birthDate'),
-                            address: watch('address')
-                        } as RegisterUser)}
-                    />
-                </section>
-            )} */}
             {formStep >= 2 && (
                 <section style={{
                     display: formStep === 2 ? 'flex' : 'none',
