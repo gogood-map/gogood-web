@@ -7,7 +7,7 @@ import { SidebarLayout } from './pages/SidebarLayout/SidebarLayout.tsx'
 import { Map } from './pages/Map/Map.tsx'
 import { Profile } from './pages/Profile/Profile.tsx'
 import { History } from './pages/History/History.tsx'
-import { IAPage } from './pages/IAPage/IAPage.tsx'
+import { IAgo } from './pages/IAgo/IAgo.tsx'
 
 export const routes = (
     <Routes>
@@ -18,7 +18,7 @@ export const routes = (
             <Route path='mapa' element={<Map />} />
             <Route path='perfil' element={<Profile />} />
             <Route path='historico' element={<History />} />
-            <Route path='iago' element={<IAPage />} />
+            <Route path='iago' element={<IAgo />} />
         </Route>
         <Route path='cadastro' element={<AuthPage type='register' />} />
         <Route path='login' element={<AuthPage type='login' />} />

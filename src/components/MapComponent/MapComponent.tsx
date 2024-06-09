@@ -127,6 +127,7 @@ export function MapComponent(props: MapComponentProps) {
                     })
                     listaPolyline.push(polylineRota)
                     polylineRota.setMap(map)
+                    map?.setCenter(caminho[0])
                 }
             }
 
