@@ -1,104 +1,60 @@
 import { designTokens } from 'design-tokens'
 import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { HistoryTable } from './components/HistoryTable/HistoryTable'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { RoutesResponse } from '../Map/components/RoutesSelection/RoutesSelection'
 import { HistoryTableItemProps } from './components/HistoryTableItem/HistoryTableItem'
 import { RouteRequest } from '../../utils/types/route'
 import { getRoute } from '../../utils/requests/route'
+import { getHistoryByUser } from '../../utils/requests/history'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
+import { toast } from 'react-toastify'
 
 export function History() {
   const [route, setRoute] = useState<RoutesResponse[]>()
+  const [historyItems, setHistoryItems] = useState<HistoryTableItemProps[]>([])
+  const { user } = useAuth()
 
-  const historyResponse = [
-    {
-      create_at: '2024-12-31',
-      origem: 'Estação Consoleção',
-      destino: 'Faculdade SPTECH',
-      meio_locomocao: 'veiculo',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'veiculo',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'bike',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'bike',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'veiculo',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'a-pe',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'veiculo',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'bike',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'trasporte-publico',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua Aasdadadasdadsasdasdadasddasd, 123',
-      destino: 'Rua asdadsasdadadsasdasdasdasdasB, 456',
-      meio_locomocao: 'bike',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'veiculo',
-    },
-    {
-      create_at: '2024-12-31',
-      origem: 'Rua A, 123',
-      destino: 'Rua B, 456',
-      meio_locomocao: 'trasporte-publico',
-    },
-  ]
-
-  const historyItems: HistoryTableItemProps[] = historyResponse.map((item) => ({
-    date: item.create_at,
-    origin: item.origem,
-    destination: item.destino,
-    locomotion: item.meio_locomocao as 'bike' | 'veiculo' | 'a-pe' | 'transporte-publico',
-  }))
-
+  useEffect(() => {
+    console.log("a")
+    if (!user) return
+    console.log(user)
+    getHistoryByUser(user?.id)
+      .then((response) => {
+        console.log(response.data)
+        setHistoryItems(response.data.map((item) => ({
+          date: item.created_at,
+          origin: item.origem,
+          destination: item.destino,
+          locomotion: item.meio_locomocao as 'bike' | 'veiculo' | 'a-pe' | 'transporte-publico',
+        })))
+      }).catch((error) => {
+        console.error(error)
+        toast.error('Erro ao carregar histórico')
+      })
+  }, [])
 
   const handleSelectRoute = (route: RouteRequest) => {
+    const notification = toast.loading('Carregando rota...', { autoClose: false })
     getRoute(route.origem, route.destino, route.tipoTransporte)
       .then((response) => {
         setRoute(response.data)
+        toast.update(notification, {
+          render: 'Rota carregada com sucesso',
+          type: 'success',
+          autoClose: 2000,
+        })
       }).catch((error) => {
         console.error(error)
+        toast.update(notification, {
+          render: 'Erro ao carregar rota',
+          type: 'error',
+          autoClose: 2000,
+        })
+      }).finally(() => {
+        setTimeout(() => {
+          toast.dismiss(notification)
+        }, 3000)
       })
   }
 
@@ -117,7 +73,7 @@ export function History() {
         width: '35%',
         height: '100%',
       }}>
-        <HistoryTable items={historyItems} onClick={handleSelectRoute} />
+        {historyItems && <HistoryTable items={historyItems} onClick={handleSelectRoute} />}
       </div>
       <div style={{
         width: '65%',
