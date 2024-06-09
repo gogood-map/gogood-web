@@ -2,14 +2,19 @@ import { FormProfile } from './components/FormProfile/FormProfile'
 import { designTokens } from 'design-tokens'
 import { AddressSection } from './components/AddressSection/AdressSection'
 import { AddressCard } from './components/AddressCard/AddressCard'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AddressFormProps } from './components/AddressForm/AddressForm'
 import { Address } from './components/AddressList/AddressList'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
+import { getAddressByUser } from '../../utils/requests/address'
+import { toast } from 'react-toastify'
 
 export const Profile = () => {
   const [showCard, setShowCard] = useState(false)
   const [updateForm, setUpdateForm] = useState(false)
   const [addressCard, setAddressCard] = useState<AddressFormProps | null>(null)
+  const [addresses, setAddresses] = useState<Address[]>([])
+  const { user } = useAuth()
 
   const handleCardClickOut = () => {
     setShowCard(false)
@@ -17,6 +22,7 @@ export const Profile = () => {
 
   const handleSelectAddress = (address: Address) => {
     setAddressCard({
+      id: address.id,
       street: address.street,
       number: address.number,
       city: address.city,
@@ -34,94 +40,51 @@ export const Profile = () => {
     setUpdateForm(false)
   }
 
-  const adresses = [
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Laranjeiras',
-      number: '123',
-      district: 'Centro',
-      city: 'São Paulo',
-      tag: 'Casa',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das macieiras',
-      number: '123',
-      district: 'Vila Maça',
-      city: 'São Paulo',
-      tag: 'Trabalho',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Limoeiras',
-      number: '123',
-      district: 'Jd Limão',
-      city: 'São Paulo',
-      tag: 'Outro',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua dos Cajuzeiros',
-      number: '123',
-      district: 'Vila Caju',
-      city: 'São Paulo',
-      tag: 'Outro',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Bananeiras',
-      number: '123',
-      district: 'Cohab Banana',
-      city: 'São Paulo',
-      tag: 'Faculdade',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Pitangueiras',
-      number: '123',
-      district: 'Vale Pitanga',
-      city: 'São Paulo',
-      tag: 'Faculdade',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Jabuticabeiras',
-      number: '123',
-      district: 'Jd Jabuticaba',
-      city: 'São Paulo',
-      tag: 'Parceiro(a)',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Aceroleiras',
-      number: '123',
-      district: 'Vila Acerola',
-      city: 'São Paulo',
-      tag: 'Parceiro(a)',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Goiabeiras',
-      number: '123',
-      district: 'Vila Goiaba',
-      city: 'São Paulo',
-      tag: 'Casa',
-    },
-    {
-      zipCode: '12345-678',
-      street: 'Rua das Mangueiras',
-      number: '123',
-      district: 'Vila Manga',
-      city: 'São Paulo',
-      tag: 'Trabalho',
-    },
-  ] as Address[]
+  const updateUserAddresses = () => {
+    if (!user) return
 
+    getAddressByUser(user.id)
+      .then((response) => {
+        setAddresses(response.data.map((data) => ({
+          id: data.enderecos.id,
+          city: data.enderecos.cidade,
+          district: data.enderecos.bairro,
+          number: data.enderecos.numero,
+          street: data.enderecos.rua,
+          zipCode: data.enderecos.cep,
+          tag: data.tipoEndereco,
+        })))
+      }).catch((error) => {
+        console.error(error)
+        toast.error('Erro ao carregar endereços')
+      })
+  }
+
+  useEffect(() => {
+    if (!user) return
+    getAddressByUser(user.id)
+      .then((response) => {
+        console.log(response.data)
+        setAddresses(response.data.map((data) => ({
+          id: data.enderecos.id,
+          city: data.enderecos.cidade,
+          district: data.enderecos.bairro,
+          number: data.enderecos.numero,
+          street: data.enderecos.rua,
+          zipCode: data.enderecos.cep,
+          tag: data.tipoEndereco,
+        })))
+      }).catch((error) => {
+        console.error(error)
+        toast.error('Erro ao carregar endereços')
+      })
+  }, [])
 
   return (
     <>
       {showCard && <AddressCard
         updateForm={updateForm}
+        updateAddresses={updateUserAddresses}
         address={{ ...addressCard }}
         onClickOut={handleCardClickOut}
       />}
@@ -144,7 +107,7 @@ export const Profile = () => {
           width: '65%',
           height: '100%',
         }}>
-          <AddressSection adresses={adresses} onSelect={handleSelectAddress} onAdd={handleAddAddress} />
+          <AddressSection adresses={addresses} updateUserAddresses={updateUserAddresses} onSelect={handleSelectAddress} onAdd={handleAddAddress} />
         </section>
       </main>
     </>

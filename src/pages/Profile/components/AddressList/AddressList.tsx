@@ -4,8 +4,9 @@ import { AddressItem } from '../AddressItem/AddressItem'
 import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { stack } from '../../../../utils/data-structure/Stack/Stack'
-import { deleteAddress } from '../../../../utils/requests/address'
+import { deleteAddress, updateAddress } from '../../../../utils/requests/address'
 import { toast } from 'react-toastify'
+import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 
 export type Address = {
   id: number
@@ -21,10 +22,12 @@ export type AddressListProps = {
   addresses: Address[]
   onSelect: (address: Address) => void
   onAdd: () => void
+  updateUserAddresses: () => void
 }
 
 export function AddressList(props: AddressListProps) {
   const { addresses, onSelect, onAdd } = props
+  const { user } = useAuth()
   const addressStack = stack<Address>()
   const [renderAddresses, setRenderAddresses] = useState<Address[]>([])
   const [addAddressHover, setAddAddressHover] = useState(false)
@@ -35,18 +38,22 @@ export function AddressList(props: AddressListProps) {
   }, [addresses])
 
   const handleExclude = (addressId: number) => {
+    if (!user) return
     const notification = toast.loading('Excluindo endereço...', { autoClose: false })
 
-    deleteAddress(addressId).then(() => {
+    deleteAddress(user.id, addressId).then(() => {
       toast.success('Endereço excluído com sucesso!', {
         toastId: notification, autoClose: 2000
       })
+      updateAddress
     }).catch(() => {
       toast.error('Erro ao excluir endereço!', {
         toastId: notification, autoClose: 2000
       })
     }).finally(() => {
-      toast.dismiss(notification)
+      setTimeout(() => {
+        toast.dismiss(notification)
+      }, 3000)
     })
   }
 
@@ -121,9 +128,18 @@ export function AddressList(props: AddressListProps) {
       </span>
 
       <List>
-        {renderAddresses.map((address, index) => (
+        {renderAddresses.length > 0 ? renderAddresses.map((address, index) => (
           <AddressItem key={index} address={address} onSelect={onSelect} onExclude={() => handleExclude(address.id)} />
-        ))}
+        )) : (
+          <p style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: designTokens.font.size.medium,
+            fontWeight: designTokens.font.weight.medium,
+          }}>Nenhum endereço cadastrado</p>
+
+        )}
       </List>
     </div >
   )

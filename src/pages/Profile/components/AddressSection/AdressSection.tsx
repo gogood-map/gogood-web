@@ -5,9 +5,10 @@ export type AddressFormProps = {
   adresses: Address[]
   onSelect: (address: Address) => void
   onAdd: () => void
+  updateUserAddresses: () => void
 }
 export function AddressSection(props: AddressFormProps) {
-  const { adresses, onSelect, onAdd } = props
+  const { adresses, onSelect, onAdd, updateUserAddresses } = props
 
   return (
     <div style={{
@@ -23,7 +24,7 @@ export function AddressSection(props: AddressFormProps) {
         borderRadius: designTokens.borderRadius.large,
         boxShadow: `0px 4px 14px 0px ${designTokens.color.boxShadow}`,
       }}>
-        <AddressList addresses={adresses} onSelect={onSelect} onAdd={onAdd} />
+        <AddressList updateUserAddresses={updateUserAddresses} addresses={adresses} onSelect={onSelect} onAdd={onAdd} />
       </div>
     </div>
   )
