@@ -26,45 +26,6 @@ export function Home() {
     const aboutTitle = 'Sobre a Gogood'
     const aboutBody = 'Você está pronto para uma nova era de navegação? Por trás da interface simples e intuitiva da nossa plataforma, está uma poderosa combinação de tecnologia avançada e dados precisos. Utilizamos algoritmos inteligentes para analisar todas as opções de rota e fornecer a você a melhor escolha possível.\n\n E o melhor de tudo? Você pode relaxar e aproveitar a viagem, sabendo que está em boas mãos. Nossa plataforma é projetada para proporcionar uma experiência de navegação tranquila, para que você possa se concentrar no que realmente importa: aproveitar o momento e explorar novos lugares.'
 
-    // const bruteData = [{
-    //     label: 'Janeiro',
-    //     value: 10,
-    // }, {
-    //     label: 'Fevereiro',
-    //     value: 20,
-    // }, {
-    //     label: 'Março',
-    //     value: 30,
-    // }, {
-    //     label: 'Abril',
-    //     value: 40,
-    // }, {
-    //     label: 'Maio',
-    //     value: 50,
-    // }, {
-    //     label: 'Junho',
-    //     value: 60,
-    // }, {
-    //     label: 'Julho',
-    //     value: 70,
-    // }, {
-    //     label: 'Agosto',
-    //     value: 80,
-    // }, {
-    //     label: 'Setembro',
-    //     value: 90,
-    // }, {
-    //     label: 'Outubro',
-    //     value: 100,
-    // }, {
-    //     label: 'Novembro',
-    //     value: 110,
-    // }, {
-    //     label: 'Dezembro',
-    //     value: 120,
-    // }]
-
-
     useEffect(() => {
         getDashboard('São Paulo', 'Cerqueira César').then(({ data }) => {
             const dataResponse = data.map(({ count }) => count)
@@ -135,63 +96,3 @@ export function Home() {
         </div>
     )
 }
-
-// async function fakeRequest(): Promise<{ label: string, value: number }[]>{
-//     const fakeData = [
-//         {
-//             label: 'Janeiro',
-//             value: 10,
-//         },
-//         {
-//             label: 'Fevereiro',
-//             value: 20,
-//         },
-//         {
-//             label: 'Março',
-//             value: 30,
-//         },
-//         {
-//             label: 'Abril',
-//             value: 40,
-//         },
-//         {
-//             label: 'Maio',
-//             value: 50,
-//         },
-//         {
-//             label: 'Junho',
-//             value: 60,
-//         },
-//         {
-//             label: 'Julho',
-//             value: 70,
-//         },
-//         {
-//             label: 'Agosto',
-//             value: 70,
-//         },
-//         {
-//             label: 'Setembro',
-//             value: 90,
-//         },
-//         {
-//             label: 'Outubro',
-//             value: 100,
-//         },
-//         {
-//             label: 'Novembro',
-//             value: 110,
-//         },
-//         {
-//             label: 'Dezembro',
-//             value: 120,
-//         },
-//     ]
-
-//     return new Promise(resolve => {
-//         setTimeout(() => {
-//             resolve(fakeData)
-//         }, 2000)
-//     })
-
-// }

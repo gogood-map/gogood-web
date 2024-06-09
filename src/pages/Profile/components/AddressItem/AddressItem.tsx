@@ -83,6 +83,7 @@ export function AddressItem(props: AddressItemProps) {
             display: 'flex',
             flexDirection: 'column',
             gap: designTokens.spacing.tiny,
+            width: '100%'
           }}>
             <span>{street}, {number} - {district} - {city} - {zipCode}</span>
             <span>{tag}</span>

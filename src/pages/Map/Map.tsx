@@ -5,6 +5,8 @@ import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import { toast } from 'react-toastify'
 import { RouteDetails } from './components/RouteDetails/RouteDetails'
 import { createSharedRoute, getRoute, getSharedRoute } from '../../utils/requests/route'
+import { createHistory } from '../../utils/requests/history'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
@@ -14,6 +16,7 @@ export function Map() {
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
     const [travelMode, setTravelMode] = useState<string>('')
+    const { user } = useAuth()
     const pathParams = new URLSearchParams(window.location.search)
 
     useEffect(() => {
@@ -36,6 +39,7 @@ export function Map() {
     }, [])
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
+        if (!user) return
         setSearchStatus('loading')
         setTravelMode(travelMode)
 
@@ -43,6 +47,16 @@ export function Map() {
             setRoutesView(routes.data as RoutesResponse[])
             setRoutes(routes.data as RoutesResponse[])
             setSearchStatus('success')
+
+            createHistory({
+                origem: origin,
+                destino: destination,
+                meio_locomocao: travelMode,
+                id_usuario: user?.id
+            }).catch((error) => {
+                console.error(error)
+            })
+
         }).catch((error) => {
             console.error(error)
             setSearchStatus('error')

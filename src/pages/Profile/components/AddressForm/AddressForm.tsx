@@ -7,8 +7,8 @@ import { Button } from '../../../../components/Button/Button'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { createAddress, updateAddress } from '../../../../utils/requests/address'
-import { UpdateAddress } from '../../../../utils/types/address'
 import { toast } from 'react-toastify'
+import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 
 export type AddressFormProps = {
   id?: number
@@ -19,11 +19,13 @@ export type AddressFormProps = {
   district?: string
   city?: string
   tag?: string
+  updateUserAddresses?: () => void
 }
 
 export function AddressForm(props: AddressFormProps) {
-  const { id, zipCode, street, number, district, city, tag, update } = props
+  const { id, zipCode, street, number, district, city, tag, update, updateUserAddresses } = props
   const { register, watch, setValue } = useForm({ mode: 'all' })
+  const { user } = useAuth()
 
   useEffect(() => {
     zipCode && setValue('zipCode', zipCode)
@@ -87,7 +89,8 @@ export function AddressForm(props: AddressFormProps) {
       .replace(/(\d{5}-\d{3}).*/, '$1')
   }
 
-  const handleSendAddres = () => {
+  const handleSendAddress = () => {
+    if (!user) return
     const data = {
       zipCode: watch('zipCode'),
       street: watch('street'),
@@ -106,21 +109,28 @@ export function AddressForm(props: AddressFormProps) {
           numero: data.number,
           bairro: data.district,
           cidade: data.city,
-          tipoEndereco: data.tag
-        } as UpdateAddress).then(() => {
+          tipoEndereco: data.tag,
+          idUsuario: user?.id,
+          usuarioId: user?.id
+        }).then(() => {
           toast.update(notification, {
             render: 'Endereço atualizado com sucesso!',
             type: 'success',
+            isLoading: false,
             autoClose: 2000
           })
+          updateUserAddresses && updateUserAddresses()
         }).catch(() => {
           toast.update(notification, {
             render: 'Erro ao atualizar endereço!',
             type: 'error',
+            isLoading: false,
             autoClose: 2000
           })
         }).finally(() => {
-          toast.dismiss(notification)
+          setTimeout(() => {
+            toast.dismiss(notification)
+          }, 2000)
         })
       }
     } else {
@@ -131,21 +141,28 @@ export function AddressForm(props: AddressFormProps) {
         numero: data.number,
         bairro: data.district,
         cidade: data.city,
-        tipoEndereco: data.tag
+        idUsuario: user?.id,
+        usuarioId: user?.id,
+        tipoEndereco: data.tag || 'Outro'
       }).then(() => {
         toast.update(notification, {
           render: 'Endereço adicionado com sucesso!',
           type: 'success',
+          isLoading: false,
           autoClose: 2000
         })
+        updateUserAddresses && updateUserAddresses()
       }).catch(() => {
         toast.update(notification, {
           render: 'Erro ao adicionar endereço!',
           type: 'error',
+          isLoading: false,
           autoClose: 2000
         })
       }).finally(() => {
-        toast.dismiss(notification)
+        setTimeout(() => {
+          toast.dismiss(notification)
+        }, 2000)
       })
     }
   }
@@ -375,7 +392,7 @@ export function AddressForm(props: AddressFormProps) {
           display: 'flex',
           width: '100%',
         }}>
-          <Button label={update ? 'Atualizar' : 'Adicionar'} type='primary' onClick={handleSendAddres} />
+          <Button label={update ? 'Atualizar' : 'Adicionar'} type='primary' onClick={handleSendAddress} />
         </div>
       </form>
     </div>

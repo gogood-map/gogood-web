@@ -23,7 +23,7 @@ export function HistoryTable(props: HistoryTableProps) {
   useEffect(() => {
     items.forEach(item => historyQueue.enqueue(item))
     setRenderItems(historyQueue.getQueue())
-  }, [])
+  }, [items])
 
   const handleDeleteHistory = () => {
     const deleteNotification = toast.loading('Apagando histórico...', { autoClose: false })
@@ -32,6 +32,7 @@ export function HistoryTable(props: HistoryTableProps) {
         toast.update(deleteNotification, {
           render: 'Histórico apagado com sucesso!',
           type: 'success',
+          isLoading: false,
           autoClose: 2000,
         })
         historyQueue.clear()
@@ -41,10 +42,13 @@ export function HistoryTable(props: HistoryTableProps) {
         toast.update(deleteNotification, {
           render: 'Erro ao apagar histórico',
           type: 'error',
+          isLoading: false,
           autoClose: 2000,
         })
       }).finally(() => {
+        setTimeout(() => {
         toast.dismiss(deleteNotification)
+        }, 3000)
       })
     }
   }

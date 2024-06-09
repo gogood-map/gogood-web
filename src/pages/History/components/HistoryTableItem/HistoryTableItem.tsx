@@ -15,9 +15,11 @@ export function HistoryTableItem(props: HistoryTableItemProps) {
   const { date, origin, destination, onClick } = props
   const [hovered, setHovered] = useState(false)
 
-  const dateObj = new Date(date)
-  const options: Intl.DateTimeFormatOptions = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
-  const dateStr = dateObj.toLocaleDateString('pt-BR', options)
+  const parsedDate = date.split(':')[0].split('-')
+  const dateObj = new Date(`${parsedDate[1]}-${parsedDate[0]}-${parsedDate[2]}`)
+  const dateStr = dateObj.toLocaleDateString('pt-BR', {
+    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+  })
   const formattedDate = dateStr[0].toUpperCase() + dateStr.slice(1)
 
   return (
