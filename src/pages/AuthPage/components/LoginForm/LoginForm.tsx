@@ -29,7 +29,7 @@ export function LoginForm() {
                     render: 'Login realizado com sucesso',
                     type: 'success',
                     isLoading: false,
-                    autoClose: 1000
+                    autoClose: 2000
                 })
                 const data = response.data
                 login({
@@ -49,11 +49,13 @@ export function LoginForm() {
                     render: 'Erro ao fazer login',
                     type: 'error',
                     isLoading: false,
-                    autoClose: 1000
+                    autoClose: 2000
                 })
                 console.error('Erro ao fazer login', error)
             }).finally(() => {
-                toast.dismiss(notification)
+                setTimeout(() => {
+                    toast.dismiss(notification)
+                }, 2000)
             })
     }
 
@@ -65,7 +67,7 @@ export function LoginForm() {
                 render: 'Login realizado com sucesso',
                 type: 'success',
                 isLoading: false,
-                autoClose: 1000
+                autoClose: 2000
             })
             const data = response.data
             login({
@@ -84,11 +86,13 @@ export function LoginForm() {
                 render: 'Erro ao fazer login',
                 type: 'error',
                 isLoading: false,
-                autoClose: 1000
+                autoClose: 2000
             })
             console.error('Erro ao fazer login', error)
         }).finally(() => {
-            toast.dismiss(notification)
+            setTimeout(() => {
+                toast.dismiss(notification)
+            }, 2000)
         })
     }
 

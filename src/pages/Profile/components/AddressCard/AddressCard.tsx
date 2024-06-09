@@ -5,12 +5,12 @@ import { IoClose } from 'react-icons/io5'
 export type AddressCardProps = {
   address: AddressFormProps
   updateForm?: boolean
-  updateAddresses?: () => void
+  updateUserAddresses?: () => void
   onClickOut?: () => void
 }
 
 export function AddressCard(props: AddressCardProps) {
-  const { address, updateForm, updateAddresses, onClickOut } = props
+  const { address, updateForm, updateUserAddresses, onClickOut } = props
 
   const handleChildClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -45,7 +45,7 @@ export function AddressCard(props: AddressCardProps) {
         }}>
           <IoClose size={30} color={designTokens.color.text} />
         </div>
-        <AddressForm updateAddresses={updateAddresses} update={updateForm} {...address} />
+        <AddressForm updateUserAddresses={updateUserAddresses} update={updateForm} {...address} />
       </div>
     </div>
   )

@@ -32,6 +32,7 @@ export function HistoryTable(props: HistoryTableProps) {
         toast.update(deleteNotification, {
           render: 'Histórico apagado com sucesso!',
           type: 'success',
+          isLoading: false,
           autoClose: 2000,
         })
         historyQueue.clear()
@@ -41,6 +42,7 @@ export function HistoryTable(props: HistoryTableProps) {
         toast.update(deleteNotification, {
           render: 'Erro ao apagar histórico',
           type: 'error',
+          isLoading: false,
           autoClose: 2000,
         })
       }).finally(() => {

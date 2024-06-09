@@ -37,7 +37,8 @@ export const FormProfile = () => {
       toast.update(notification, {
         render: 'Usuário atualizado com sucesso!',
         type: 'success',
-        autoClose: 3000
+        isLoading: false,
+        autoClose: 2000
       })
       login({
         id: user.id,
@@ -59,14 +60,15 @@ export const FormProfile = () => {
       toast.update(notification, {
         render: 'Erro ao atualizar usuário',
         type: 'error',
-        autoClose: 3000
+        isLoading: false,
+        autoClose: 2000
       })
       setUpdateForm(false)
       console.error(error)
     }).finally(() => {
       setTimeout(() => {
         toast.dismiss(notification)
-      }, 3000)
+      }, 2000)
     })
   }
 
@@ -79,7 +81,8 @@ export const FormProfile = () => {
       toast.update(notification, {
         render: 'Usuário excluído com sucesso!',
         type: 'success',
-        autoClose: 3000
+        isLoading: false,
+        autoClose: 2000
       })
       logout()
       setTimeout(() => {
@@ -89,13 +92,14 @@ export const FormProfile = () => {
       toast.update(notification, {
         render: 'Erro ao excluir usuário',
         type: 'error',
-        autoClose: 3000
+        isLoading: false,
+        autoClose: 2000
       })
       console.error(error)
     }).finally(() => {
       setTimeout(() => {
         toast.dismiss(notification)
-      }, 3000)
+      }, 2000)
     })
   }
 

@@ -19,11 +19,11 @@ export type AddressFormProps = {
   district?: string
   city?: string
   tag?: string
-  updateAddresses?: () => void
+  updateUserAddresses?: () => void
 }
 
 export function AddressForm(props: AddressFormProps) {
-  const { id, zipCode, street, number, district, city, tag, update, updateAddresses } = props
+  const { id, zipCode, street, number, district, city, tag, update, updateUserAddresses } = props
   const { register, watch, setValue } = useForm({ mode: 'all' })
   const { user } = useAuth()
 
@@ -116,18 +116,21 @@ export function AddressForm(props: AddressFormProps) {
           toast.update(notification, {
             render: 'Endereço atualizado com sucesso!',
             type: 'success',
+            isLoading: false,
             autoClose: 2000
           })
+          updateUserAddresses && updateUserAddresses()
         }).catch(() => {
           toast.update(notification, {
             render: 'Erro ao atualizar endereço!',
             type: 'error',
+            isLoading: false,
             autoClose: 2000
           })
         }).finally(() => {
           setTimeout(() => {
             toast.dismiss(notification)
-          }, 3000)
+          }, 2000)
         })
       }
     } else {
@@ -145,21 +148,23 @@ export function AddressForm(props: AddressFormProps) {
         toast.update(notification, {
           render: 'Endereço adicionado com sucesso!',
           type: 'success',
+          isLoading: false,
           autoClose: 2000
         })
+        updateUserAddresses && updateUserAddresses()
       }).catch(() => {
         toast.update(notification, {
           render: 'Erro ao adicionar endereço!',
           type: 'error',
+          isLoading: false,
           autoClose: 2000
         })
       }).finally(() => {
         setTimeout(() => {
           toast.dismiss(notification)
-        }, 3000)
+        }, 2000)
       })
     }
-    updateAddresses && updateAddresses()
   }
 
   return (

@@ -42,7 +42,6 @@ export const Profile = () => {
 
   const updateUserAddresses = () => {
     if (!user) return
-
     getAddressByUser(user.id)
       .then((response) => {
         setAddresses(response.data.map((data) => ({
@@ -57,6 +56,10 @@ export const Profile = () => {
       }).catch((error) => {
         console.error(error)
         toast.error('Erro ao carregar endereços')
+      }).finally(() => {
+        setShowCard(false)
+        setAddressCard(null)
+        setUpdateForm(false)
       })
   }
 
@@ -84,7 +87,7 @@ export const Profile = () => {
     <>
       {showCard && <AddressCard
         updateForm={updateForm}
-        updateAddresses={updateUserAddresses}
+        updateUserAddresses={updateUserAddresses}
         address={{ ...addressCard }}
         onClickOut={handleCardClickOut}
       />}

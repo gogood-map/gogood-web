@@ -42,6 +42,7 @@ export function History() {
         toast.update(notification, {
           render: 'Rota carregada com sucesso',
           type: 'success',
+          isLoading: false,
           autoClose: 2000,
         })
       }).catch((error) => {
@@ -49,12 +50,13 @@ export function History() {
         toast.update(notification, {
           render: 'Erro ao carregar rota',
           type: 'error',
+          isLoading: false,
           autoClose: 2000,
         })
       }).finally(() => {
         setTimeout(() => {
           toast.dismiss(notification)
-        }, 3000)
+        }, 2000)
       })
   }
 

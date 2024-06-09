@@ -4,7 +4,7 @@ import { AddressItem } from '../AddressItem/AddressItem'
 import { useEffect, useState } from 'react'
 import { FaPlus } from 'react-icons/fa6'
 import { stack } from '../../../../utils/data-structure/Stack/Stack'
-import { deleteAddress, updateAddress } from '../../../../utils/requests/address'
+import { deleteAddress } from '../../../../utils/requests/address'
 import { toast } from 'react-toastify'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 
@@ -26,7 +26,7 @@ export type AddressListProps = {
 }
 
 export function AddressList(props: AddressListProps) {
-  const { addresses, onSelect, onAdd } = props
+  const { addresses, onSelect, onAdd, updateUserAddresses } = props
   const { user } = useAuth()
   const addressStack = stack<Address>()
   const [renderAddresses, setRenderAddresses] = useState<Address[]>([])
@@ -35,6 +35,12 @@ export function AddressList(props: AddressListProps) {
   useEffect(() => {
     addresses.forEach(address => addressStack.push(address))
     setRenderAddresses(addressStack.getStack())
+  }, [])
+
+  useEffect(() => {
+    addresses.forEach(address => addressStack.push(address))
+    setRenderAddresses(addressStack.getStack())
+    console.log(addresses)
   }, [addresses])
 
   const handleExclude = (addressId: number) => {
@@ -42,18 +48,24 @@ export function AddressList(props: AddressListProps) {
     const notification = toast.loading('Excluindo endereço...', { autoClose: false })
 
     deleteAddress(user.id, addressId).then(() => {
-      toast.success('Endereço excluído com sucesso!', {
-        toastId: notification, autoClose: 2000
+      toast.update(notification, {
+        render: 'Endereço excluído com sucesso!',
+        type: 'success',
+        isLoading: false,
+        autoClose: 2000
       })
-      updateAddress
+      updateUserAddresses()
     }).catch(() => {
-      toast.error('Erro ao excluir endereço!', {
-        toastId: notification, autoClose: 2000
+      toast.update(notification, {
+        render: 'Erro ao excluir endereço',
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000
       })
     }).finally(() => {
       setTimeout(() => {
         toast.dismiss(notification)
-      }, 3000)
+      }, 2000)
     })
   }
 

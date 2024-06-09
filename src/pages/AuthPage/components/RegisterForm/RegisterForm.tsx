@@ -74,7 +74,7 @@ export function RegisterForm() {
                 render: 'Cadastro realizado com sucesso!',
                 type: 'success',
                 isLoading: false,
-                autoClose: 3000
+                autoClose: 2000
             })
             login({
                 id: user.userId,
@@ -90,13 +90,13 @@ export function RegisterForm() {
                 render: 'Erro ao cadastrar',
                 type: 'error',
                 isLoading: false,
-                autoClose: 3000
+                autoClose: 2000
             })
             console.error(error)
         }).finally(() => {
             setTimeout(() => {
                 toast.dismiss(notification)
-            }, 3000)
+            }, 2000)
         })
     }
 
@@ -112,7 +112,7 @@ export function RegisterForm() {
                 render: 'Cadastro realizado com sucesso!',
                 type: 'success',
                 isLoading: false,
-                autoClose: 3000
+                autoClose: 2000
             })
             navigate('/login')
         }).catch(error => {
@@ -120,13 +120,13 @@ export function RegisterForm() {
                 render: 'Erro ao cadastrar',
                 type: 'error',
                 isLoading: false,
-                autoClose: 3000
+                autoClose: 2000
             })
             console.error(error)
         }).finally(() => {
             setTimeout(() => {
                 toast.dismiss(notification)
-            }, 3000)
+            }, 2000)
         })
     }
 
