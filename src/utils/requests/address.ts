@@ -3,21 +3,21 @@ import { AddressResponse, CreateAddress, UpdateAddress } from '../types/address'
 
 const baseURL = import.meta.env.VITE_BASE_URL
 
-export const getAddressByUser = async (userId: string)
+export const getAddressByUser = async (userId: number)
   : Promise<AxiosResponse<AddressResponse[]>> => {
-  return await axios.get(`${baseURL}/address/${userId}`)
+  return await axios.get(`${baseURL}/enderecos/${userId}`)
 }
 
 export const createAddress = async (address: CreateAddress)
   : Promise<AxiosResponse<AddressResponse>> => {
-  return await axios.post(`${baseURL}/address`, address)
+  return await axios.post(`${baseURL}/enderecos`, address)
 }
 
 export const updateAddress = async (addressId: number, address: UpdateAddress)
   : Promise<AxiosResponse<AddressResponse>> => {
-  return await axios.put(`${baseURL}/address/${addressId}`, address)
+  return await axios.put(`${baseURL}/enderecos/${addressId}`, address)
 }
 
-export const deleteAddress = async (addressId: number) => {
-  return await axios.delete(`${baseURL}/address/${addressId}`)
+export const deleteAddress = async (userId: number, addressId: number) => {
+  return await axios.delete(`${baseURL}/enderecos/usuario/${userId}/endereco/${addressId}`)
 }
