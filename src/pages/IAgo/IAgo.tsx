@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
-import { getIAResponse } from "../../utils/requests/ia";
+import { getIAResponse } from "../../utils/requests/iago";
 import { useState } from "react";
 import { designTokens } from "design-tokens";
 
-export function IAPage() {
+export function IAgo() {
   const [response, setResponse] = useState<string>('')
   const { register, watch } = useForm({ mode: 'onSubmit' })
 
