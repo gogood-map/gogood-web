@@ -4,11 +4,12 @@ export type ButtonProps = {
     label: string
     type?: 'outline' | 'solid' | 'text' | 'primary'
     color?: string
+    disabled?: boolean
     onClick: () => void
 }
 
 export function Button(props: ButtonProps) {
-    const { label, type, color, onClick } = props
+    const { label, type, color, disabled, onClick } = props
 
     const commonStyles = {
         paddingTop: designTokens.spacing.small,
@@ -18,22 +19,18 @@ export function Button(props: ButtonProps) {
         borderRadius: designTokens.borderRadius.medium,
         fontSize: designTokens.font.size.medium,
         fontFamily: designTokens.font.family,
-        cursor: 'pointer',
-    }
+        opacity: disabled ? 0.5 : 1,
+        cursor: disabled ? 'auto' : 'pointer',
+    }   
 
 
     return (
         <>
             {(type === 'solid' || !type) &&
                 <button onClick={onClick}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#1B242A'
-                    }}
-
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = designTokens.color.secondary
-                    }}
-
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#1B242A' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = designTokens.color.secondary }}
+                    disabled={disabled}
                     style={{
                         ...commonStyles,
                         backgroundColor: designTokens.color.secondary,
@@ -47,14 +44,9 @@ export function Button(props: ButtonProps) {
 
             {type === 'outline' &&
                 <button onClick={onClick}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, .1)'
-                    }}
-
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = designTokens.color.white
-                    }}
-
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, .1)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = designTokens.color.white }}
+                    disabled={disabled}
                     style={{
                         ...commonStyles,
                         backgroundColor: 'transparent',
@@ -68,7 +60,7 @@ export function Button(props: ButtonProps) {
             }
 
             {type === 'text' &&
-                <button onClick={onClick}
+                <button onClick={onClick} disabled={disabled}
                     style={{
                         ...commonStyles,
                         backgroundColor: 'transparent',
@@ -82,8 +74,9 @@ export function Button(props: ButtonProps) {
             {type === 'primary' &&
                 <button onClick={onClick}
                     type='button'
-                    onMouseEnter={(e) => {e.currentTarget.style.filter = 'brightness(80%)'}}
-                    onMouseLeave={(e) => {e.currentTarget.style.filter = 'brightness(100%)'}}
+                    onMouseEnter={(e) => { e.currentTarget.style.filter = 'brightness(80%)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.filter = 'brightness(100%)' }}
+                    disabled={disabled}
                     style={{
                         ...commonStyles,
                         width: '100%',

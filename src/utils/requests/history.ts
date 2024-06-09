@@ -1,18 +1,18 @@
 import axios, { AxiosResponse } from 'axios'
-import { HistoryResponse } from '../types/history'
+import { CreateHistory, HistoryResponse } from '../types/history'
 
 const baseURL = import.meta.env.VITE_BASE_URL
 
-export const getHistoryByUser = async (userId: string)
+export const getHistoryByUser = async (userId: number)
   : Promise<AxiosResponse<HistoryResponse[]>> => {
-  return await axios.get(`${baseURL}/history/${userId}`)
+  return await axios.get(`${baseURL}/historico-rota/${userId}`)
 }
 
-export const createHistory = async (history: History)
+export const createHistory = async (history: CreateHistory)
   : Promise<AxiosResponse<HistoryResponse>> => {
-  return await axios.post(`${baseURL}/history`, history)
+  return await axios.post(`${baseURL}/historico-rota`, history)
 }
 
 export const deleteHistoryByUser = async (userId: number) => {
-  return await axios.delete(`${baseURL}/history/${userId}`)
+  return await axios.delete(`${baseURL}/historico-rota/${userId}`)
 }

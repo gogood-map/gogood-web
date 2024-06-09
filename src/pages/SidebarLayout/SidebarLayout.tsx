@@ -4,7 +4,7 @@ import { SidebarItem } from '../../components/SidebarItem/SidebarItem'
 import { FiHome, FiMap, FiUser } from 'react-icons/fi'
 import { designTokens } from 'design-tokens'
 import { createContext, useState } from 'react'
-import { RiHistoryFill } from 'react-icons/ri'
+import { RiChat4Line, RiHistoryFill } from 'react-icons/ri'
 
 export type SidebarContextProps = {
     expanded: boolean
@@ -22,7 +22,7 @@ export function SidebarLayout() {
         { icon: <FiMap size={defaultIconSize} />, text: 'Mapa', onclick: () => { navigate('/mapa') } },
         { icon: <FiUser size={defaultIconSize} />, text: 'Perfil', alert: true, onclick: () => { navigate('/perfil') } },
         { icon: <RiHistoryFill size={defaultIconSize} />, text: 'Histórico', onclick: () => { navigate('/historico') } },
-        // { icon: <FiSettings size={defaultIconSize} />, text: 'Ajustes', onclick: () => { navigate('/ajustes') } },
+        { icon: <RiChat4Line  size={defaultIconSize} />, text: 'IAgo', onclick: () => { navigate('/iago') } },
     ]
 
     return (

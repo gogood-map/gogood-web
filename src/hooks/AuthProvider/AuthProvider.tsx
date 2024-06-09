@@ -35,6 +35,8 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(storedUser ? JSON.parse(storedUser) : null)
 
     const login = (userData: User, persistData: boolean) => {
+        localStorage.removeItem('user')
+        sessionStorage.removeItem('user')
         if (persistData) {
             localStorage.setItem('user', JSON.stringify(userData))
         } else {

@@ -1,15 +1,17 @@
 export type HistoryResponse = {
   id: number
-  date: string
-  origin: string
-  destination: string
-  locomotion: 'bike' | 'automovel' | 'a-pe' | 'transporte-publico'
+  origem: string
+  destino: string
+  meio_locomocao: string
+  idUsuario: number
+  created_at: string
 }
 
 export type CreateHistory = {
-  origin: string
-  destination: string
-  locomotion: 'bike' | 'automovel' | 'a-pe' | 'transporte-publico'
+  id_usuario: number
+  origem: string
+  destino: string
+  meio_locomocao: string
 }
 
 

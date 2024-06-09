@@ -5,22 +5,109 @@ import { useEffect, useState } from 'react'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import { useForm } from 'react-hook-form'
 import { Input } from '../../../../components/Input/Input'
-import isEmail from 'validator/lib/isEmail'
 import { SelectInput } from '../../../../components/SelectInput/SelectInput'
 import { Button } from '../../../../components/Button/Button'
 import { PopUp } from '../../../../components/PopUp/PopUp'
+import { deleteUser, updateUser } from '../../../../utils/requests/user'
+import { toast } from 'react-toastify'
+import { isAlpha, isEmail } from 'validator'
+import { useNavigate } from 'react-router-dom'
 
 export const FormProfile = () => {
-  const { user } = useAuth()
+  const { user, logout, login } = useAuth()
   const [showExcludeCard, setShowExcludeCard] = useState(false)
   const [updateForm, setUpdateForm] = useState(false)
-  const { register, setValue, formState: { errors } } = useForm({ mode: 'all' })
+  const { register, watch, setValue, formState: { errors } } = useForm({ mode: 'all' })
+  const navigate = useNavigate()
+
+  const handleUpdateUser = () => {
+    if (!user) {
+      setUpdateForm(false)
+      return
+    }
+
+    const notification = toast.loading('Atualizando usuário...', { autoClose: false })
+
+    updateUser(user?.id, {
+      nome: watch('name'),
+      email: watch('email'),
+      genero: watch('gender').toLowerCase(),
+      dt_Nascimento: watch('birthdate')
+    }).then(() => {
+      toast.update(notification, {
+        render: 'Usuário atualizado com sucesso!',
+        type: 'success',
+        isLoading: false,
+        autoClose: 2000
+      })
+      login({
+        id: user.id,
+        name: watch('name'),
+        email: watch('email'),
+        gender: watch('gender'),
+        birthdate: watch('birthdate'),
+        token: user.token,
+        picture: user.picture
+      }, false)
+
+      setUpdateForm(false)
+    }).catch((error) => {
+      setValue('name', user.name)
+      setValue('email', user.email)
+      setValue('gender', user.gender[0].toUpperCase() + user.gender.slice(1))
+      setValue('birthdate', user.birthdate)
+
+      toast.update(notification, {
+        render: 'Erro ao atualizar usuário',
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000
+      })
+      setUpdateForm(false)
+      console.error(error)
+    }).finally(() => {
+      setTimeout(() => {
+        toast.dismiss(notification)
+      }, 2000)
+    })
+  }
+
+  const handleDeleteUser = () => {
+    if (!user) return
+
+    const notification = toast.loading('Excluindo usuário...', { autoClose: false })
+
+    deleteUser(user.id).then(() => {
+      toast.update(notification, {
+        render: 'Usuário excluído com sucesso!',
+        type: 'success',
+        isLoading: false,
+        autoClose: 2000
+      })
+      logout()
+      setTimeout(() => {
+        navigate('/')
+      }, 3000)
+    }).catch((error) => {
+      toast.update(notification, {
+        render: 'Erro ao excluir usuário',
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000
+      })
+      console.error(error)
+    }).finally(() => {
+      setTimeout(() => {
+        toast.dismiss(notification)
+      }, 2000)
+    })
+  }
 
   useEffect(() => {
     if (user) {
       setValue('name', user.name)
       setValue('email', user.email)
-      setValue('gender', user.gender)
+      setValue('gender', user.gender[0].toUpperCase() + user.gender.slice(1))
       setValue('birthdate', user.birthdate)
     }
   }, [])
@@ -45,7 +132,7 @@ export const FormProfile = () => {
           gap: designTokens.spacing.medium
         }}>
           <Button label='Cancelar' onClick={() => setShowExcludeCard(false)} />
-          <Button label='Excluir' color='#FF3030' type='primary' onClick={() => { }} />
+          <Button label='Excluir' color='#FF3030' type='primary' onClick={handleDeleteUser} />
         </div>
       </PopUp>}
       <span style={{
@@ -92,7 +179,9 @@ export const FormProfile = () => {
                 value={user?.name}
                 disabled={!updateForm}
                 register={register('name', {
-                  required: 'Campo obrigatório'
+                  required: { value: true, message: 'Nome obrigatório' },
+                  minLength: { value: 3, message: 'Nome deve ter no mínimo 3 caracteres' },
+                  validate: (value) => isAlpha(value.replace(/\s/g, ""), 'pt-BR') || 'Nome deve conter apenas letras'
                 })}
               />
 
@@ -125,7 +214,7 @@ export const FormProfile = () => {
               value={user?.gender}
               disabled={!updateForm}
               register={register('gender')} options={[
-                'Masculino', 'Feminino', 'Outro', 'Prefiro não dizer'
+                'Masculino', 'Feminino', 'Outro', 'Não especificado'
               ]}
             />
 
@@ -162,7 +251,9 @@ export const FormProfile = () => {
             <Button
               label={updateForm ? 'Salvar' : 'Atualizar'}
               type='primary'
-              onClick={() => { updateForm ? setUpdateForm(false) : setUpdateForm(true)}}
+              disabled={updateForm && (!(!errors.name && !errors.email && !errors.birthdate)
+                || (!watch('name') || !watch('email') || !watch('gender') || !watch('birthdate')))}
+              onClick={() => { updateForm ? handleUpdateUser() : setUpdateForm(true) }}
             />
           </div>
         </section>
