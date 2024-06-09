@@ -4,7 +4,7 @@ import { FaHistory } from 'react-icons/fa'
 import { IoArrowForward } from 'react-icons/io5'
 
 export type HistoryTableItemProps = {
-  date: string // 08-06-2024:17:49:56
+  date: string
   origin: string
   destination: string
   locomotion?: 'bike' | 'veiculo' | 'a-pe' | 'transporte-publico'

@@ -40,7 +40,6 @@ export function AddressList(props: AddressListProps) {
   useEffect(() => {
     addresses.forEach(address => addressStack.push(address))
     setRenderAddresses(addressStack.getStack())
-    console.log(addresses)
   }, [addresses])
 
   const handleExclude = (addressId: number) => {

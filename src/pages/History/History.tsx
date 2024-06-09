@@ -16,12 +16,9 @@ export function History() {
   const { user } = useAuth()
 
   useEffect(() => {
-    console.log("a")
     if (!user) return
-    console.log(user)
     getHistoryByUser(user?.id)
       .then((response) => {
-        console.log(response.data)
         setHistoryItems(response.data.map((item) => ({
           date: item.created_at,
           origin: item.origem,

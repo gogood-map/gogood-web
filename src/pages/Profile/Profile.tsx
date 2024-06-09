@@ -67,7 +67,6 @@ export const Profile = () => {
     if (!user) return
     getAddressByUser(user.id)
       .then((response) => {
-        console.log(response.data)
         setAddresses(response.data.map((data) => ({
           id: data.enderecos.id,
           city: data.enderecos.cidade,
