@@ -11,6 +11,9 @@ import { designTokens } from 'design-tokens'
 import { useEffect, useState } from 'react'
 import { getCitySuburb, getDashboard } from '../../utils/requests/dashboard'
 import { toast } from 'react-toastify'
+import { CardsInfo } from '../../components/CardsInfo/CardInfo'
+import userSymbol from '../../assets/Users.svg'
+import dataSymbol from '../../assets/Database.svg'
 
 export function Home() {
     const [data, setData] = useState<number[]>([])
@@ -25,6 +28,17 @@ export function Home() {
     const aboutSubtitle = 'OVERVIEW'
     const aboutTitle = 'Sobre a Gogood'
     const aboutBody = 'Você está pronto para uma nova era de navegação? Por trás da interface simples e intuitiva da nossa plataforma, está uma poderosa combinação de tecnologia avançada e dados precisos. Utilizamos algoritmos inteligentes para analisar todas as opções de rota e fornecer a você a melhor escolha possível.\n\n E o melhor de tudo? Você pode relaxar e aproveitar a viagem, sabendo que está em boas mãos. Nossa plataforma é projetada para proporcionar uma experiência de navegação tranquila, para que você possa se concentrar no que realmente importa: aproveitar o momento e explorar novos lugares.'
+    
+    const CardTitleUser = 'Atualmente Somos'
+    const CardCountUser = 124
+    const CardLabelUser = 'Usuários'
+    const CardSymbolUser = userSymbol
+
+    const CardTitleData = 'Contamos com'
+    const CardCountData = 500000
+    const CardLabelData = 'Dados em nosso banco'
+    const CardSymbolData = dataSymbol
+
 
     useEffect(() => {
         getDashboard('São Paulo', 'Cerqueira César').then(({ data }) => {
@@ -84,6 +98,27 @@ export function Home() {
                     type='line'
                 />
             </DashboardContainer>
+
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+                gap: designTokens.spacing.medium,
+            }}>
+                <CardsInfo
+                    titulo={CardTitleUser}
+                    count={CardCountUser}
+                    label={CardLabelUser}
+                    symbol={CardSymbolUser}
+                />
+
+                <CardsInfo
+                    titulo={CardTitleData}
+                    count={CardCountData}
+                    label={CardLabelData}
+                    symbol={CardSymbolData}
+                />
+            </div>
 
             <AboutSession
                 image={aboutIlustration}
