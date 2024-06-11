@@ -68,7 +68,7 @@ export const Profile = () => {
 
   useEffect(() => {
     if (!user) {
-      toast.info('Faça login para visualizar os endereços')
+      toast.error('Faça login para visualizar os endereços')
       return
     }
     getAddressByUser(user.id)
