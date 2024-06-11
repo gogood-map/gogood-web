@@ -4,55 +4,35 @@ import { Button } from "../../components/Button/Button"
 import { getIAResponse } from "../../utils/requests/iago"
 import { useState } from "react"
 import { designTokens } from "design-tokens"
+import { IAgoText } from "./components/IAgoText/IAgo"
+import { toast } from "react-toastify"
 
 export function IAgo() {
   const [response, setResponse] = useState<string>('')
   const { register, watch } = useForm({ mode: 'onSubmit' })
 
-  function generateHtmlFromText(text: string): string {
-    const sections = text.split(/(?=##)/);
-
-    return sections.map(section => {
-      const [title, ...contentLines] = section.split('\n').filter(line => line.trim() !== '');
-
-
-      // considera que pode ter negrito no título
-      const titleHtml = `<h2>${title.replace('**', '<strong>').replace('**', '</strong>').trim()}</h2>`;
-
-      const ordenedListItens: number[] = []
-
-      const contentLinesHtml = contentLines.map((line, index) => {
-        if (/^\d+\.\s/.test(line)) {
-          ordenedListItens.push(index);
-          return `<li>${line.replace(/^\d+\.\s/, '').replace('**', '<strong>').replace('**', '</strong>').trim()}</li>`;
-        } else if (/^\*\s/.test(line)) {
-          return `<li>${line.replace('**', '<strong>').replace('**', '</strong>').replace(/^\*\s/, '').trim()}</li>`;
-        } else if (line.startsWith('**')) {
-          return `<strong>${line.replace('**', '').replace('**', '').trim()}</strong>`;
-        }
-
-        // considera que todo o texto pode conter negrito
-        return `<p>${line.replace('**', '<strong>').replace('**', '</strong>').trim()}</p>`;
-      });
-
-      console.log(contentLinesHtml);
-
-      let wrappedContentHtml = contentLinesHtml.join('');
-      wrappedContentHtml = wrappedContentHtml.replace(/(<li>.*?<\/li>)+/g, match => {
-        const isOrderedList = ordenedListItens.includes(contentLinesHtml.indexOf(match.split('</li>')[0] + '</li>'));
-        return isOrderedList ? `<ol>${match}</ol>` : `<ul>${match}</ul>`;
-      });
-
-      return `<section>${titleHtml}${wrappedContentHtml}</section>`;
-    }).join('');
-  }
-
   const handleClick = () => {
+    const notification = toast.loading('Carregando...', { autoClose: false })
     getIAResponse(watch('prompt')).then(response => {
-      const formatedResponse = generateHtmlFromText(response.data)
-      setResponse(formatedResponse)
+      toast.update(notification, {
+        render: 'Resposta carregada',
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      })
+      setResponse(response.data)
     }).catch(error => {
+      toast.update(notification, {
+        render: 'Erro ao carregar resposta',
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      })
       console.error('Erro ao fazer requisição', error)
+    }).finally(() => {
+      setTimeout(() => {
+        toast.dismiss(notification)
+      }, 3000)
     })
   }
 
@@ -86,10 +66,7 @@ export function IAgo() {
           <Button label="Enviar" onClick={handleClick} type="solid" />
         </div>
       </div>
-      <div style={{
-
-      }} dangerouslySetInnerHTML={{ __html: response }}>
-      </div>
+      <IAgoText text={response} />
     </div>
   )
 }
