@@ -90,7 +90,10 @@ export function AddressForm(props: AddressFormProps) {
   }
 
   const handleSendAddress = () => {
-    if (!user) return
+    if (!user) {
+      toast.error('Faça login para adicionar ou atualizar um endereço')
+      return
+    }
     const data = {
       zipCode: watch('zipCode'),
       street: watch('street'),
