@@ -16,6 +16,7 @@ export function Input(props: InputProps) {
     <div style={{
       display: 'flex',
       flexDirection: 'column',
+      width: '100%',
     }}>
       <label htmlFor={label}>
         {label}

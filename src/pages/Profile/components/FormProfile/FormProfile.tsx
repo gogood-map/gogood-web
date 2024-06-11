@@ -22,6 +22,7 @@ export const FormProfile = () => {
 
   const handleUpdateUser = () => {
     if (!user) {
+      toast.error('Faça login para atualizar o usuário')
       setUpdateForm(false)
       return
     }
@@ -73,7 +74,10 @@ export const FormProfile = () => {
   }
 
   const handleDeleteUser = () => {
-    if (!user) return
+    if (!user) {
+      toast.error('Faça login para excluir o usuário')
+      return
+    }
 
     const notification = toast.loading('Excluindo usuário...', { autoClose: false })
 

@@ -39,7 +39,10 @@ export function Map() {
     }, [])
 
     const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
-        if (!user) return
+        if (!user) {
+            toast.error('Faça login para realizar a busca')
+            return
+        }
         setSearchStatus('loading')
         setTravelMode(travelMode)
 

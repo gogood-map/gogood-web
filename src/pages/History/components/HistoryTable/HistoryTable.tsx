@@ -26,31 +26,36 @@ export function HistoryTable(props: HistoryTableProps) {
   }, [items])
 
   const handleDeleteHistory = () => {
-    const deleteNotification = toast.loading('Apagando histórico...', { autoClose: false })
-    if (user) {
-      deleteHistoryByUser(user.id).then(() => {
-        toast.update(deleteNotification, {
-          render: 'Histórico apagado com sucesso!',
-          type: 'success',
-          isLoading: false,
-          autoClose: 2000,
-        })
-        historyQueue.clear()
-        setRenderItems([])
-      }).catch((err) => {
-        console.error(err)
-        toast.update(deleteNotification, {
-          render: 'Erro ao apagar histórico',
-          type: 'error',
-          isLoading: false,
-          autoClose: 2000,
-        })
-      }).finally(() => {
-        setTimeout(() => {
-        toast.dismiss(deleteNotification)
-        }, 3000)
-      })
+    if (!user) {
+      toast.error('Faça login para apagar o histórico')
+      return
     }
+
+    const notification = toast.loading('Apagando histórico...', { autoClose: false })
+
+    deleteHistoryByUser(user.id).then(() => {
+      toast.update(notification, {
+        render: 'Histórico apagado com sucesso!',
+        type: 'success',
+        isLoading: false,
+        autoClose: 2000,
+      })
+      historyQueue.clear()
+      setRenderItems([])
+    }).catch((err) => {
+      console.error(err)
+      toast.update(notification, {
+        render: 'Erro ao apagar histórico',
+        type: 'error',
+        isLoading: false,
+        autoClose: 2000,
+      })
+    }).finally(() => {
+      setTimeout(() => {
+        toast.dismiss(notification)
+      }, 3000)
+    })
+
   }
 
   const ScrolableDiv = styled.div`
