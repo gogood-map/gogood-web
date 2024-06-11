@@ -43,7 +43,10 @@ export function AddressList(props: AddressListProps) {
   }, [addresses])
 
   const handleExclude = (addressId: number) => {
-    if (!user) return
+    if (!user) {
+      toast.error('Faça login para excluir endereços')
+      return
+    }
     const notification = toast.loading('Excluindo endereço...', { autoClose: false })
 
     deleteAddress(user.id, addressId).then(() => {

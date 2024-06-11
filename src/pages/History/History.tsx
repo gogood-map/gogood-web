@@ -16,7 +16,10 @@ export function History() {
   const { user } = useAuth()
 
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      toast.info('Faça login para visualizar o histórico')
+      return
+    }
     getHistoryByUser(user?.id)
       .then((response) => {
         setHistoryItems(response.data.map((item) => ({

@@ -41,7 +41,10 @@ export const Profile = () => {
   }
 
   const updateUserAddresses = () => {
-    if (!user) return
+    if (!user) {
+      toast.error('Faça login para atualizar os endereços')
+      return
+    }
     getAddressByUser(user.id)
       .then((response) => {
         setAddresses(response.data.map((data) => ({
@@ -64,7 +67,10 @@ export const Profile = () => {
   }
 
   useEffect(() => {
-    if (!user) return
+    if (!user) {
+      toast.info('Faça login para visualizar os endereços')
+      return
+    }
     getAddressByUser(user.id)
       .then((response) => {
         setAddresses(response.data.map((data) => ({
