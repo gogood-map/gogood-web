@@ -48,8 +48,21 @@ export function IAgo() {
       padding: `${designTokens.spacing.medium} ${designTokens.spacing.large}`,
     }}>
       <h1 style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
         margin: 0,
-      }}>IAgo</h1>
+      }}>IAgo
+      <span style={{
+        backgroundColor: designTokens.color.selected,
+        marginLeft: designTokens.spacing.small,
+        padding: `0 ${designTokens.spacing.tiny}`,
+        color: 'white',
+        fontSize: designTokens.font.size.small
+      }}>
+        BETA
+      </span>
+      </h1>
       <div style={{
         display: 'flex',
         flexDirection: 'row',
