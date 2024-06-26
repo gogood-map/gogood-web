@@ -20,7 +20,7 @@ export function IAgo() {
         isLoading: false,
         autoClose: 3000,
       })
-      setResponse(response.data)
+      setResponse(response.data.response)
     }).catch(error => {
       toast.update(notification, {
         render: 'Erro ao carregar resposta',
