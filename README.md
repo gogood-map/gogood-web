@@ -13,7 +13,6 @@ If you are developing a production application, we recommend updating the config
 
 - Configure the top-level `parserOptions` property like this:
 
-
 ```js
 export default {
   // other rules...
