@@ -86,6 +86,13 @@ export function Map() {
         setVisibleInstructions(true)
     }
 
+    const handleCancelSelectRoute = () => {
+        setSelectedRoute(undefined)
+        setSteps([])
+        setRoutesView(routes)
+        setVisibleInstructions(false)
+    }
+
     const handleClose = () => {
         setRoutesView(undefined)
         setRoutes(undefined)
@@ -119,6 +126,7 @@ export function Map() {
             <RouteSearchCard
                 onSubmitSearch={handleSubmitSearch}
                 onSelectRoute={handleSelectRoute}
+                onCancelSelect={handleCancelSelectRoute}
                 onClose={handleClose}
                 routes={routes}
                 searchStatus={searchStatus}
