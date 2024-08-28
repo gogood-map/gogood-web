@@ -4,6 +4,7 @@ import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSea
 import { RouteOption } from '../RouteOption/RouteOption'
 import { LoaderIcon } from '../../../../components/LoaderIcon/LoaderIcon'
 import { IoClose } from 'react-icons/io5'
+import { CancelRouteSelect } from '../CancelRouteSelect/CancelRouteSelect'
 
 export function routesColors(routes: RoutesResponse[]) {
     let colors = routes.map(route => {
@@ -77,11 +78,12 @@ type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSelectRoute?: (route: RoutesResponse) => void
+    onCancelSelect: () => void
     onClose?: () => void
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes, searchStatus, onSelectRoute, onClose } = props
+    const { routes, searchStatus, onSelectRoute, onCancelSelect, onClose } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
@@ -190,6 +192,10 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                         onSelectRoute={onSelectRoute}
                     />
                 })}
+
+                {routes && searchStatus === 'success' && <>
+                    <CancelRouteSelect onCancelSelect={onCancelSelect} />
+                </>}
 
                 {searchStatus === 'loading' && <div style={{
                     display: 'flex',

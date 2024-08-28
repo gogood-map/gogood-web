@@ -15,11 +15,12 @@ export type RouteSearchCardProps = {
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
     onSelectRoute?: (route: RoutesResponse) => void
+    onCancelSelect: () => void
     onClose?: () => void
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, onSubmitSearch, onSelectRoute, onClose } = props
+    const { routes, searchStatus, onSubmitSearch, onSelectRoute, onCancelSelect, onClose } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -34,12 +35,23 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 position: 'absolute',
                 gap: designTokens.spacing.small,
                 top: designTokens.spacing.medium,
-                left: expanded ? `calc(180px + ${designTokens.spacing.large})` : `calc(60px + ${designTokens.spacing.large})`,
+                left: expanded
+                    ? `calc(180px + ${designTokens.spacing.large})`
+                    : `calc(60px + ${designTokens.spacing.large})`,
                 backgroundColor: 'transparent',
                 transition: 'left 0.3s ease',
             }}>
-                <RouteForm onClickExpand={() => { setExpandedCard(!expandedCard) }} onSubmit={onSubmitSearch} />
-                <RoutesSelection routes={routes} searchStatus={searchStatus} onSelectRoute={onSelectRoute} onClose={onClose} />
+                <RouteForm onClickExpand={() => {
+                    setExpandedCard(!expandedCard)
+                }}
+                    onSubmit={onSubmitSearch} />
+                <RoutesSelection
+                    routes={routes}
+                    searchStatus={searchStatus}
+                    onSelectRoute={onSelectRoute}
+                    onCancelSelect={onCancelSelect}
+                    onClose={onClose}
+                />
             </div>
         </RouteSearchCardContext.Provider>
     )
