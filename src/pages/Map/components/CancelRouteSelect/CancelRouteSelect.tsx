@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CSSProperties } from 'styled-components'
 
 export type CancelRouteSelectProps = {
-  onCancelSelect: () => void
+  onCancelSelect?: () => void
 }
 
 export function CancelRouteSelect(props: CancelRouteSelectProps) {

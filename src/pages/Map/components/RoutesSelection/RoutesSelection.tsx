@@ -78,7 +78,7 @@ type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSelectRoute?: (route: RoutesResponse) => void
-    onCancelSelect: () => void
+    onCancelSelect?: () => void
     onClose?: () => void
 }
 

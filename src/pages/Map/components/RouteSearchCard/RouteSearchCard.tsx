@@ -15,7 +15,7 @@ export type RouteSearchCardProps = {
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
     onSelectRoute?: (route: RoutesResponse) => void
-    onCancelSelect: () => void
+    onCancelSelect?: () => void
     onClose?: () => void
 }
 
