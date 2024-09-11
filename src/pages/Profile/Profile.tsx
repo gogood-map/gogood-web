@@ -1,5 +1,4 @@
 import { FormProfile } from './components/FormProfile/FormProfile'
-import { designTokens } from 'design-tokens'
 import { AddressSection } from './components/AddressSection/AdressSection'
 import { AddressCard } from './components/AddressCard/AddressCard'
 import { useEffect, useState } from 'react'
@@ -8,6 +7,7 @@ import { Address } from './components/AddressList/AddressList'
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 import { getAddressByUser } from '../../utils/requests/address'
 import { toast } from 'react-toastify'
+import styles from './Profile.module.css'
 
 export const Profile = () => {
   const [showCard, setShowCard] = useState(false)
@@ -96,26 +96,17 @@ export const Profile = () => {
         address={{ ...addressCard }}
         onClickOut={handleCardClickOut}
       />}
-      <main style={{
-        display: 'flex',
-        flexDirection: 'row',
-        height: `calc(100vh - ${designTokens.spacing.large} * 2)`,
-        width: `calc(100% - 60px - ${designTokens.spacing.large} * 2)`,
-        padding: designTokens.spacing.large,
-        marginLeft: '60px',
-        gap: designTokens.spacing.large,
-      }}>
-        <section style={{
-          width: '35%',
-          height: '100%',
-        }}>
+      <main className={styles['profile-page']}>
+        <section className={styles['profile-section']}>
           <FormProfile />
         </section>
-        <section style={{
-          width: '65%',
-          height: '100%',
-        }}>
-          <AddressSection adresses={addresses} updateUserAddresses={updateUserAddresses} onSelect={handleSelectAddress} onAdd={handleAddAddress} />
+        <section className={styles['address-section']}>
+          <AddressSection
+            adresses={addresses}
+            updateUserAddresses={updateUserAddresses}
+            onSelect={handleSelectAddress}
+            onAdd={handleAddAddress}
+          />
         </section>
       </main>
     </>

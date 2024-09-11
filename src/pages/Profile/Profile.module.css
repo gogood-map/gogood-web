@@ -1,0 +1,19 @@
+.profile-page {
+  display: flex;
+  flex-direction: row;
+  margin-left: 60px;
+  height: calc(100vh - 64px);
+  width: calc(100% - 60px - 64px);
+  padding: 32px;
+  gap: 32px;
+}
+
+.profile-section {
+  width: 35%;
+  height: 100%;
+}
+
+.address-section {
+  width: 65%;
+  height: 100%;
+}
