@@ -1,0 +1,9 @@
+.sidebar-layout {
+  display: 'flex';
+  flex-direction: 'column';
+  align-items: 'center';
+  width: 100vw;
+  min-height: 100vh;
+  user-select: none;
+  background-color: #F4FBF9;
+}

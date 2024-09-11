@@ -20,7 +20,11 @@ export function Map() {
     const pathParams = new URLSearchParams(window.location.search)
 
     useEffect(() => {
-        toast.info('Dados atualizados até 2° semestre de 2023')
+        const message = new Date().getMonth() < 6
+            ? `Dados atualizados até 2° semestre de ${new Date().getFullYear() - 1}`
+            : `Dados atualizados até 1° semestre de ${new Date().getFullYear()}`
+        toast.info(message)
+        
         const routeId = pathParams.get('id-rota')
 
         if (routeId) {
@@ -130,6 +134,7 @@ export function Map() {
                 onClose={handleClose}
                 routes={routes}
                 searchStatus={searchStatus}
+                selectedRoute={selectedRoute}
             />
             <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>
