@@ -13,6 +13,7 @@ export const RouteSearchCardContext = createContext<RouteSearchCardContextProps 
 export type RouteSearchCardProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
+    selectedRoute?: RoutesResponse
     onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
@@ -20,7 +21,7 @@ export type RouteSearchCardProps = {
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, onSubmitSearch, onSelectRoute, onCancelSelect, onClose } = props
+    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -48,6 +49,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 <RoutesSelection
                     routes={routes}
                     searchStatus={searchStatus}
+                    selectedRoute={selectedRoute}
                     onSelectRoute={onSelectRoute}
                     onCancelSelect={onCancelSelect}
                     onClose={onClose}

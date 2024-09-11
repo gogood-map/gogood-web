@@ -7,7 +7,7 @@ import { IoClose } from 'react-icons/io5'
 import { CancelRouteSelect } from '../CancelRouteSelect/CancelRouteSelect'
 
 export function routesColors(routes: RoutesResponse[]) {
-    let colors = routes.map(route => {
+    const colors = routes.map(route => {
         const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
         if (ocorrenciasPorKm < 50) {
             return designTokens.color.success
@@ -24,7 +24,7 @@ export function routesColors(routes: RoutesResponse[]) {
     } else if (colors.every(color => color === designTokens.color.alert)) {
         colors[0] = designTokens.color.success
     } else if (colors.every(color => color === designTokens.color.success)) {
-        colors = colors
+        // colors = colors
     } else if (!colors.includes(designTokens.color.success)) {
         colors[0] = designTokens.color.success
         colors[1] = designTokens.color.alert
@@ -77,13 +77,14 @@ export type RoutesResponse = {
 type RoutesSelectionProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
+    selectedRoute?: RoutesResponse
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
     onClose?: () => void
 }
 
 export function RoutesSelection(props: RoutesSelectionProps) {
-    const { routes, searchStatus, onSelectRoute, onCancelSelect, onClose } = props
+    const { routes, searchStatus, selectedRoute, onSelectRoute, onCancelSelect, onClose } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const orderedRoutes = (routes: RoutesResponse[]) => routes.sort((a, b) => {
@@ -120,7 +121,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        ? `calc(60px + 35px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
             ? ' '
             : '0px'
@@ -193,7 +194,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                     />
                 })}
 
-                {routes && searchStatus === 'success' && <>
+                {routes && selectedRoute && searchStatus === 'success' && <>
                     <CancelRouteSelect onCancelSelect={onCancelSelect} />
                 </>}
 
