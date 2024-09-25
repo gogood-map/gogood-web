@@ -251,7 +251,7 @@ export function RegisterForm() {
                         currentStep={formStep}
                         steps={steps.length}
                         disabled={(!watch('email') || !watch('password') || !watch('confirmPassword'))
-                            || (errors.email ? true : false || errors.password ? true : false || errors.confirmPassword ? true : false)}
+                            || (errors.email || errors.password || errors.confirmPassword ? true : false)}
                         onClickNext={() => setFormStep(formStep + 1)}
                     />
                     <div style={{
