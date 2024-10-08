@@ -16,7 +16,8 @@ export function Map() {
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
 
     const [centerMap, setCenter ] = useState<number[]>([])
-    
+    const [zoom, setZoom ] = useState<number>(16)
+
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
@@ -29,7 +30,9 @@ export function Map() {
 
     const handleMapCenter = (lat:number, lng:number)=>{
         setCenter([lat, lng])
-        console.log(lat, lng)
+    }
+    const handleZoom = (zoom: number)=>{
+        setZoom(zoom)
     }
 
     useEffect(() => {
@@ -139,7 +142,7 @@ export function Map() {
 
     return (
         <>
-            <MapComponent  onCenterMapChange={handleMapCenter} routes={routesView} />
+            <MapComponent onZoomChange={handleZoom} onCenterMapChange={handleMapCenter} routes={routesView} />
             <RouteSearchCard
                 onSubmitSearch={handleSubmitSearch}
                 onSelectRoute={handleSelectRoute}
@@ -149,6 +152,7 @@ export function Map() {
                 searchStatus={searchStatus}
                 selectedRoute={selectedRoute}
                 centerMap={centerMap}
+                zoom = {zoom}
             />
             <RouteSteps visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>

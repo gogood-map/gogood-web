@@ -24,10 +24,11 @@ export type RouteSearchCardProps = {
     onCancelSelect?: () => void
     onClose?: () => void
     centerMap: number[]
+    zoom: number
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose, centerMap } = props
+    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose, centerMap, zoom } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -61,7 +62,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                     onClose={onClose}
                 />
                 
-                <AreaDetails centerMap={centerMap} />
+                <AreaDetails zoom={zoom} centerMap={centerMap} />
                 
                
             </div>

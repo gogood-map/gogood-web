@@ -7,11 +7,16 @@ import { getCitySuburb } from '../../utils/requests/dashboard'
 export type MapComponentProps = {
     routes?: RoutesResponse[], 
     onCenterMapChange: (lat:number, lng:number)=>void
+    onZoomChange: (zoom: number)=>void
 }
 
 export function MapComponent(props: MapComponentProps) {
-    const { routes, onCenterMapChange } = props
+    const { routes, onCenterMapChange, onZoomChange } = props
     const [map, setMap] = useState<google.maps.Map | null>(null)
+
+    const [radius, setRadius] = useState<number>(0.5);
+
+   
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
@@ -33,36 +38,56 @@ export function MapComponent(props: MapComponentProps) {
         }
     }
 
-
-    const debouncedLoadData = useCallback(debounce((lat, lng) => {
-        loadData(lat, lng).then(newData => setData(newData))
+    const debouncedLoadData = useCallback(debounce((lat, lng, zoom) => {
+        loadData(lat, lng, zoom).then(newData => setData(newData))
     }, 500), [])
 
     const debounceCenter = useCallback(debounce((lat, lng)=>{
         onCenterMapChange(lat, lng)
-    }, 800), [])
+    }, 500), [])
+
+
 
     useEffect(() => {
         loader.load().then(() => {
+            
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
                 center: { lat: -23.5581213, lng: -46.661614 },
-                zoom: 15,
-                mapTypeControl: false,
+                zoom: 16,
+                maxZoom: 16 + 3,
+                minZoom: 7,
+                mapTypeControl: true,
                 streetViewControl: false,
-                fullscreenControl: false,
-                zoomControl: false,
+                fullscreenControl: true,
+                zoomControl: true,
+                scaleControl: true,
             })
 
             map.addListener('center_changed', () => {
+                const zoom = map.getZoom()
                 const center = map.getCenter()
-                if (center) {
-                    
-                    
-                    debounceCenter(center.lat(), center.lng())
-                    
-                    debouncedLoadData(center.lat(), center.lng())
+                if (center && zoom) {
+                    debouncedLoadData(center.lat(), center.lng(), zoom)
                 }
             })
+
+            map.addListener('dragend', ()=>{
+                const center = map.getCenter()
+                if(center){
+                    debounceCenter(center.lat(), center.lng())
+                }
+            })
+
+            map.addListener('zoom_changed', ()=>{
+                const zoom = map.getZoom()
+                const center = map.getCenter()
+
+                if(zoom && center){
+                    console.log(zoom)
+                    debouncedLoadData(center.lat(), center.lng(), zoom)
+                }
+            })
+
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -148,9 +173,31 @@ export function MapComponent(props: MapComponentProps) {
         }
     }, [routes])
 
-    const loadData = async (lat: number, lng: number) => {
+    const loadData = async (lat: number, lng: number, zoom: number) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
-        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`, {
+        var radiusTeste = 5
+        switch (zoom) {
+            case 14:
+                radiusTeste =2.5
+                break;
+            case 15:
+                radiusTeste =1
+                break;
+            case 16:
+                radiusTeste =0.5
+                break;
+            case 17:
+                radiusTeste =0.25
+                break;
+            case 18:
+                radiusTeste =0.1
+                break;
+            case 19:
+                radiusTeste =0.05
+                break;
+        }
+        console.log(radius)
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}?raio=${radiusTeste}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',

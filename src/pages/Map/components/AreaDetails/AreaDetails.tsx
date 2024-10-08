@@ -13,17 +13,17 @@ import { CardRanking } from "./CardRanking";
 
 type AreaDetailsProps = {
   centerMap:number[];
+  zoom: number
 };
 
 export function AreaDetails(props: AreaDetailsProps) {
-  const { centerMap } = props
+  const { centerMap, zoom } = props
   const [expandDetails, setExpandDetails] = useState(false);
   const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined);
   
   useEffect(()=>{
     if(centerMap.length > 0){
       loadDetails().then((resposta)=>{
-        console.log(resposta)
       })
     }
 
@@ -31,10 +31,7 @@ export function AreaDetails(props: AreaDetailsProps) {
 
   const loadDetails = async()=>{
     await getDetails(centerMap[0],centerMap[1]).then((resposta)=>{
-      
       setDetailsData(resposta.data)
-      
-      
     })
   }
 
