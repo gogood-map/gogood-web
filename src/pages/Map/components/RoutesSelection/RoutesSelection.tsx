@@ -8,7 +8,7 @@ import { CancelRouteSelect } from '../CancelRouteSelect/CancelRouteSelect'
 
 export function routesColors(routes: RoutesResponse[]) {
     const colors = routes.map(route => {
-        const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
+        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
         if (ocorrenciasPorKm < 50) {
             return designTokens.color.success
         } else if (ocorrenciasPorKm < 75) {
@@ -34,8 +34,9 @@ export function routesColors(routes: RoutesResponse[]) {
 }
 
 export function routesRisk(routes: RoutesResponse[]) {
+    
     let risk = routes.map(route => {
-        const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
+        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
         if (ocorrenciasPorKm < 50) {
             return 'Baixo Risco'
         } else if (ocorrenciasPorKm < 75) {
@@ -45,7 +46,7 @@ export function routesRisk(routes: RoutesResponse[]) {
         }
     })
 
-    if (risk.every(risk => risk === 'Alto Risco')) {
+    if (risk.every(risk => risk === "Alto Risco")) {
         risk[0] = 'Baixo Risco'
         risk[1] = 'Médio Risco'
     } else if (risk.every(risk => risk === 'Médio Risco')) {
@@ -64,6 +65,23 @@ export type RoutesResponse = {
     origem: string
     destino: string
     distancia: number
+    ocorrencias: {
+        numBo: string,
+        crime: string,
+        tipoLocal: string,
+        rua: string,
+        bairro: string,
+        delegacia: string,
+        cidade: string,
+        dataOcorrencia: string,
+        dataAberturaBo: string,
+        localizacao: {
+            x: number,
+            y: number,
+            type: string,
+            coordinates: number[]
+        }
+    }[],
     duracao: string
     horarioSaida: string
     horarioChegada: string
@@ -73,6 +91,7 @@ export type RoutesResponse = {
         instrucao: string
     }[]
 }
+
 
 type RoutesSelectionProps = {
     routes?: RoutesResponse[]

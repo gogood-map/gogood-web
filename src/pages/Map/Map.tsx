@@ -3,21 +3,34 @@ import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import { toast } from 'react-toastify'
-import { RouteDetails } from './components/RouteDetails/RouteDetails'
+import { RouteSteps } from './components/RouteSteps/RouteSteps'
 import { createSharedRoute, getRoute, getSharedRoute } from '../../utils/requests/route'
 import { createHistory } from '../../utils/requests/history'
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
+
+
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
+
+    const [centerMap, setCenter ] = useState<number[]>([])
+    
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
     const [travelMode, setTravelMode] = useState<string>('')
     const { user } = useAuth()
     const pathParams = new URLSearchParams(window.location.search)
+
+    
+
+
+    const handleMapCenter = (lat:number, lng:number)=>{
+        setCenter([lat, lng])
+        console.log(lat, lng)
+    }
 
     useEffect(() => {
         const message = new Date().getMonth() < 6
@@ -126,7 +139,7 @@ export function Map() {
 
     return (
         <>
-            <MapComponent routes={routesView} />
+            <MapComponent  onCenterMapChange={handleMapCenter} routes={routesView} />
             <RouteSearchCard
                 onSubmitSearch={handleSubmitSearch}
                 onSelectRoute={handleSelectRoute}
@@ -135,8 +148,9 @@ export function Map() {
                 routes={routes}
                 searchStatus={searchStatus}
                 selectedRoute={selectedRoute}
+                centerMap={centerMap}
             />
-            <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
+            <RouteSteps visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>
     )
 }

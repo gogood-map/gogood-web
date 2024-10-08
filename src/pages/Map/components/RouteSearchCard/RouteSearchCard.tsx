@@ -3,12 +3,17 @@ import { createContext, useContext, useState } from 'react'
 import { RouteForm } from '../RouteForm/RouteForm'
 import { RoutesResponse, RoutesSelection } from '../RoutesSelection/RoutesSelection'
 import { SidebarContext, SidebarContextProps } from '../../../SidebarLayout/SidebarLayout'
+import { AreaDetails } from '../AreaDetails/AreaDetails'
 
 export type RouteSearchCardContextProps = {
     expandedCard: boolean
 }
+export type RouteDetailsCardContextProps = {
+    expandedCard: boolean
+}
 
 export const RouteSearchCardContext = createContext<RouteSearchCardContextProps | undefined>(undefined)
+export const RouteDetailsCardContext = createContext<RouteDetailsCardContextProps | undefined>(undefined)
 
 export type RouteSearchCardProps = {
     routes?: RoutesResponse[]
@@ -18,10 +23,11 @@ export type RouteSearchCardProps = {
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
     onClose?: () => void
+    centerMap: number[]
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose } = props
+    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose, centerMap } = props
     const [expandedCard, setExpandedCard] = useState(true)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
@@ -54,6 +60,10 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                     onCancelSelect={onCancelSelect}
                     onClose={onClose}
                 />
+                
+                <AreaDetails centerMap={centerMap} />
+                
+               
             </div>
         </RouteSearchCardContext.Provider>
     )

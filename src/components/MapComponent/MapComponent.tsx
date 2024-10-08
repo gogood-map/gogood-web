@@ -5,11 +5,12 @@ import axios from 'axios'
 import { getCitySuburb } from '../../utils/requests/dashboard'
 
 export type MapComponentProps = {
-    routes?: RoutesResponse[]
+    routes?: RoutesResponse[], 
+    onCenterMapChange: (lat:number, lng:number)=>void
 }
 
 export function MapComponent(props: MapComponentProps) {
-    const { routes } = props
+    const { routes, onCenterMapChange } = props
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
@@ -37,6 +38,10 @@ export function MapComponent(props: MapComponentProps) {
         loadData(lat, lng).then(newData => setData(newData))
     }, 500), [])
 
+    const debounceCenter = useCallback(debounce((lat, lng)=>{
+        onCenterMapChange(lat, lng)
+    }, 800), [])
+
     useEffect(() => {
         loader.load().then(() => {
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
@@ -51,12 +56,19 @@ export function MapComponent(props: MapComponentProps) {
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 if (center) {
+                    
+                    
+                    debounceCenter(center.lat(), center.lng())
+                    
                     debouncedLoadData(center.lat(), center.lng())
                 }
             })
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
+                   
+                    onCenterMapChange(position.coords.latitude, position.coords.latitude)
+                   
                     const pos = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -79,6 +91,7 @@ export function MapComponent(props: MapComponentProps) {
 
 
     useEffect(() => {
+        
         if (map && data.length) {
             if (heatmap) {
                 heatmap.setMap(null)
@@ -148,8 +161,9 @@ export function MapComponent(props: MapComponentProps) {
             return Promise.reject('Erro ao consultar local')
         }
 
-        return response.data.mapData.map((item: { latitude: number; longitude: number }) => {
-            return new google.maps.LatLng(item.latitude, item.longitude)
+        return response.data.ocorrencias.map((item: { localizacao:{coordinates:[number, number ]}}) => {
+            const [long, lat] = item.localizacao.coordinates
+            return new google.maps.LatLng(lat, long)
         })
     }
 
