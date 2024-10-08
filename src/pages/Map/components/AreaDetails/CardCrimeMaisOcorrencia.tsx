@@ -27,10 +27,10 @@ export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps){
             </span>
             <span
                 style={{
-                    fontSize: '24px',
+                    fontSize: '18px',
                     fontWeight: designTokens.font.weight.semiBold
                 }}
-                >{topCrime?.crime} - {topCrime?.qtdOcorrido} ocorrências</span>
+                >{topCrime?.crime}</span>
     </div>
     )
 }

@@ -1,13 +1,13 @@
 import { designTokens } from "design-tokens"
+import { QtdCrime } from "../../../../utils/types/details"
 
 
 type ItemRankingProps ={
-    cor: string
-    crime: string,
-    qtd: number
+  cor: string
+  item?: QtdCrime
 }
 export default function ItemRanking(props: ItemRankingProps){
-    const {cor, crime, qtd} = props
+    const {cor,item} = props
 
     return(
         <>
@@ -27,7 +27,7 @@ export default function ItemRanking(props: ItemRankingProps){
                 fontSize: designTokens.font.size.smallMedium,
                 color: ''
             }}>
-                {crime} - {qtd}
+                {item?.crime} - {item?.qtdOcorrido}
             </span>
         </div>
     </>

@@ -9,7 +9,8 @@ import { getDetails } from "../../../../utils/requests/details";
 import { DetailResponse } from "../../../../utils/types/details";
 import { CardQtdOcorrencia } from "./CardQtdOcorrencias";
 import { CardCrimeMaisOcorrencia } from "./CardCrimeMaisOcorrencia";
-  
+import { CardRanking } from "./CardRanking";
+
 type AreaDetailsProps = {
   centerMap:number[];
 };
@@ -56,7 +57,7 @@ export function AreaDetails(props: AreaDetailsProps) {
 
       <div
         style={{
-          padding: '16px 0',
+          padding: '12px 0',
           display: "flex",
           flexDirection: "row",
           alignItems: 'center',
@@ -147,28 +148,7 @@ export function AreaDetails(props: AreaDetailsProps) {
 
         <CardCrimeMaisOcorrencia topCrime={detailsData?.top5Ocorrencias[0]}></CardCrimeMaisOcorrencia>
 
-        <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              width: '85%',
-              background: '#F3F3F3',
-              borderRadius: designTokens.borderRadius.medium,
-              padding: designTokens.spacing.medium
-            }}>
-              <span
-                style={{
-                    fontSize: '24px',
-                    fontWeight: designTokens.font.weight.semiBold
-                }}
-                >Ranking
-              </span>
-                <ItemRanking cor={designTokens.color.error} crime={"Roubo"} qtd={1}></ItemRanking>
-                <ItemRanking cor={"#F18900"} crime={"Sim"} qtd={1}></ItemRanking>
-                <ItemRanking cor={designTokens.color.alert} crime={"Furto de veículo"} qtd={1}></ItemRanking>
-
-        </div>
+        <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
 
         
     </div>
