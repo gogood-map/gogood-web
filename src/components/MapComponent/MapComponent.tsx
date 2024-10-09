@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
@@ -5,18 +6,14 @@ import axios from 'axios'
 import { getCitySuburb } from '../../utils/requests/dashboard'
 
 export type MapComponentProps = {
-    routes?: RoutesResponse[], 
-    onCenterMapChange: (lat:number, lng:number)=>void
-    onZoomChange: (zoom: number)=>void
+    routes?: RoutesResponse[],
+    onCenterMapChange: (lat: number, lng: number) => void
+    onZoomChange: (zoom: number) => void
 }
 
 export function MapComponent(props: MapComponentProps) {
-    const { routes, onCenterMapChange, onZoomChange } = props
+    const { routes, onCenterMapChange } = props
     const [map, setMap] = useState<google.maps.Map | null>(null)
-
-    const [radius, setRadius] = useState<number>(0.5);
-
-   
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
@@ -38,19 +35,13 @@ export function MapComponent(props: MapComponentProps) {
         }
     }
 
-    const debouncedLoadData = useCallback(debounce((lat, lng, zoom) => {
-        loadData(lat, lng, zoom).then(newData => setData(newData))
+    const debouncedLoadData = useCallback(debounce((lat, lng, radius) => {
+        loadData(lat, lng, radius).then(newData => setData(newData))
     }, 500), [])
-
-    const debounceCenter = useCallback(debounce((lat, lng)=>{
-        onCenterMapChange(lat, lng)
-    }, 500), [])
-
-
 
     useEffect(() => {
         loader.load().then(() => {
-            
+
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
                 center: { lat: -23.5581213, lng: -46.661614 },
                 zoom: 16,
@@ -64,36 +55,21 @@ export function MapComponent(props: MapComponentProps) {
             })
 
             map.addListener('center_changed', () => {
-                const zoom = map.getZoom()
                 const center = map.getCenter()
-                if (center && zoom) {
-                    debouncedLoadData(center.lat(), center.lng(), zoom)
+                const radius = loadRadius(map.getZoom())
+
+                console.log('listener center_changed: center - ', center, ', radius - ', radius)
+
+                if (center && radius) {
+                    debouncedLoadData(center.lat(), center.lng(), radius)
                 }
             })
-
-            map.addListener('dragend', ()=>{
-                const center = map.getCenter()
-                if(center){
-                    debounceCenter(center.lat(), center.lng())
-                }
-            })
-
-            map.addListener('zoom_changed', ()=>{
-                const zoom = map.getZoom()
-                const center = map.getCenter()
-
-                if(zoom && center){
-                    console.log(zoom)
-                    debouncedLoadData(center.lat(), center.lng(), zoom)
-                }
-            })
-
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                   
+
                     onCenterMapChange(position.coords.latitude, position.coords.latitude)
-                   
+
                     const pos = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -116,7 +92,7 @@ export function MapComponent(props: MapComponentProps) {
 
 
     useEffect(() => {
-        
+
         if (map && data.length) {
             if (heatmap) {
                 heatmap.setMap(null)
@@ -128,8 +104,6 @@ export function MapComponent(props: MapComponentProps) {
                 gradient: [
                     'rgba(0,0,0,0)',
                     'yellow',
-                    'rgba(255, 165, 0, 100)',
-                    'rgba(255, 165, 0, 100)',
                     'rgba(255, 165, 0, 100)',
                     'rgba(255, 165, 0, 100)',
                     'red'
@@ -173,31 +147,20 @@ export function MapComponent(props: MapComponentProps) {
         }
     }, [routes])
 
-    const loadData = async (lat: number, lng: number, zoom: number) => {
-        const baseUrl = import.meta.env.VITE_BASE_URL
-        var radiusTeste = 5
-        switch (zoom) {
-            case 14:
-                radiusTeste =2.5
-                break;
-            case 15:
-                radiusTeste =1
-                break;
-            case 16:
-                radiusTeste =0.5
-                break;
-            case 17:
-                radiusTeste =0.25
-                break;
-            case 18:
-                radiusTeste =0.1
-                break;
-            case 19:
-                radiusTeste =0.05
-                break;
+    const loadRadius = (zoom?: number) => {
+        let radius = 5
+
+        if (zoom) {
+            radius = 5 / Math.pow(2, zoom - 14);
         }
-        console.log(radius)
-        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}?raio=${radiusTeste}`, {
+
+        return Math.min(radius, 10)
+    }
+
+    const loadData = async (lat: number, lng: number, radius: number) => {
+        const baseUrl = import.meta.env.VITE_BASE_URL
+
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}?raio=${radius}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
@@ -208,7 +171,7 @@ export function MapComponent(props: MapComponentProps) {
             return Promise.reject('Erro ao consultar local')
         }
 
-        return response.data.ocorrencias.map((item: { localizacao:{coordinates:[number, number ]}}) => {
+        return response.data.ocorrencias.map((item: { localizacao: { coordinates: [number, number] } }) => {
             const [long, lat] = item.localizacao.coordinates
             return new google.maps.LatLng(lat, long)
         })
