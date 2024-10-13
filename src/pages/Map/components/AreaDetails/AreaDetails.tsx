@@ -4,20 +4,20 @@ import {
   MdOutlineExpandMore,
 } from "react-icons/md";
 import { useEffect, useState } from "react";
-import ItemRanking from "./ItemRanking";
 import { getDetails } from "../../../../utils/requests/details";
 import { DetailResponse } from "../../../../utils/types/details";
 import { CardQtdOcorrencia } from "./CardQtdOcorrencias";
 import { CardCrimeMaisOcorrencia } from "./CardCrimeMaisOcorrencia";
 import { CardRanking } from "./CardRanking";
+import { Zoom } from "react-toastify";
 
 type AreaDetailsProps = {
   centerMap:number[];
-  zoom: number
+  radius: number
 };
 
 export function AreaDetails(props: AreaDetailsProps) {
-  const { centerMap, zoom } = props
+  const { centerMap, radius } = props
   const [expandDetails, setExpandDetails] = useState(false);
   const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined);
   
@@ -29,8 +29,10 @@ export function AreaDetails(props: AreaDetailsProps) {
 
   }, [centerMap])
 
+
+
   const loadDetails = async()=>{
-    await getDetails(centerMap[0],centerMap[1]).then((resposta)=>{
+    await getDetails(centerMap[0],centerMap[1], radius).then((resposta)=>{
       setDetailsData(resposta.data)
     })
   }

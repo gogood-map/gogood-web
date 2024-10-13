@@ -19,17 +19,18 @@ export type RouteSearchCardProps = {
     routes?: RoutesResponse[]
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     selectedRoute?: RoutesResponse
-    onSubmitSearch: (origin: string, destination: string, travelMode: string) => void
+    onSubmitSearchRoute: (origin: string, destination: string, travelMode: string) => void
+    onLocalSearch: (query: string)=>void
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
     onClose?: () => void
     centerMap: number[]
-    zoom: number
+    radius: number
 }
 
 export function RouteSearchCard(props: RouteSearchCardProps) {
-    const { routes, searchStatus, selectedRoute, onSubmitSearch, onSelectRoute, onCancelSelect, onClose, centerMap, zoom } = props
-    const [expandedCard, setExpandedCard] = useState(true)
+    const { routes, searchStatus, selectedRoute, onSubmitSearchRoute, onSelectRoute, onCancelSelect, onClose, centerMap, radius, onLocalSearch } = props
+    const [expandedCard, setExpandedCard] = useState(false)
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
 
     return (
@@ -52,7 +53,9 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 <RouteForm onClickExpand={() => {
                     setExpandedCard(!expandedCard)
                 }}
-                    onSubmit={onSubmitSearch} />
+                    onSubmitSearchRoute={onSubmitSearchRoute} 
+                    onSearchLocal={onLocalSearch}
+                    />
                 <RoutesSelection
                     routes={routes}
                     searchStatus={searchStatus}
@@ -62,7 +65,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                     onClose={onClose}
                 />
                 
-                <AreaDetails zoom={zoom} centerMap={centerMap} />
+                <AreaDetails radius={radius} centerMap={centerMap} />
                 
                
             </div>

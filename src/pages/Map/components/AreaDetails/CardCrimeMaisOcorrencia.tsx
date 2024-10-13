@@ -7,6 +7,14 @@ type CardCrimeMaisOcorrenciaProps = {
 
 export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps){
     const {topCrime} = props
+    const formatText = (value:string)=>{
+        var valueFormated = value
+        
+        valueFormated = valueFormated.replace("OUTROS", "")
+        valueFormated = valueFormated.replace("-", "")
+
+        return valueFormated
+    }
     return(
         <div 
         style={{
@@ -30,7 +38,7 @@ export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps){
                     fontSize: '18px',
                     fontWeight: designTokens.font.weight.semiBold
                 }}
-                >{topCrime?.crime}</span>
+                >{topCrime && formatText(topCrime.crime)}</span>
     </div>
     )
 }

@@ -44,9 +44,9 @@ const onSubmit = (origin: string, destination: string, travelMode: string) => {
 }
 
 export const Loading = () => {
-    return <RouteSearchCard onSubmitSearch={onSubmit} searchStatus='loading'  />
+    return <RouteSearchCard onSubmitSearchRoute={onSubmit} searchStatus='loading'  />
 }
 
 export const Success = () => {
-    return <RouteSearchCard onSubmitSearch={onSubmit} searchStatus='success' routes={routes} />
+    return <RouteSearchCard onSubmitSearchRoute={onSubmit} searchStatus='success' routes={routes} />
 }

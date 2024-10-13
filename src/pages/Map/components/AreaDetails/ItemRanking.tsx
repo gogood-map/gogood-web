@@ -6,9 +6,19 @@ type ItemRankingProps ={
   cor: string
   item?: QtdCrime
 }
+
+
+
 export default function ItemRanking(props: ItemRankingProps){
     const {cor,item} = props
+    const formatText = (value:string)=>{
+        var valueFormated = value.toLowerCase()
+        
+        valueFormated = valueFormated.replace("outros", "")
+        valueFormated = valueFormated.replace("-", "")
 
+        return valueFormated[0].toUpperCase() + valueFormated.slice(1, valueFormated.length)
+    }
     return(
         <>
         <div style={{
@@ -19,15 +29,16 @@ export default function ItemRanking(props: ItemRankingProps){
         }}>
             <span style={{
                 background: cor,
-                width: '16px',
+                width: '10%',
                 height: '10px',
                 borderRadius: designTokens.borderRadius.small
             }}/>
             <span style={{
+                width: '90%',
                 fontSize: designTokens.font.size.smallMedium,
                 color: ''
             }}>
-                {item?.crime} - {item?.qtdOcorrido}
+                {item && formatText(item.crime)} - {item && item.qtdOcorrido} ocorrências
             </span>
         </div>
     </>

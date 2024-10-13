@@ -12,5 +12,5 @@ const onSubmit = (origin: string, destination: string, travelMode: string) => {
 export const Default = () => {
   return <RouteForm onClickExpand={() => {
     console.log('clicked')
-  }} onSubmit={onSubmit} />
+  }} onSubmitSearchRoute={onSubmit} />
 }

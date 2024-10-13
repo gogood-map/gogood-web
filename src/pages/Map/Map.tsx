@@ -14,9 +14,9 @@ export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
-
+    const [localSearch, setLocalSearch] = useState<string>("")
     const [centerMap, setCenter ] = useState<number[]>([])
-    const [zoom, setZoom ] = useState<number>(16)
+    const [radius, setRadius ] = useState<number>(16)
 
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
@@ -31,8 +31,15 @@ export function Map() {
     const handleMapCenter = (lat:number, lng:number)=>{
         setCenter([lat, lng])
     }
-    const handleZoom = (zoom: number)=>{
-        setZoom(zoom)
+    const handleRadius = (radius: number)=>{
+        setRadius(radius)
+    }
+    const handleLocalSearch = (query: string) =>{
+        if (!user) {
+            toast.error('Faça login para realizar a busca')
+            return
+        }
+        setLocalSearch(query)
     }
 
     useEffect(() => {
@@ -58,7 +65,7 @@ export function Map() {
         }
     }, [])
 
-    const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
+    const handleSubmitSearchRoute = (origin: string, destination: string, travelMode: string) => {
         if (!user) {
             toast.error('Faça login para realizar a busca')
             return
@@ -142,17 +149,18 @@ export function Map() {
 
     return (
         <>
-            <MapComponent onZoomChange={handleZoom} onCenterMapChange={handleMapCenter} routes={routesView} />
+            <MapComponent queryLocalSearch={localSearch} onRadiusChange={handleRadius} onCenterMapChange={handleMapCenter} routes={routesView} />
             <RouteSearchCard
-                onSubmitSearch={handleSubmitSearch}
+                onSubmitSearchRoute={handleSubmitSearchRoute}
                 onSelectRoute={handleSelectRoute}
                 onCancelSelect={handleCancelSelectRoute}
                 onClose={handleClose}
+                onLocalSearch={handleLocalSearch}
                 routes={routes}
                 searchStatus={searchStatus}
                 selectedRoute={selectedRoute}
                 centerMap={centerMap}
-                zoom = {zoom}
+                radius = {radius}
             />
             <RouteSteps visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>

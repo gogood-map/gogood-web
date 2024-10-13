@@ -1,20 +1,23 @@
 import { designTokens } from 'design-tokens'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
-import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
+import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore, MdOutlineMap, MdOutlinePlace, MdOutlineRoute, MdOutlineSearch } from 'react-icons/md'
 import { RiCarLine } from 'react-icons/ri'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { useForm } from 'react-hook-form'
+import { PiPathBold } from 'react-icons/pi'
 
 type RouteFormProps = {
     onClickExpand: () => void
-    onSubmit: (origin: string, destination: string, travelMode: string) => void
+    onSubmitSearchRoute: (origin: string, destination: string, travelMode: string) => void
+    onSearchLocal: (query: string)=>void
 }
 
 export function RouteForm(props: RouteFormProps) {
     const { register, watch, handleSubmit } = useForm({ mode: 'all' })
-    const { onClickExpand, onSubmit } = props
+    const [localSearch, setLocalSearch] = useState("")
+    const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
     const inputStyle = {
@@ -47,8 +50,16 @@ export function RouteForm(props: RouteFormProps) {
     const iconSize = '24px'
 
     const handleFormSubmit = (data: any) => {
-        onSubmit(data.origin, data.destination, data.travelMode)
+       
+        
+        if(data.origin && data.destination && data.travelMode){
+            console.log(data.origin);
+            onSubmitSearchRoute(data.origin, data.destination, data.travelMode)
+        }
+        
     }
+
+
 
     return (
         <>
@@ -79,154 +90,204 @@ export function RouteForm(props: RouteFormProps) {
                         display: 'flex',
                         cursor: 'pointer',
                     }} onClick={onClickExpand}>
-                        {expandedCard && <MdOutlineExpandLess size={iconSize} />}
-                        {!expandedCard && <MdOutlineExpandMore size={iconSize} />}
+                        {expandedCard && <MdOutlinePlace size={iconSize} />}
+                        {!expandedCard && <PiPathBold size={iconSize} />}
                     </span>
                 </div>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    gap: designTokens.spacing.small,
-                    width: `calc(100% - ${designTokens.spacing.medium})`,
-                }}>
+
+                
+                {
+                    !expandedCard ?
                     <div style={{
                         display: 'flex',
-                        flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        width: '9px',
+                        flexDirection: 'row',
+                        gap: designTokens.spacing.small,
+                        width: `calc(100% - ${designTokens.spacing.medium})`,
                     }}>
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
-                            height: '9px',
-                            width: '9px',
-                            borderRadius: '50%',
-                            backgroundColor: designTokens.color.secondary,
-                        }} />
-                        <div style={{
+                            gap: designTokens.spacing.small,
+                            width: '100%',
+                        }}>
+                            <input onChange={(e)=>{
+                                setLocalSearch(e.target.value)
+                            }} style={inputStyle} type='text' id='localQuery' value={localSearch} />
+                            <button style={{
                             display: 'flex',
-                            position: 'relative',
-                            flexDirection: 'column',
-                            height: '35px',
-                            width: '1px',
-                            backgroundColor: designTokens.color.secondary,
-                        }} />
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            height: '7px',
-                            width: '7px',
-                            borderRadius: '50%',
-                            backgroundColor: designTokens.color.background,
-                            outline: `1px solid ${designTokens.color.secondary}`,
-                        }} />
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '100%',
+                            gap: designTokens.spacing.small,
+                            backgroundColor: designTokens.color.selectedLight,
+                            color: designTokens.color.white,
+                            padding: designTokens.spacing.small,
+                            borderRadius: designTokens.borderRadius.medium,
+                            cursor: 'pointer',
+                            border: 'none',
+                            fontSize: designTokens.font.size.medium,
+                        }} onClick={()=>{   
+                            onSearchLocal(localSearch)
+                            setLocalSearch("")
+                        }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
+                        </div>
+
+                    
                     </div>
+
+                    :
+
+                    <>
                     <div style={{
                         display: 'flex',
-                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
                         gap: designTokens.spacing.small,
-                        width: '100%',
+                        width: `calc(100% - ${designTokens.spacing.medium})`,
                     }}>
-                        <input {...register('origin')} style={inputStyle} type='text' id='origin' />
-                        <input {...register('destination')} style={inputStyle} type='text' id='destination' />
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '9px',
+                        }}>
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: '9px',
+                                width: '9px',
+                                borderRadius: '50%',
+                                backgroundColor: designTokens.color.secondary,
+                            }} />
+                            <div style={{
+                                display: 'flex',
+                                position: 'relative',
+                                flexDirection: 'column',
+                                height: '35px',
+                                width: '1px',
+                                backgroundColor: designTokens.color.secondary,
+                            }} />
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: '7px',
+                                width: '7px',
+                                borderRadius: '50%',
+                                backgroundColor: designTokens.color.background,
+                                outline: `1px solid ${designTokens.color.secondary}`,
+                            }} />
+                        </div>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: designTokens.spacing.small,
+                            width: '100%',
+                        }}>
+                            <input {...register('origin')} style={inputStyle} type='text' id='origin' />
+                            <input {...register('destination')} style={inputStyle} type='text' id='destination' />
+                        </div>
                     </div>
-                </div>
-                <div style={{
-                    display: expandedCard ? 'flex' : 'none',
-                    width: '100%',
-                    height: '1px',
-                    backgroundColor: designTokens.color.border,
-                }} />
-                <div style={{
-                    display: expandedCard ? 'flex' : 'none',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: designTokens.spacing.tiny,
-                }}>
-                    <input
-                        {...register('travelMode', { required: true })}
-                        style={radioInputStyle}
-                        type='radio'
-                        id='walk'
-                        name='travelMode'
-                        value='a-pe'
-                    />
-                    <input
-                        {...register('travelMode', { required: true })}
-                        style={radioInputStyle}
-                        type='radio'
-                        id='bicycle'
-                        name='travelMode'
-                        value='bike'
-                    />
-                    <input
-                        {...register('travelMode', { required: true })}
-                        style={radioInputStyle}
-                        type='radio'
-                        id='car'
-                        name='travelMode'
-                        value='veiculo'
-                    />
-                    <input
-                        {...register('travelMode', { required: true })}
-                        style={radioInputStyle}
-                        type='radio'
-                        id='bus'
-                        name='travelMode'
-                        value='transporte-publico'
-                    />
-
-                    <label
-                        style={watch('travelMode') === 'a-pe'
-                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                            : routeLabelStyle}
-                        htmlFor='walk'
-                    >
-                        <MdDirectionsWalk size={iconSize} />
-                    </label>
-                    <label
-                        style={watch('travelMode') === 'bike'
-                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                            : routeLabelStyle}
-                        htmlFor='bicycle'
-                    >
-                        <IoIosBicycle size={iconSize} />
-                    </label>
-                    <label
-                        style={watch('travelMode') === 'veiculo'
-                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                            : routeLabelStyle}
-                        htmlFor='car'
-                    >
-                        <RiCarLine size={iconSize} />
-                    </label>
-                    <label
-                        style={watch('travelMode') === 'transporte-publico'
-                            ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                            : routeLabelStyle}
-                        htmlFor='bus'
-                    >
-                        <IoBusOutline size={iconSize} />
-                    </label>
-                </div>
-                <button style={{
-                    display: expandedCard ? 'flex' : 'none',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    gap: designTokens.spacing.small,
-                    backgroundColor: designTokens.color.selectedLight,
-                    color: designTokens.color.white,
-                    padding: designTokens.spacing.small,
-                    borderRadius: designTokens.borderRadius.medium,
-                    cursor: 'pointer',
-                    border: 'none',
-                    fontSize: designTokens.font.size.medium,
-                }} type='submit'><IoSearchSharp size={'20px'} />Buscar Rota</button>
+                    <div style={{
+                        display: expandedCard ? 'flex' : 'none',
+                        width: '100%',
+                        height: '1px',
+                        backgroundColor: designTokens.color.border,
+                    }} />
+                    <div style={{
+                        display: expandedCard ? 'flex' : 'none',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: designTokens.spacing.tiny,
+                    }}>
+                        <input
+                            {...register('travelMode', { required: true })}
+                            style={radioInputStyle}
+                            type='radio'
+                            id='walk'
+                            name='travelMode'
+                            value='a-pe'
+                        />
+                        <input
+                            {...register('travelMode', { required: true })}
+                            style={radioInputStyle}
+                            type='radio'
+                            id='bicycle'
+                            name='travelMode'
+                            value='bike'
+                        />
+                        <input
+                            {...register('travelMode', { required: true })}
+                            style={radioInputStyle}
+                            type='radio'
+                            id='car'
+                            name='travelMode'
+                            value='veiculo'
+                        />
+                        <input
+                            {...register('travelMode', { required: true })}
+                            style={radioInputStyle}
+                            type='radio'
+                            id='bus'
+                            name='travelMode'
+                            value='transporte-publico'
+                        />
+    
+                        <label
+                            style={watch('travelMode') === 'a-pe'
+                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                : routeLabelStyle}
+                            htmlFor='walk'
+                        >
+                            <MdDirectionsWalk size={iconSize} />
+                        </label>
+                        <label
+                            style={watch('travelMode') === 'bike'
+                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                : routeLabelStyle}
+                            htmlFor='bicycle'
+                        >
+                            <IoIosBicycle size={iconSize} />
+                        </label>
+                        <label
+                            style={watch('travelMode') === 'veiculo'
+                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                : routeLabelStyle}
+                            htmlFor='car'
+                        >
+                            <RiCarLine size={iconSize} />
+                        </label>
+                        <label
+                            style={watch('travelMode') === 'transporte-publico'
+                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                : routeLabelStyle}
+                            htmlFor='bus'
+                        >
+                            <IoBusOutline size={iconSize} />
+                        </label>
+                    </div>
+                    <button style={{
+                        display: expandedCard ? 'flex' : 'none',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '100%',
+                        gap: designTokens.spacing.small,
+                        backgroundColor: designTokens.color.selectedLight,
+                        color: designTokens.color.white,
+                        padding: designTokens.spacing.small,
+                        borderRadius: designTokens.borderRadius.medium,
+                        cursor: 'pointer',
+                        border: 'none',
+                        fontSize: designTokens.font.size.medium,
+                    }} type='submit'><IoSearchSharp size={'20px'} />Buscar Rota</button>
+                    </>
+                }
+              
+                
             </form>
         </>
     )
