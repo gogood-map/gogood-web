@@ -2,7 +2,7 @@ import { designTokens } from 'design-tokens'
 import { PiCopySimple } from 'react-icons/pi'
 import styled from 'styled-components'
 
-export type RouteDetailsProps = {
+export type RouteStepsProps = {
   visible: boolean
   steps?: {
     instruction: string
@@ -10,7 +10,7 @@ export type RouteDetailsProps = {
   onShare?: () => void
 }
 
-export function RouteDetails(props: RouteDetailsProps) {
+export function RouteSteps(props: RouteStepsProps) {
   const { steps, visible, onShare } = props
 
   const ListSteps = styled.div`

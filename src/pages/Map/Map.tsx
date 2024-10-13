@@ -3,15 +3,21 @@ import { MapComponent } from '../../components/MapComponent/MapComponent'
 import { RouteSearchCard } from './components/RouteSearchCard/RouteSearchCard'
 import { RoutesResponse } from './components/RoutesSelection/RoutesSelection'
 import { toast } from 'react-toastify'
-import { RouteDetails } from './components/RouteDetails/RouteDetails'
+import { RouteSteps } from './components/RouteSteps/RouteSteps'
 import { createSharedRoute, getRoute, getSharedRoute } from '../../utils/requests/route'
 import { createHistory } from '../../utils/requests/history'
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
+
+
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
+    const [localSearch, setLocalSearch] = useState<string>("")
+    const [centerMap, setCenter ] = useState<number[]>([])
+    const [radius, setRadius ] = useState<number>(16)
+
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
@@ -19,8 +25,29 @@ export function Map() {
     const { user } = useAuth()
     const pathParams = new URLSearchParams(window.location.search)
 
+    
+
+
+    const handleMapCenter = (lat:number, lng:number)=>{
+        setCenter([lat, lng])
+    }
+    const handleRadius = (radius: number)=>{
+        setRadius(radius)
+    }
+    const handleLocalSearch = (query: string) =>{
+        if (!user) {
+            toast.error('Faça login para realizar a busca')
+            return
+        }
+        setLocalSearch(query)
+    }
+
     useEffect(() => {
-        toast.info('Dados atualizados até 2° semestre de 2023')
+        const message = new Date().getMonth() < 6
+            ? `Dados atualizados até 2° semestre de ${new Date().getFullYear() - 1}`
+            : `Dados atualizados até 1° semestre de ${new Date().getFullYear()}`
+        toast.info(message)
+        
         const routeId = pathParams.get('id-rota')
 
         if (routeId) {
@@ -38,7 +65,7 @@ export function Map() {
         }
     }, [])
 
-    const handleSubmitSearch = (origin: string, destination: string, travelMode: string) => {
+    const handleSubmitSearchRoute = (origin: string, destination: string, travelMode: string) => {
         if (!user) {
             toast.error('Faça login para realizar a busca')
             return
@@ -86,6 +113,13 @@ export function Map() {
         setVisibleInstructions(true)
     }
 
+    const handleCancelSelectRoute = () => {
+        setSelectedRoute(undefined)
+        setSteps([])
+        setRoutesView(routes)
+        setVisibleInstructions(false)
+    }
+
     const handleClose = () => {
         setRoutesView(undefined)
         setRoutes(undefined)
@@ -115,15 +149,20 @@ export function Map() {
 
     return (
         <>
-            <MapComponent routes={routesView} />
+            <MapComponent queryLocalSearch={localSearch} onRadiusChange={handleRadius} onCenterMapChange={handleMapCenter} routes={routesView} />
             <RouteSearchCard
-                onSubmitSearch={handleSubmitSearch}
+                onSubmitSearchRoute={handleSubmitSearchRoute}
                 onSelectRoute={handleSelectRoute}
+                onCancelSelect={handleCancelSelectRoute}
                 onClose={handleClose}
+                onLocalSearch={handleLocalSearch}
                 routes={routes}
                 searchStatus={searchStatus}
+                selectedRoute={selectedRoute}
+                centerMap={centerMap}
+                radius = {radius}
             />
-            <RouteDetails visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
+            <RouteSteps visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
         </>
     )
 }

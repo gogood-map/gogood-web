@@ -20,7 +20,7 @@ export function IAgo() {
         isLoading: false,
         autoClose: 3000,
       })
-      setResponse(response.data)
+      setResponse(response.data.response)
     }).catch(error => {
       toast.update(notification, {
         render: 'Erro ao carregar resposta',
@@ -48,8 +48,21 @@ export function IAgo() {
       padding: `${designTokens.spacing.medium} ${designTokens.spacing.large}`,
     }}>
       <h1 style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
         margin: 0,
-      }}>IAgo</h1>
+      }}>IAgo
+      <span style={{
+        backgroundColor: designTokens.color.selected,
+        marginLeft: designTokens.spacing.small,
+        padding: `0 ${designTokens.spacing.tiny}`,
+        color: 'white',
+        fontSize: designTokens.font.size.small
+      }}>
+        BETA
+      </span>
+      </h1>
       <div style={{
         display: 'flex',
         flexDirection: 'row',

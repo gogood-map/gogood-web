@@ -2,9 +2,9 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { Sidebar } from '../../components/Sidebar/Sidebar'
 import { SidebarItem } from '../../components/SidebarItem/SidebarItem'
 import { FiHome, FiMap, FiUser } from 'react-icons/fi'
-import { designTokens } from 'design-tokens'
 import { createContext, useState } from 'react'
 import { RiChat4Line, RiHistoryFill } from 'react-icons/ri'
+import styles from './SidebarLayout.module.css'
 
 export type SidebarContextProps = {
     expanded: boolean
@@ -27,15 +27,7 @@ export function SidebarLayout() {
 
     return (
         <SidebarContext.Provider value={{ expanded }}>
-            <span style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                width: '100vw',
-                minHeight: '100vh',
-                userSelect: 'none',
-                backgroundColor: designTokens.color.background,
-            }}>
+            <span className={styles['sidebar-layout']}>
                 <Sidebar onClick={() => { setExpanded(!expanded) }}>
                     {icons.map((icon, index) => (
                         <SidebarItem

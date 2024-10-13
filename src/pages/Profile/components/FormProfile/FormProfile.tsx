@@ -1,6 +1,6 @@
 import { designTokens } from 'design-tokens'
 import { RiAccountCircleLine } from 'react-icons/ri'
-import monteiro from '../../../../assets/monteiro.png'
+import unknownUser from '../../../../assets/unknown-user.png'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import { useForm } from 'react-hook-form'
@@ -162,7 +162,7 @@ export const FormProfile = () => {
             height: 100,
             backgroundSize: 'cover',
             borderRadius: 100,
-            backgroundImage: `url(${monteiro})`
+            backgroundImage: `url(${unknownUser})`
           }}></div>
         </section>
 
