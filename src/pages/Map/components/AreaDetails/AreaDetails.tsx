@@ -9,10 +9,10 @@ import { DetailResponse } from "../../../../utils/types/details";
 import { CardQtdOcorrencia } from "./CardQtdOcorrencias";
 import { CardCrimeMaisOcorrencia } from "./CardCrimeMaisOcorrencia";
 import { CardRanking } from "./CardRanking";
-import { Zoom } from "react-toastify";
+
 
 type AreaDetailsProps = {
-  centerMap:number[];
+  centerMap?:number[];
   radius: number
 };
 
@@ -22,19 +22,20 @@ export function AreaDetails(props: AreaDetailsProps) {
   const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined);
   
   useEffect(()=>{
-    if(centerMap.length > 0){
-      loadDetails().then((resposta)=>{
-      })
+    if(centerMap && centerMap.length > 0){
+      loadDetails()
     }
 
   }, [centerMap])
 
 
 
-  const loadDetails = async()=>{
-    await getDetails(centerMap[0],centerMap[1], radius).then((resposta)=>{
-      setDetailsData(resposta.data)
-    })
+  const loadDetails = ()=>{
+    if(centerMap){
+      getDetails(centerMap[0],centerMap[1], radius).then((resposta)=>{
+        setDetailsData(resposta.data)
+      })
+    }
   }
 
   

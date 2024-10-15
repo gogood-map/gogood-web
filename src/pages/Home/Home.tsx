@@ -27,27 +27,26 @@ export function Home() {
     const aboutBody = 'Você está pronto para uma nova era de navegação? Por trás da interface simples e intuitiva da nossa plataforma, está uma poderosa combinação de tecnologia avançada e dados precisos. Utilizamos algoritmos inteligentes para analisar todas as opções de rota e fornecer a você a melhor escolha possível.\n\n E o melhor de tudo? Você pode relaxar e aproveitar a viagem, sabendo que está em boas mãos. Nossa plataforma é projetada para proporcionar uma experiência de navegação tranquila, para que você possa se concentrar no que realmente importa: aproveitar o momento e explorar novos lugares.'
 
     useEffect(() => {
-        getDashboard('São Paulo', 'Cerqueira César').then(({ data }) => {
-            const dataResponse = data.map(({ count }) => count)
-            const labels = data.map(({ anoMes }) => anoMes)
-            setData(dataResponse.reverse())
-            setLabels(labels.reverse())
-            setTitle('Escala de furtos em São Paulo - Cerqueira César')
-
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     getCitySuburb(position.coords.latitude, position.coords.longitude)
                         .then(({ data }) => {
-                            getDashboard(data.address.city, data.address.suburb).then(({ data }) => {
-                                const dataResponse = data.map(({ count }) => count)
-                                const labels = data.map(({ anoMes }) => anoMes)
-                                setData(dataResponse.reverse())
-                                setLabels(labels.reverse())
-                            }).catch(() => {
+                            getDashboard(data.address.city, data.address.suburb).then((response) => {
+                                console.log(response)
+                                if(response.status == 204){
+                                    toast.info('Não foi possível encontrar dados para sua região.')
+                                }else{
+                                    var dataDash = response.data
+                                    const dataResponse = dataDash.map(({ count }) => count)
+                                    const labels = dataDash.map(({ anoMes }) => anoMes)
+                                    setData(dataResponse.reverse())
+                                    setLabels(labels.reverse())
+                                }
+                            }).catch((err) => {
                                 toast.error('Erro ao buscar dados da dashboard para localização atual')
                             }).finally(() => {
                                 if (data.address.city && data.address.suburb) {
-                                    setTitle(`Escala de furtos em ${data.address.city} - ${data.address.suburb}`)
+                                    setTitle(`${data.address.suburb}, ${data.address.city}`)
                                 }
                             })
                         }).catch(() => {
@@ -55,9 +54,6 @@ export function Home() {
                         })
                 })
             }
-        }).catch(() => {
-            toast.error('Erro ao buscar dados da dashboard')
-        })
     }, [])
 
     return (

@@ -14,8 +14,8 @@ export function Map() {
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
-    const [localSearch, setLocalSearch] = useState<string>("")
-    const [centerMap, setCenter ] = useState<number[]>([])
+    const [localSearch, setLocalSearch] = useState<string | undefined>(undefined)
+    const [centerMap, setCenter ] = useState<number[] | undefined>(undefined)
     const [radius, setRadius ] = useState<number>(16)
 
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')

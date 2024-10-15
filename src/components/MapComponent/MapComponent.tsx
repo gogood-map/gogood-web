@@ -9,7 +9,7 @@ export type MapComponentProps = {
     routes?: RoutesResponse[],
     onCenterMapChange: (lat: number, lng: number) => void
     onRadiusChange: (radius: number) => void
-    queryLocalSearch: string
+    queryLocalSearch?: string
 }
 
 export function MapComponent(props: MapComponentProps) {
@@ -168,9 +168,10 @@ export function MapComponent(props: MapComponentProps) {
     }, [routes])
 
     useEffect(()=>{
-        console.log(queryLocalSearch);
-    
-        searchPlace(queryLocalSearch)
+        if(queryLocalSearch){
+            searchPlace(queryLocalSearch)
+        }
+       
     }, [queryLocalSearch])
 
 
@@ -214,12 +215,7 @@ export function MapComponent(props: MapComponentProps) {
 
 
     const searchPlace = (query: string)=>{
-        console.log(query)
-        if(query === ""){
-
-            
-        }else{
-
+        if(query != ""){
             var request = {
                 query: query,
                 fields: ['geometry'],
@@ -238,10 +234,8 @@ export function MapComponent(props: MapComponentProps) {
                             title:"Hello World!"
                         });
                         marker.setMap(map)
-                        console.log("foi");
-                    }else{
-                        console.log("por que");
-                        
+
+                       
                     }
                     
                     

@@ -24,7 +24,7 @@ export type RouteSearchCardProps = {
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
     onClose?: () => void
-    centerMap: number[]
+    centerMap?: number[]
     radius: number
 }
 

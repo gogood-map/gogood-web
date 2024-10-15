@@ -1,12 +1,15 @@
 import { designTokens } from 'design-tokens'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
-import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore, MdOutlineMap, MdOutlinePlace, MdOutlineRoute, MdOutlineSearch } from 'react-icons/md'
+import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore, MdOutlineMap, MdOutlinePlace, MdOutlineRoute, MdOutlineSearch, MdOutlineSyncLock } from 'react-icons/md'
 import { RiCarLine } from 'react-icons/ri'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { useForm } from 'react-hook-form'
 import { PiPathBold } from 'react-icons/pi'
+import { FaRoute } from 'react-icons/fa6'
+import { CiClock1 } from "react-icons/ci";
+import { getAll as getAllAddressLocal, saveAddressLocal } from '../../../../utils/local/AddressStore'
 
 type RouteFormProps = {
     onClickExpand: () => void
@@ -17,6 +20,7 @@ type RouteFormProps = {
 export function RouteForm(props: RouteFormProps) {
     const { register, watch, handleSubmit } = useForm({ mode: 'all' })
     const [localSearch, setLocalSearch] = useState("")
+    const [localAddress, setLocalAddress]= useState<string[] | undefined>(undefined)
     const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
 
@@ -51,15 +55,19 @@ export function RouteForm(props: RouteFormProps) {
 
     const handleFormSubmit = (data: any) => {
        
-        
+        setLocalAddress (getAllAddressLocal())
         if(data.origin && data.destination && data.travelMode){
             console.log(data.origin);
+            saveAddressLocal(data.origin)
+            saveAddressLocal(data.destination)
             onSubmitSearchRoute(data.origin, data.destination, data.travelMode)
         }
         
     }
 
-
+    useEffect(()=>{
+        setLocalAddress (getAllAddressLocal())
+    }, [])
 
     return (
         <>
@@ -69,7 +77,7 @@ export function RouteForm(props: RouteFormProps) {
                 alignItems: 'center',
                 justifyContent: 'start',
                 width: '100%',
-                height: expandedCard ? '210px' : '80px',
+                height: expandedCard ? '500px' : '200px',
                 gap: designTokens.spacing.medium,
                 padding: `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`,
                 borderRadius: designTokens.borderRadius.medium,
@@ -86,15 +94,16 @@ export function RouteForm(props: RouteFormProps) {
                     justifyContent: 'end',
                     alignItems: 'start',
                 }}>
+                             
                     <span style={{
                         display: 'flex',
                         cursor: 'pointer',
                     }} onClick={onClickExpand}>
-                        {expandedCard && <MdOutlinePlace size={iconSize} />}
-                        {!expandedCard && <PiPathBold size={iconSize} />}
+                        {expandedCard && <MdOutlineExpandMore size={iconSize} />}
+                        {!expandedCard && <MdOutlineExpandLess size={iconSize} />}
                     </span>
                 </div>
-
+      
                 
                 {
                     !expandedCard ?
@@ -106,6 +115,7 @@ export function RouteForm(props: RouteFormProps) {
                         gap: designTokens.spacing.small,
                         width: `calc(100% - ${designTokens.spacing.medium})`,
                     }}>
+                       
                         <div style={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -115,6 +125,47 @@ export function RouteForm(props: RouteFormProps) {
                             <input onChange={(e)=>{
                                 setLocalSearch(e.target.value)
                             }} style={inputStyle} type='text' id='localQuery' value={localSearch} />
+                           
+
+                           {
+                            localAddress && 
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '16px',
+                                borderRadius: designTokens.borderRadius.medium,
+                                border: `0.25px solid ${designTokens.color.border}`,
+                                boxShadow: `0 1px 4px 0 ${designTokens.color.boxShadow}`,
+                                padding: designTokens.spacing.small,
+                              
+                           }}>
+                            {localAddress.map((item, index)=>{return(
+                                <div key={index} style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    gap: '10px',
+                                    alignItems: 'center',
+                                    cursor: 'pointer',
+                                }} onClick={()=>{
+                                    setLocalSearch(item)
+                                }}>
+                                    <CiClock1  size={20}/>
+                                    <span style={{
+                                      
+                                        fontSize: designTokens.font.size.smallMedium
+                                    }}>
+                                    {item}
+                                    </span>
+                                </div>
+                            )
+
+                              
+                            })}
+                            </div>
+                           }
+                        
+
+                           
                             <button style={{
                             display: 'flex',
                             justifyContent: 'center',
@@ -129,11 +180,13 @@ export function RouteForm(props: RouteFormProps) {
                             border: 'none',
                             fontSize: designTokens.font.size.medium,
                         }} onClick={()=>{   
+
+                            saveAddressLocal(localSearch)
                             onSearchLocal(localSearch)
-                            setLocalSearch("")
                         }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
                         </div>
-
+               
+                        
                     
                     </div>
 
@@ -287,7 +340,7 @@ export function RouteForm(props: RouteFormProps) {
                     </>
                 }
               
-                
+              
             </form>
         </>
     )

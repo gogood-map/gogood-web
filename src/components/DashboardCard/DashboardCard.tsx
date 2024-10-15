@@ -28,7 +28,14 @@ export function DashboardCard(props: DashboardCardProps) {
       <h2 style={{
         color: designTokens.color.text,
         margin: 0,
-      }}>{title}</h2>
+      }}>
+        Quantidade de ocorrências em sua região ao longo dos meses
+      </h2>
+      <h4 style={{
+        fontWeight: designTokens.font.weight.semiBold,
+        color: designTokens.color.text,
+        margin: 0,
+      }}>{title}</h4>
       <div style={{
         height: height,
       }}>
