@@ -8,14 +8,11 @@ type ItemRankingProps = {
 
 export default function ItemRanking(props: ItemRankingProps) {
     const { cor, item } = props
-
     const formatText = (value: string) => {
-        let valueFormated = value.toLowerCase()
-
-        valueFormated = valueFormated.replace("outros", "")
-        valueFormated = valueFormated.replace("-", "")
-
-        return valueFormated[0].toUpperCase() + valueFormated.slice(1, valueFormated.length)
+        const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        const words = value.match(/[a-zA-ZÀ-ÖØ-öø-ÿ]+/g) || []
+        const pascalWords = words.map(capitalize)
+        return pascalWords.join(' ').replace("Outros", "").replace("-", "")
     }
 
     return (
@@ -24,7 +21,7 @@ export default function ItemRanking(props: ItemRankingProps) {
                 display: 'flex',
                 width: '100%',
                 alignItems: 'center',
-                gap: '8px'
+                gap: designTokens.spacing.small,
             }}>
                 <span style={{
                     background: cor,
@@ -33,11 +30,11 @@ export default function ItemRanking(props: ItemRankingProps) {
                     borderRadius: designTokens.borderRadius.small
                 }} />
                 <span style={{
-                    width: '90%',
+                    width: `calc(90% - ${designTokens.spacing.small})`,
                     fontSize: designTokens.font.size.smallMedium,
                     color: ''
                 }}>
-                    {item && formatText(item.crime)} - {item && item.qtdOcorrido} ocorrências
+                    {item && formatText(item.crime)} - {item && item.qtdOcorrido} Ocorrências
                 </span>
             </div>
         </>

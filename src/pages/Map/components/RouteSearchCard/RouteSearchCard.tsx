@@ -53,7 +53,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 <RouteForm onClickExpand={() => {
                     setExpandedCard(!expandedCard)
                 }}
-                    onSubmitSearchRoute={onSubmitSearchRoute} 
+                    onSubmitSearchRoute={onSubmitSearchRoute}
                     onSearchLocal={onLocalSearch}
                     />
                 <RoutesSelection
@@ -64,10 +64,8 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                     onCancelSelect={onCancelSelect}
                     onClose={onClose}
                 />
-                
+
                 <AreaDetails radius={radius} centerMap={centerMap} />
-                
-               
             </div>
         </RouteSearchCardContext.Provider>
     )

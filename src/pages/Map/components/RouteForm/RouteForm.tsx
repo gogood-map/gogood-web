@@ -12,7 +12,7 @@ import { RouteRequest } from '../../../../utils/types/route'
 type RouteFormProps = {
     onClickExpand: () => void
     onSubmitSearchRoute: (origem: string, destino: string, tipoTransporte: string) => void
-    onSearchLocal: (query: string)=>void
+    onSearchLocal: (query: string) => void
 }
 
 export function RouteForm(props: RouteFormProps) {
@@ -20,6 +20,7 @@ export function RouteForm(props: RouteFormProps) {
     const [localSearch, setLocalSearch] = useState("")
     const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
+    const iconSize = '22px'
 
     const inputStyle = {
         borderRadius: designTokens.borderRadius.medium,
@@ -48,19 +49,12 @@ export function RouteForm(props: RouteFormProps) {
         color: designTokens.color.ligthGray,
     } as React.CSSProperties
 
-    const iconSize = '24px'
-
     const handleFormSubmit = (data: RouteRequest) => {
-
-
-        if(data.origem && data.destino && data.tipoTransporte){
+        if (data.origem && data.destino && data.tipoTransporte) {
             console.log(data.origem);
             onSubmitSearchRoute(data.origem, data.destino, data.tipoTransporte)
         }
-
     }
-
-
 
     return (
         <>
@@ -91,201 +85,201 @@ export function RouteForm(props: RouteFormProps) {
                         display: 'flex',
                         cursor: 'pointer',
                     }} onClick={onClickExpand}>
-                        {expandedCard && <MdOutlinePlace size={iconSize} />}
-                        {!expandedCard && <PiPathBold size={iconSize} />}
+                        {!expandedCard && <MdOutlinePlace size={iconSize} />}
+                        {expandedCard && <PiPathBold size={iconSize} />}
                     </span>
                 </div>
 
 
                 {
                     !expandedCard ?
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        gap: designTokens.spacing.small,
-                        width: `calc(100% - ${designTokens.spacing.medium})`,
-                    }}>
                         <div style={{
                             display: 'flex',
-                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            flexDirection: 'row',
                             gap: designTokens.spacing.small,
-                            width: '100%',
+                            width: `calc(100% - ${designTokens.spacing.medium})`,
                         }}>
-                            <input onChange={(e)=>{
-                                setLocalSearch(e.target.value)
-                            }} style={inputStyle} type='text' id='localQuery' value={localSearch} />
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: designTokens.spacing.small,
+                                width: '100%',
+                            }}>
+                                <input onChange={(e) => {
+                                    setLocalSearch(e.target.value)
+                                }} style={inputStyle} type='text' id='localQuery' value={localSearch} />
+                                <button style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    gap: designTokens.spacing.small,
+                                    backgroundColor: designTokens.color.selectedLight,
+                                    color: designTokens.color.white,
+                                    padding: designTokens.spacing.small,
+                                    borderRadius: designTokens.borderRadius.medium,
+                                    cursor: 'pointer',
+                                    border: 'none',
+                                    fontSize: designTokens.font.size.medium,
+                                }} onClick={() => {
+                                    onSearchLocal(localSearch)
+                                    setLocalSearch("")
+                                }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
+                            </div>
+
+
+                        </div>
+
+                        :
+
+                        <>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                gap: designTokens.spacing.small,
+                                width: `calc(100% - ${designTokens.spacing.medium})`,
+                            }}>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: '9px',
+                                }}>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '9px',
+                                        width: '9px',
+                                        borderRadius: '50%',
+                                        backgroundColor: designTokens.color.secondary,
+                                    }} />
+                                    <div style={{
+                                        display: 'flex',
+                                        position: 'relative',
+                                        flexDirection: 'column',
+                                        height: '35px',
+                                        width: '1px',
+                                        backgroundColor: designTokens.color.secondary,
+                                    }} />
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '7px',
+                                        width: '7px',
+                                        borderRadius: '50%',
+                                        backgroundColor: designTokens.color.background,
+                                        outline: `1px solid ${designTokens.color.secondary}`,
+                                    }} />
+                                </div>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: designTokens.spacing.small,
+                                    width: '100%',
+                                }}>
+                                    <input {...register('origem')} style={inputStyle} type='text' id='origem' />
+                                    <input {...register('destino')} style={inputStyle} type='text' id='destino' />
+                                </div>
+                            </div>
+                            <div style={{
+                                display: expandedCard ? 'flex' : 'none',
+                                width: '100%',
+                                height: '1px',
+                                backgroundColor: designTokens.color.border,
+                            }} />
+                            <div style={{
+                                display: expandedCard ? 'flex' : 'none',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                gap: designTokens.spacing.tiny,
+                            }}>
+                                <input
+                                    {...register('tipoTransporte', { required: true })}
+                                    style={radioInputStyle}
+                                    type='radio'
+                                    id='walk'
+                                    name='tipoTransporte'
+                                    value='a-pe'
+                                />
+                                <input
+                                    {...register('tipoTransporte', { required: true })}
+                                    style={radioInputStyle}
+                                    type='radio'
+                                    id='bicycle'
+                                    name='tipoTransporte'
+                                    value='bike'
+                                />
+                                <input
+                                    {...register('tipoTransporte', { required: true })}
+                                    style={radioInputStyle}
+                                    type='radio'
+                                    id='car'
+                                    name='tipoTransporte'
+                                    value='veiculo'
+                                />
+                                <input
+                                    {...register('tipoTransporte', { required: true })}
+                                    style={radioInputStyle}
+                                    type='radio'
+                                    id='bus'
+                                    name='tipoTransporte'
+                                    value='transporte-publico'
+                                />
+
+                                <label
+                                    style={watch('tipoTransporte') === 'a-pe'
+                                        ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                        : routeLabelStyle}
+                                    htmlFor='walk'
+                                >
+                                    <MdDirectionsWalk size={iconSize} />
+                                </label>
+                                <label
+                                    style={watch('tipoTransporte') === 'bike'
+                                        ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                        : routeLabelStyle}
+                                    htmlFor='bicycle'
+                                >
+                                    <IoIosBicycle size={iconSize} />
+                                </label>
+                                <label
+                                    style={watch('tipoTransporte') === 'veiculo'
+                                        ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                        : routeLabelStyle}
+                                    htmlFor='car'
+                                >
+                                    <RiCarLine size={iconSize} />
+                                </label>
+                                <label
+                                    style={watch('tipoTransporte') === 'transporte-publico'
+                                        ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
+                                        : routeLabelStyle}
+                                    htmlFor='bus'
+                                >
+                                    <IoBusOutline size={iconSize} />
+                                </label>
+                            </div>
                             <button style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '100%',
-                            gap: designTokens.spacing.small,
-                            backgroundColor: designTokens.color.selectedLight,
-                            color: designTokens.color.white,
-                            padding: designTokens.spacing.small,
-                            borderRadius: designTokens.borderRadius.medium,
-                            cursor: 'pointer',
-                            border: 'none',
-                            fontSize: designTokens.font.size.medium,
-                        }} onClick={()=>{
-                            onSearchLocal(localSearch)
-                            setLocalSearch("")
-                        }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
-                        </div>
-
-
-                    </div>
-
-                    :
-
-                    <>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        gap: designTokens.spacing.small,
-                        width: `calc(100% - ${designTokens.spacing.medium})`,
-                    }}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '9px',
-                        }}>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: '9px',
-                                width: '9px',
-                                borderRadius: '50%',
-                                backgroundColor: designTokens.color.secondary,
-                            }} />
-                            <div style={{
-                                display: 'flex',
-                                position: 'relative',
-                                flexDirection: 'column',
-                                height: '35px',
-                                width: '1px',
-                                backgroundColor: designTokens.color.secondary,
-                            }} />
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: '7px',
-                                width: '7px',
-                                borderRadius: '50%',
-                                backgroundColor: designTokens.color.background,
-                                outline: `1px solid ${designTokens.color.secondary}`,
-                            }} />
-                        </div>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: designTokens.spacing.small,
-                            width: '100%',
-                        }}>
-                            <input {...register('origem')} style={inputStyle} type='text' id='origem' />
-                            <input {...register('destino')} style={inputStyle} type='text' id='destino' />
-                        </div>
-                    </div>
-                    <div style={{
-                        display: expandedCard ? 'flex' : 'none',
-                        width: '100%',
-                        height: '1px',
-                        backgroundColor: designTokens.color.border,
-                    }} />
-                    <div style={{
-                        display: expandedCard ? 'flex' : 'none',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: designTokens.spacing.tiny,
-                    }}>
-                        <input
-                            {...register('tipoTransporte', { required: true })}
-                            style={radioInputStyle}
-                            type='radio'
-                            id='walk'
-                            name='tipoTransporte'
-                            value='a-pe'
-                        />
-                        <input
-                            {...register('tipoTransporte', { required: true })}
-                            style={radioInputStyle}
-                            type='radio'
-                            id='bicycle'
-                            name='tipoTransporte'
-                            value='bike'
-                        />
-                        <input
-                            {...register('tipoTransporte', { required: true })}
-                            style={radioInputStyle}
-                            type='radio'
-                            id='car'
-                            name='tipoTransporte'
-                            value='veiculo'
-                        />
-                        <input
-                            {...register('tipoTransporte', { required: true })}
-                            style={radioInputStyle}
-                            type='radio'
-                            id='bus'
-                            name='tipoTransporte'
-                            value='transporte-publico'
-                        />
-
-                        <label
-                            style={watch('tipoTransporte') === 'a-pe'
-                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                                : routeLabelStyle}
-                            htmlFor='walk'
-                        >
-                            <MdDirectionsWalk size={iconSize} />
-                        </label>
-                        <label
-                            style={watch('tipoTransporte') === 'bike'
-                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                                : routeLabelStyle}
-                            htmlFor='bicycle'
-                        >
-                            <IoIosBicycle size={iconSize} />
-                        </label>
-                        <label
-                            style={watch('tipoTransporte') === 'veiculo'
-                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                                : routeLabelStyle}
-                            htmlFor='car'
-                        >
-                            <RiCarLine size={iconSize} />
-                        </label>
-                        <label
-                            style={watch('tipoTransporte') === 'transporte-publico'
-                                ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
-                                : routeLabelStyle}
-                            htmlFor='bus'
-                        >
-                            <IoBusOutline size={iconSize} />
-                        </label>
-                    </div>
-                    <button style={{
-                        display: expandedCard ? 'flex' : 'none',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: '100%',
-                        gap: designTokens.spacing.small,
-                        backgroundColor: designTokens.color.selectedLight,
-                        color: designTokens.color.white,
-                        padding: designTokens.spacing.small,
-                        borderRadius: designTokens.borderRadius.medium,
-                        cursor: 'pointer',
-                        border: 'none',
-                        fontSize: designTokens.font.size.medium,
-                    }} type='submit'><IoSearchSharp size={'20px'} />Buscar Rota</button>
-                    </>
+                                display: expandedCard ? 'flex' : 'none',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                width: '100%',
+                                gap: designTokens.spacing.small,
+                                backgroundColor: designTokens.color.selectedLight,
+                                color: designTokens.color.white,
+                                padding: designTokens.spacing.small,
+                                borderRadius: designTokens.borderRadius.medium,
+                                cursor: 'pointer',
+                                border: 'none',
+                                fontSize: designTokens.font.size.medium,
+                            }} type='submit'><IoSearchSharp size={'20px'} />Buscar Rota</button>
+                        </>
                 }
 
 

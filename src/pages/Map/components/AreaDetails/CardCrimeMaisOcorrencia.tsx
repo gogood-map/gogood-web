@@ -5,36 +5,33 @@ type CardCrimeMaisOcorrenciaProps = {
     topCrime?: QtdCrime
 }
 
-export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps){
-    const {topCrime} = props
-    const formatText = (value:string)=>{
+export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps) {
+    const { topCrime } = props
+    const formatText = (value: string) => {
         return value.replace("OUTROS", "").replace("-", "")
     }
-    
-    return(
-        <div
-        style={{
+
+    return (
+        <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '10px',
-            width: '85%',
-            background: '#F3F3F3',
+            gap: designTokens.spacing.tiny,
+            marginRight: designTokens.spacing.medium,
+            background: designTokens.color.grayScale[200],
             borderRadius: designTokens.borderRadius.medium,
             padding: designTokens.spacing.medium
-        }}
-    >
-         <span
-                style={{
-                    fontSize: '12px'
-                }}
-                >Crime com mais ocorrencias
+        }}>
+            <span style={{
+                fontSize: designTokens.font.size.small,
+            }}>
+                Crime com mais ocorrências
             </span>
-            <span
-                style={{
-                    fontSize: '18px',
-                    fontWeight: designTokens.font.weight.semiBold
-                }}
-                >{topCrime && formatText(topCrime.crime)}</span>
-    </div>
+            <span style={{
+                fontSize: designTokens.font.size.mediumLarge,
+                fontWeight: designTokens.font.weight.semiBold
+            }}>
+                {topCrime && formatText(topCrime.crime)}
+            </span>
+        </div>
     )
 }
