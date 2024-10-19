@@ -23,8 +23,6 @@ export function routesColors(routes: RoutesResponse[]) {
         colors[1] = designTokens.color.alert
     } else if (colors.every(color => color === designTokens.color.alert)) {
         colors[0] = designTokens.color.success
-    } else if (colors.every(color => color === designTokens.color.success)) {
-        // colors = colors
     } else if (!colors.includes(designTokens.color.success)) {
         colors[0] = designTokens.color.success
         colors[1] = designTokens.color.alert
@@ -33,9 +31,10 @@ export function routesColors(routes: RoutesResponse[]) {
     return colors
 }
 
-export function routesRisk(routes: RoutesResponse[]) {
-    
-    let risk = routes.map(route => {
+type RiskLevel = 'Baixo Risco' | 'Médio Risco' | 'Alto Risco'
+
+export function routesRisk(routes: RoutesResponse[]): RiskLevel[] {
+    let risk: RiskLevel[] = routes.map(route => {
         const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
         if (ocorrenciasPorKm < 50) {
             return 'Baixo Risco'
@@ -46,20 +45,17 @@ export function routesRisk(routes: RoutesResponse[]) {
         }
     })
 
-    if (risk.every(risk => risk === "Alto Risco")) {
-        risk[0] = 'Baixo Risco'
-        risk[1] = 'Médio Risco'
-    } else if (risk.every(risk => risk === 'Médio Risco')) {
-        risk[0] = 'Baixo Risco'
-    } else if (risk.every(risk => risk === 'Baixo Risco')) {
-        risk = risk
+    if (risk.every(r => r === 'Alto Risco')) {
+        risk = ['Baixo Risco', 'Médio Risco', ...risk.slice(2)]
+    } else if (risk.every(r => r === 'Médio Risco')) {
+        risk = ['Baixo Risco', ...risk.slice(1)]
     } else if (!risk.includes('Baixo Risco')) {
-        risk[0] = 'Baixo Risco'
-        risk[1] = 'Médio Risco'
+        risk = ['Baixo Risco', ...risk.slice(1)]
     }
 
     return risk
 }
+
 
 export type RoutesResponse = {
     origem: string

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useCallback } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
@@ -7,9 +6,9 @@ import { getCitySuburb } from '../../utils/requests/dashboard'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[],
-    onCenterMapChange: (lat: number, lng: number) => void
-    onRadiusChange: (radius: number) => void
-    queryLocalSearch: string
+    onCenterMapChange?: (lat: number, lng: number) => void
+    onRadiusChange?: (radius: number) => void
+    queryLocalSearch?: string
 }
 
 export function MapComponent(props: MapComponentProps) {
@@ -18,18 +17,20 @@ export function MapComponent(props: MapComponentProps) {
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
-    const [center, setCenter] = useState<google.maps.LatLng>()
     const [placesService, setPlacesService] = useState<google.maps.places.PlacesService>()
-   
-    
+
+
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: 'weekly',
         libraries: ['visualization', 'places', 'marker'],
     })
 
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: NodeJS.Timeout
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return function executedFunction(...args: any[]) {
             const later = () => {
                 clearTimeout(timeout)
@@ -58,36 +59,36 @@ export function MapComponent(props: MapComponentProps) {
                 zoomControl: true,
                 scaleControl: false,
             })
-           
-           
+
+
 
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 const zoom = map.getZoom()
-               
+
                 if (center && zoom) {
-                   
+
                     debouncedLoadData(center.lat(), center.lng(), zoom)
                 }
             })
             map.addListener('zoom_changed', () => {
                 const center = map.getCenter()
                 const zoom = map.getZoom()
-               
+
                 if (center && zoom) {
-                   
+
                     debouncedLoadData(center.lat(), center.lng(), zoom)
                 }
             })
-            let placesService = new google.maps.places.PlacesService(map)
+            const placesService = new google.maps.places.PlacesService(map)
             setPlacesService(placesService)
-            
+
 
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
 
-                    onCenterMapChange(position.coords.latitude, position.coords.latitude)
+                    onCenterMapChange && onCenterMapChange(position.coords.latitude, position.coords.latitude)
 
                     const pos = {
                         lat: position.coords.latitude,
@@ -104,9 +105,8 @@ export function MapComponent(props: MapComponentProps) {
             } else {
                 map.setCenter({ lat: -23.5581213, lng: -46.661614 })
             }
-            
+
             setMap(map)
-            setCenter(map.getCenter())
         })
     }, [])
 
@@ -167,10 +167,10 @@ export function MapComponent(props: MapComponentProps) {
         }
     }, [routes])
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log(queryLocalSearch);
-    
-        searchPlace(queryLocalSearch)
+
+        searchPlace(queryLocalSearch || "")
     }, [queryLocalSearch])
 
 
@@ -179,21 +179,20 @@ export function MapComponent(props: MapComponentProps) {
         if (zoom && zoom <= 13) {
             return radius;
         }
-        else if(zoom && zoom <= 15){
+        else if (zoom && zoom <= 15) {
             radius = 2.5
-        }else if(zoom && zoom <= 17){
+        } else if (zoom && zoom <= 17) {
             radius = 1.25
-        }else{
+        } else {
             radius = 0.575
         }
         return radius
-        
+
     }
 
     const loadData = async (lat: number, lng: number, zoom: number) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
         const radius = loadRadius(zoom)
-        onRadiusChange(radius)
         const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}?raio=${radius}`, {
             headers: {
                 'Content-Type': 'application/json',
@@ -201,58 +200,61 @@ export function MapComponent(props: MapComponentProps) {
             },
         })
 
+        onRadiusChange && onRadiusChange(radius)
+
+        onCenterMapChange && onCenterMapChange(lat, lng)
+
         if (response.status !== 200) {
             return Promise.reject('Erro ao consultar local')
         }
-        onCenterMapChange(lat, lng)
-        return response.data.coordenadasOcorrencias.map((item: [number, number]  ) => {
+
+        return response.data.coordenadasOcorrencias.map((item: [number, number]) => {
             const [long, lat] = item
-           
+
             return new google.maps.LatLng(lat, long)
         })
     }
 
 
-    const searchPlace = (query: string)=>{
-        console.log(query)
-        if(query === ""){
+    const searchPlace = (query: string) => {
 
-            
-        }else{
+        if (query === "") {
+            console.log("vazio")
+        } else {
 
-            var request = {
+            const request = {
                 query: query,
                 fields: ['geometry'],
             };
-           
-            placesService?.findPlaceFromQuery(request, (response)=>{
-                
-                if(response){
-                    var itemResponse = response[0]
-                    
-                    if(itemResponse.geometry?.location){
-                        var coordenate = new google.maps.LatLng(itemResponse.geometry?.location?.lat(), itemResponse.geometry?.location?.lng())
+
+            placesService?.findPlaceFromQuery(request, (response) => {
+
+                if (response) {
+                    const itemResponse = response[0]
+
+                    if (itemResponse.geometry?.location) {
+                        const coordenate = new google.maps.LatLng(itemResponse.geometry?.location?.lat(), itemResponse.geometry?.location?.lng())
                         map?.setCenter(coordenate)
-                        var marker = new google.maps.Marker({
+                        const marker = new google.maps.Marker({
                             position: coordenate,
-                            title:"Hello World!"
+                            title: "Hello World!"
                         });
                         marker.setMap(map)
-                        console.log("foi");
-                    }else{
-                        console.log("por que");
-                        
+                        console.log("foi")
+                    } else {
+                        console.log("não foi")
+                        return
                     }
-                    
-                    
+
+
                 }
-                
-                
+
+
             })
         }
 
 
-        
+
 
     }
     return <div id="map" style={{ width: '100%', height: '100%' }} />

@@ -2,20 +2,21 @@ import { designTokens } from 'design-tokens'
 import { useContext, useState } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
-import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore, MdOutlineMap, MdOutlinePlace, MdOutlineRoute, MdOutlineSearch } from 'react-icons/md'
+import { MdDirectionsWalk, MdOutlinePlace } from 'react-icons/md'
 import { RiCarLine } from 'react-icons/ri'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { useForm } from 'react-hook-form'
 import { PiPathBold } from 'react-icons/pi'
+import { RouteRequest } from '../../../../utils/types/route'
 
 type RouteFormProps = {
     onClickExpand: () => void
-    onSubmitSearchRoute: (origin: string, destination: string, travelMode: string) => void
+    onSubmitSearchRoute: (origem: string, destino: string, tipoTransporte: string) => void
     onSearchLocal: (query: string)=>void
 }
 
 export function RouteForm(props: RouteFormProps) {
-    const { register, watch, handleSubmit } = useForm({ mode: 'all' })
+    const { register, watch, handleSubmit } = useForm<RouteRequest>({ mode: 'all' })
     const [localSearch, setLocalSearch] = useState("")
     const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
     const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
@@ -49,14 +50,14 @@ export function RouteForm(props: RouteFormProps) {
 
     const iconSize = '24px'
 
-    const handleFormSubmit = (data: any) => {
-       
-        
-        if(data.origin && data.destination && data.travelMode){
-            console.log(data.origin);
-            onSubmitSearchRoute(data.origin, data.destination, data.travelMode)
+    const handleFormSubmit = (data: RouteRequest) => {
+
+
+        if(data.origem && data.destino && data.tipoTransporte){
+            console.log(data.origem);
+            onSubmitSearchRoute(data.origem, data.destino, data.tipoTransporte)
         }
-        
+
     }
 
 
@@ -95,7 +96,7 @@ export function RouteForm(props: RouteFormProps) {
                     </span>
                 </div>
 
-                
+
                 {
                     !expandedCard ?
                     <div style={{
@@ -128,13 +129,13 @@ export function RouteForm(props: RouteFormProps) {
                             cursor: 'pointer',
                             border: 'none',
                             fontSize: designTokens.font.size.medium,
-                        }} onClick={()=>{   
+                        }} onClick={()=>{
                             onSearchLocal(localSearch)
                             setLocalSearch("")
                         }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
                         </div>
 
-                    
+
                     </div>
 
                     :
@@ -187,8 +188,8 @@ export function RouteForm(props: RouteFormProps) {
                             gap: designTokens.spacing.small,
                             width: '100%',
                         }}>
-                            <input {...register('origin')} style={inputStyle} type='text' id='origin' />
-                            <input {...register('destination')} style={inputStyle} type='text' id='destination' />
+                            <input {...register('origem')} style={inputStyle} type='text' id='origem' />
+                            <input {...register('destino')} style={inputStyle} type='text' id='destino' />
                         </div>
                     </div>
                     <div style={{
@@ -205,40 +206,40 @@ export function RouteForm(props: RouteFormProps) {
                         gap: designTokens.spacing.tiny,
                     }}>
                         <input
-                            {...register('travelMode', { required: true })}
+                            {...register('tipoTransporte', { required: true })}
                             style={radioInputStyle}
                             type='radio'
                             id='walk'
-                            name='travelMode'
+                            name='tipoTransporte'
                             value='a-pe'
                         />
                         <input
-                            {...register('travelMode', { required: true })}
+                            {...register('tipoTransporte', { required: true })}
                             style={radioInputStyle}
                             type='radio'
                             id='bicycle'
-                            name='travelMode'
+                            name='tipoTransporte'
                             value='bike'
                         />
                         <input
-                            {...register('travelMode', { required: true })}
+                            {...register('tipoTransporte', { required: true })}
                             style={radioInputStyle}
                             type='radio'
                             id='car'
-                            name='travelMode'
+                            name='tipoTransporte'
                             value='veiculo'
                         />
                         <input
-                            {...register('travelMode', { required: true })}
+                            {...register('tipoTransporte', { required: true })}
                             style={radioInputStyle}
                             type='radio'
                             id='bus'
-                            name='travelMode'
+                            name='tipoTransporte'
                             value='transporte-publico'
                         />
-    
+
                         <label
-                            style={watch('travelMode') === 'a-pe'
+                            style={watch('tipoTransporte') === 'a-pe'
                                 ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
                                 : routeLabelStyle}
                             htmlFor='walk'
@@ -246,7 +247,7 @@ export function RouteForm(props: RouteFormProps) {
                             <MdDirectionsWalk size={iconSize} />
                         </label>
                         <label
-                            style={watch('travelMode') === 'bike'
+                            style={watch('tipoTransporte') === 'bike'
                                 ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
                                 : routeLabelStyle}
                             htmlFor='bicycle'
@@ -254,7 +255,7 @@ export function RouteForm(props: RouteFormProps) {
                             <IoIosBicycle size={iconSize} />
                         </label>
                         <label
-                            style={watch('travelMode') === 'veiculo'
+                            style={watch('tipoTransporte') === 'veiculo'
                                 ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
                                 : routeLabelStyle}
                             htmlFor='car'
@@ -262,7 +263,7 @@ export function RouteForm(props: RouteFormProps) {
                             <RiCarLine size={iconSize} />
                         </label>
                         <label
-                            style={watch('travelMode') === 'transporte-publico'
+                            style={watch('tipoTransporte') === 'transporte-publico'
                                 ? { ...routeLabelStyle, ...selectedRouteLabelStyle }
                                 : routeLabelStyle}
                             htmlFor='bus'
@@ -286,8 +287,8 @@ export function RouteForm(props: RouteFormProps) {
                     }} type='submit'><IoSearchSharp size={'20px'} />Buscar Rota</button>
                     </>
                 }
-              
-                
+
+
             </form>
         </>
     )

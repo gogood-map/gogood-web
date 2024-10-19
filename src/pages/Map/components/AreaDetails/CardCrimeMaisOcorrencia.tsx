@@ -8,15 +8,11 @@ type CardCrimeMaisOcorrenciaProps = {
 export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps){
     const {topCrime} = props
     const formatText = (value:string)=>{
-        var valueFormated = value
-        
-        valueFormated = valueFormated.replace("OUTROS", "")
-        valueFormated = valueFormated.replace("-", "")
-
-        return valueFormated
+        return value.replace("OUTROS", "").replace("-", "")
     }
+    
     return(
-        <div 
+        <div
         style={{
             display: 'flex',
             flexDirection: 'column',

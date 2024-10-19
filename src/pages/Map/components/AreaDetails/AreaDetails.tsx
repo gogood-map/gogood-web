@@ -1,43 +1,29 @@
-import { designTokens } from "design-tokens";
-import {
-  MdOutlineExpandLess,
-  MdOutlineExpandMore,
-} from "react-icons/md";
-import { useEffect, useState } from "react";
-import { getDetails } from "../../../../utils/requests/details";
-import { DetailResponse } from "../../../../utils/types/details";
-import { CardQtdOcorrencia } from "./CardQtdOcorrencias";
-import { CardCrimeMaisOcorrencia } from "./CardCrimeMaisOcorrencia";
-import { CardRanking } from "./CardRanking";
-import { Zoom } from "react-toastify";
+import { designTokens } from "design-tokens"
+import { MdOutlineExpandLess, MdOutlineExpandMore } from "react-icons/md"
+import { useEffect, useState } from "react"
+import { getDetails } from "../../../../utils/requests/details"
+import { DetailResponse } from "../../../../utils/types/details"
+import { CardQtdOcorrencia } from "./CardQtdOcorrencias"
+import { CardCrimeMaisOcorrencia } from "./CardCrimeMaisOcorrencia"
+import { CardRanking } from "./CardRanking"
 
 type AreaDetailsProps = {
-  centerMap:number[];
+  centerMap: number[]
   radius: number
-};
+}
 
 export function AreaDetails(props: AreaDetailsProps) {
   const { centerMap, radius } = props
-  const [expandDetails, setExpandDetails] = useState(false);
-  const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined);
-  
-  useEffect(()=>{
-    if(centerMap.length > 0){
-      loadDetails().then((resposta)=>{
+  const [expandDetails, setExpandDetails] = useState(false)
+  const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined)
+
+  useEffect(() => {
+    getDetails(centerMap[0], centerMap[1], radius)
+      .then((response) => {
+        setDetailsData(response.data)
       })
-    }
+  }, [centerMap, radius])
 
-  }, [centerMap])
-
-
-
-  const loadDetails = async()=>{
-    await getDetails(centerMap[0],centerMap[1], radius).then((resposta)=>{
-      setDetailsData(resposta.data)
-    })
-  }
-
-  
   return (
     <div
       style={{
@@ -70,25 +56,25 @@ export function AreaDetails(props: AreaDetailsProps) {
             flexDirection: "column",
           }}>
           <span
-              style={{
-                fontWeight: designTokens.font.weight.bold,
-                fontFamily: designTokens.font.family,
-                fontSize: designTokens.font.size.medium,
-                color: designTokens.color.text,
-              }}
-            >
-              Minha área é perigosa?
+            style={{
+              fontWeight: designTokens.font.weight.bold,
+              fontFamily: designTokens.font.family,
+              fontSize: designTokens.font.size.medium,
+              color: designTokens.color.text,
+            }}
+          >
+            Minha área é perigosa?
           </span>
 
           <span
-           style={{
-                fontWeight: designTokens.font.weight.medium,
-                fontFamily: designTokens.font.family,
-                fontSize: designTokens.font.size.small,
-                color: designTokens.color.text,
-              }}
-            >
-              Confira agora sua segurança
+            style={{
+              fontWeight: designTokens.font.weight.medium,
+              fontFamily: designTokens.font.family,
+              fontSize: designTokens.font.size.small,
+              color: designTokens.color.text,
+            }}
+          >
+            Confira agora sua segurança
           </span>
         </div>
 
@@ -106,7 +92,7 @@ export function AreaDetails(props: AreaDetailsProps) {
               cursor: "pointer",
             }}
             onClick={() => {
-              setExpandDetails(!expandDetails);
+              setExpandDetails(!expandDetails)
             }}
           >
             {expandDetails && (
@@ -124,35 +110,35 @@ export function AreaDetails(props: AreaDetailsProps) {
           </span>
         </div>
       </div>
-      
 
 
 
-    
 
-    {expandDetails && 
-    
-    <div
-        style={{
+
+
+      {expandDetails &&
+
+        <div
+          style={{
             overflow: 'auto',
             borderTop: '1px solid #c5d1e2',
             paddingTop: '16px',
             display: 'flex',
             gap: '16px',
             alignItems: 'center',
-            flexDirection: 'column',  
-        }}>
-         
-        <CardQtdOcorrencia qtd={detailsData?.qtdOcorrencias} ></CardQtdOcorrencia>
+            flexDirection: 'column',
+          }}>
 
-        <CardCrimeMaisOcorrencia topCrime={detailsData?.top5Ocorrencias[0]}></CardCrimeMaisOcorrencia>
+          <CardQtdOcorrencia qtd={detailsData?.qtdOcorrencias} ></CardQtdOcorrencia>
 
-        <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
+          <CardCrimeMaisOcorrencia topCrime={detailsData?.top5Ocorrencias[0]}></CardCrimeMaisOcorrencia>
 
-        
-    </div>
-    
-    }
+          <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
+
+
+        </div>
+
+      }
     </div>
 
   );

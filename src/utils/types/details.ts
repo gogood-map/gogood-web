@@ -1,9 +1,6 @@
-import { Ocorrencia } from "./route"
-
 export type DetailResponse = {
-    //ocorrencias: Ocorrencia[]
     top5Ocorrencias: QtdCrime[]
-    mesOcorrencias: MesOcorrencias, 
+    mesOcorrencias: MesOcorrencias,
     qtdOcorrencias:number
 }
 export type MesOcorrencias = {
