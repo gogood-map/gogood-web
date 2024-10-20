@@ -1,4 +1,4 @@
-import { designTokens } from "design-tokens"
+import { designTokens } from 'design-tokens'
 
 type CardQtdOcorrenciaProps = {
     qtd?: number

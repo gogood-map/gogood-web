@@ -1,6 +1,5 @@
-// import { useEffect, useState } from "react"
-import { ListItem } from "./ListItem"
-import { designTokens } from "design-tokens"
+import { ListItem } from './ListItem'
+import { designTokens } from 'design-tokens'
 
 export type ListAutoCompleteProps = {
   items: string[]

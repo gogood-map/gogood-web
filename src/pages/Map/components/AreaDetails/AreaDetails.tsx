@@ -144,14 +144,11 @@ export function AreaDetails(props: AreaDetailsProps) {
 
               <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
 
-
             </div>
           </>
         }
-        
       </div>
     </div>
-
-  );
+  )
 }
 

@@ -1,28 +1,28 @@
-import { designTokens } from 'design-tokens';
-import { useContext, useState } from 'react';
-import { IoIosBicycle } from 'react-icons/io';
-import { IoBusOutline, IoSearchSharp } from 'react-icons/io5';
-import { MdDirectionsWalk, MdOutlinePlace } from 'react-icons/md';
-import { RiCarLine } from 'react-icons/ri';
-import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard';
-import { useForm } from 'react-hook-form';
-import { PiPathBold } from 'react-icons/pi';
-import { RouteRequest } from '../../../../utils/types/route';
-import { ListAutoComplete } from '../ListAutoComplete/ListAutoComplete';
+import { designTokens } from 'design-tokens'
+import { useContext, useState } from 'react'
+import { IoIosBicycle } from 'react-icons/io'
+import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
+import { MdDirectionsWalk, MdOutlinePlace } from 'react-icons/md'
+import { RiCarLine } from 'react-icons/ri'
+import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
+import { useForm } from 'react-hook-form'
+import { PiPathBold } from 'react-icons/pi'
+import { RouteRequest } from '../../../../utils/types/route'
+import { ListAutoComplete } from '../ListAutoComplete/ListAutoComplete'
 
 type RouteFormProps = {
-    onClickExpand: () => void;
-    onSubmitSearchRoute: (origem: string, destino: string, tipoTransporte: string) => void;
-    onSearchLocal: (query: string) => void;
-};
+    onClickExpand: () => void
+    onSubmitSearchRoute: (origem: string, destino: string, tipoTransporte: string) => void
+    onSearchLocal: (query: string) => void
+}
 
 export function RouteForm(props: RouteFormProps) {
-    const { register, watch, handleSubmit } = useForm<RouteRequest>({ mode: 'all' });
-    const [localSearch, setLocalSearch] = useState("");
-    const [isFocusedSearch, setIsFocusedSearch] = useState(false);
-    const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props;
-    const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps;
-    const iconSize = '22px';
+    const { register, watch, handleSubmit } = useForm<RouteRequest>({ mode: 'all' })
+    const [localSearch, setLocalSearch] = useState('')
+    const [isFocusedSearch, setIsFocusedSearch] = useState(false)
+    const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
+    const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
+    const iconSize = '22px'
 
     const inputStyle = {
         borderRadius: designTokens.borderRadius.medium,
@@ -32,9 +32,9 @@ export function RouteForm(props: RouteFormProps) {
         fontSize: designTokens.font.size.medium,
         boxShadow: `0 1px 4px 0 ${designTokens.color.boxShadow}`,
         margin: 0,
-    } as React.CSSProperties;
+    } as React.CSSProperties
 
-    const radioInputStyle = { display: 'none' } as React.CSSProperties;
+    const radioInputStyle = { display: 'none' } as React.CSSProperties
 
     const routeLabelStyle = {
         display: 'flex',
@@ -44,17 +44,16 @@ export function RouteForm(props: RouteFormProps) {
         padding: `${designTokens.spacing.small} ${designTokens.spacing.medium}`,
         borderRadius: designTokens.borderRadius.smallMedium,
         cursor: 'pointer',
-    } as React.CSSProperties;
+    } as React.CSSProperties
 
     const selectedRouteLabelStyle = {
         backgroundColor: designTokens.color.secondary,
         color: designTokens.color.ligthGray,
-    } as React.CSSProperties;
+    } as React.CSSProperties
 
     const handleFormSubmit = (data: RouteRequest) => {
         if (data.origem && data.destino && data.tipoTransporte) {
-            console.log(data.origem);
-            onSubmitSearchRoute(data.origem, data.destino, data.tipoTransporte);
+            onSubmitSearchRoute(data.origem, data.destino, data.tipoTransporte)
         }
     }
 
@@ -122,7 +121,7 @@ export function RouteForm(props: RouteFormProps) {
                                     }}
                                 />
                                 <ListAutoComplete
-                                    items={["rua 1", "rua 2", "rua 3"]}
+                                    items={['rua 1', 'rua 2', 'rua 3']}
                                     show={isFocusedSearch}
                                     onSelect={(item) => {
                                         setLocalSearch(item)
@@ -297,5 +296,5 @@ export function RouteForm(props: RouteFormProps) {
                 )}
             </form>
         </>
-    );
+    )
 }

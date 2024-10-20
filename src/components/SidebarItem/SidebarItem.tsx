@@ -1,13 +1,13 @@
-import { ReactNode, useContext, useState } from "react";
-import { SidebarContext, SidebarContextProps } from "../../pages/SidebarLayout/SidebarLayout";
-import { designTokens } from "design-tokens";
+import { ReactNode, useContext, useState } from 'react'
+import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout'
+import { designTokens } from 'design-tokens'
 
 export type SidebarItemProps = {
-    icon: ReactNode;
-    text: string;
-    active?: boolean;
-    alert?: boolean;
-    onClick?: () => void;
+    icon: ReactNode
+    text: string
+    active?: boolean
+    alert?: boolean
+    onClick?: () => void
 }
 
 export function SidebarItem({ icon, text, alert, onClick }: SidebarItemProps) {

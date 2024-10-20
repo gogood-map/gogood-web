@@ -1,6 +1,6 @@
-import { QtdCrime } from "../../../../utils/types/details"
-import ItemRanking from "./ItemRanking"
-import { designTokens } from "design-tokens"
+import { QtdCrime } from '../../../../utils/types/details'
+import ItemRanking from './ItemRanking'
+import { designTokens } from 'design-tokens'
 type CardRankingProps = {
   lista?: QtdCrime[]
 }
@@ -9,7 +9,7 @@ type CardRankingProps = {
 export function CardRanking(props: CardRankingProps) {
   const { lista } = props
   const cores = [
-    designTokens.color.error, "#F18900", designTokens.color.alert
+    designTokens.color.error, '#F18900', designTokens.color.alert
   ]
   return (
     <div style={{

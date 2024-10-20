@@ -1,5 +1,5 @@
-import { designTokens } from "design-tokens"
-import { QtdCrime } from "../../../../utils/types/details"
+import { designTokens } from 'design-tokens'
+import { QtdCrime } from '../../../../utils/types/details'
 
 type ItemRankingProps = {
     cor: string
@@ -12,7 +12,7 @@ export default function ItemRanking(props: ItemRankingProps) {
         const capitalize = (word: string) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
         const words = value.match(/[a-zA-ZÀ-ÖØ-öø-ÿ]+/g) || []
         const pascalWords = words.map(capitalize)
-        return pascalWords.join(' ').replace("Outros", "").replace("-", "")
+        return pascalWords.join(' ').replace('Outros', '').replace('-', '')
     }
 
     return (

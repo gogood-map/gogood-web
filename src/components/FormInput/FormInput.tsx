@@ -1,4 +1,4 @@
-import { ChangeHandler, RegisterOptions } from 'react-hook-form';
+import { ChangeHandler, RegisterOptions } from 'react-hook-form'
 
 export type FormInputProps = {
   register: (name: string, options?: RegisterOptions) => ({ onChange: ChangeHandler , onBlur: ChangeHandler , name: string })

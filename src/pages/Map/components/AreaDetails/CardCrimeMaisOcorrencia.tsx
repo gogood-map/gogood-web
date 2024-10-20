@@ -1,5 +1,5 @@
-import { designTokens } from "design-tokens"
-import { QtdCrime } from "../../../../utils/types/details"
+import { designTokens } from 'design-tokens'
+import { QtdCrime } from '../../../../utils/types/details'
 
 type CardCrimeMaisOcorrenciaProps = {
     topCrime?: QtdCrime
@@ -8,7 +8,7 @@ type CardCrimeMaisOcorrenciaProps = {
 export function CardCrimeMaisOcorrencia(props: CardCrimeMaisOcorrenciaProps) {
     const { topCrime } = props
     const formatText = (value: string) => {
-        return value.replace("OUTROS", "").replace("-", "")
+        return value.replace('OUTROS', '').replace('-', '')
     }
 
     return (
