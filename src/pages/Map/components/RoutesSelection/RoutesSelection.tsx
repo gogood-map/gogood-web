@@ -136,7 +136,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(60px + 35px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length}) + ${selectedRoute ? '35px' : '1px'})`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
             ? ' '
             : '0px'
@@ -175,11 +175,12 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                 alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
-                gap: designTokens.spacing.small,
                 fontSize: designTokens.font.size.medium,
                 fontWeight: designTokens.font.weight.bold,
                 color: designTokens.color.text,
-            }}>Selecione uma opção</div>
+            }}>
+                Selecione uma opção
+            </div>
             <div style={{
                 display: 'flex',
                 width: '100%',
