@@ -11,6 +11,7 @@ export function CardRanking(props: CardRankingProps) {
   const cores = [
     designTokens.color.error, '#F18900', designTokens.color.alert
   ]
+
   return (
     <div style={{
       display: 'flex',
@@ -31,7 +32,7 @@ export function CardRanking(props: CardRankingProps) {
       {lista?.map((item, index) => {
         if (index < 3) {
           return (
-            <ItemRanking cor={cores[index]} item={item}></ItemRanking>
+            <ItemRanking key={index} cor={cores[index]} item={item} />
           )
         }
       })}

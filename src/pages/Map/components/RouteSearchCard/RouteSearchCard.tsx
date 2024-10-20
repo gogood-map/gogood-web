@@ -20,7 +20,7 @@ export type RouteSearchCardProps = {
     searchStatus: 'loading' | 'success' | 'error' | 'none'
     selectedRoute?: RoutesResponse
     onSubmitSearchRoute: (origin: string, destination: string, travelMode: string) => void
-    onLocalSearch: (query: string)=>void
+    onLocalSearch: (query: string) => void
     onSelectRoute?: (route: RoutesResponse) => void
     onCancelSelect?: () => void
     onClose?: () => void
@@ -55,7 +55,7 @@ export function RouteSearchCard(props: RouteSearchCardProps) {
                 }}
                     onSubmitSearchRoute={onSubmitSearchRoute}
                     onSearchLocal={onLocalSearch}
-                    />
+                />
                 <RoutesSelection
                     routes={routes}
                     searchStatus={searchStatus}

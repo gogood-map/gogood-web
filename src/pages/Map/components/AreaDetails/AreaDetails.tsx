@@ -18,6 +18,10 @@ export function AreaDetails(props: AreaDetailsProps) {
   const [detailsData, setDetailsData] = useState<DetailResponse | undefined>(undefined)
 
   useEffect(() => {
+    if (!centerMap || !radius || centerMap[0] === undefined || centerMap[1] === undefined) {
+      return
+    }
+
     getDetails(centerMap[0], centerMap[1], radius)
       .then((response) => {
         setDetailsData(response.data)

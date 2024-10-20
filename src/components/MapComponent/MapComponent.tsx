@@ -3,7 +3,6 @@ import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
 import { getCitySuburb } from '../../utils/requests/dashboard'
-import { toast } from 'react-toastify'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[],
@@ -61,8 +60,6 @@ export function MapComponent(props: MapComponentProps) {
                 scaleControl: false,
             })
 
-
-
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 const zoom = map.getZoom()
@@ -83,8 +80,6 @@ export function MapComponent(props: MapComponentProps) {
             })
             const placesService = new google.maps.places.PlacesService(map)
             setPlacesService(placesService)
-
-
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -218,7 +213,7 @@ export function MapComponent(props: MapComponentProps) {
     const searchPlace = (query: string) => {
 
         if (query === '') {
-            toast.error('Digite um local para pesquisar')
+            return
         } else {
 
             const request = {
@@ -242,17 +237,10 @@ export function MapComponent(props: MapComponentProps) {
                     } else {
                         return
                     }
-
-
                 }
-
-
             })
         }
-
-
-
-
     }
+
     return <div id='map' style={{ width: '100%', height: '100%' }} />
 }
