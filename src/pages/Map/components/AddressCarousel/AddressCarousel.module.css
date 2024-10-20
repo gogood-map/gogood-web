@@ -1,0 +1,20 @@
+.carousel-item {
+  display: flex;
+  width: fit-content !important;
+}
+
+.carousel-slider {
+  display: flex;
+  position: relative;
+  width: fit-content !important;
+  overflow: hidden;
+  gap: 12px;
+}
+
+.carousel-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
