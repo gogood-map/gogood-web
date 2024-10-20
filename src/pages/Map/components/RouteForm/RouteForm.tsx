@@ -1,5 +1,5 @@
 import { designTokens } from 'design-tokens'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
 import { MdDirectionsWalk, MdOutlinePlace } from 'react-icons/md'
@@ -17,11 +17,16 @@ type RouteFormProps = {
 }
 
 export function RouteForm(props: RouteFormProps) {
-    const { register, watch, handleSubmit } = useForm<RouteRequest>({ mode: 'all' })
+    const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
+    const { register, watch, handleSubmit, setValue } = useForm<RouteRequest>({ mode: 'all' })
+    const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
+    const [listLocalSearch, setListLocalSearch] = useState<string[]>([])
+    const [listOrigin, setListOrigin] = useState<string[]>([])
+    const [listDestination, setListDestination] = useState<string[]>([])
     const [localSearch, setLocalSearch] = useState('')
     const [isFocusedSearch, setIsFocusedSearch] = useState(false)
-    const { onClickExpand, onSubmitSearchRoute, onSearchLocal } = props
-    const { expandedCard } = useContext(RouteSearchCardContext) as RouteSearchCardContextProps
+    const [isFocusedOrigin, setIsFocusedOrigin] = useState(false)
+    const [isFocusedDestination, setIsFocusedDestination] = useState(false)
     const iconSize = '22px'
 
     const inputStyle = {
@@ -53,9 +58,55 @@ export function RouteForm(props: RouteFormProps) {
 
     const handleFormSubmit = (data: RouteRequest) => {
         if (data.origem && data.destino && data.tipoTransporte) {
+            handleLocalStorage(data.origem, 'listOrigin')
+            handleLocalStorage(data.destino, 'listDestination')
+
             onSubmitSearchRoute(data.origem, data.destino, data.tipoTransporte)
         }
     }
+
+    const handleLocalStorage = (query: string, key: string) => {
+        const list = localStorage.getItem(key)
+        if (list) {
+            const listParsed = JSON.parse(list)
+            if (!listParsed.includes(query)) {
+                listParsed.splice(0, 0, query)
+
+                if (listParsed.length > 3) {
+                    listParsed.pop()
+                }
+
+                localStorage.setItem(key, JSON.stringify(listParsed))
+
+                if (key === 'listLocalSearch') setListLocalSearch(listParsed)
+                if (key === 'listOrigin') setListOrigin(listParsed)
+                if (key === 'listDestination') setListDestination(listParsed)
+            } else {
+
+                listParsed.splice(listParsed.indexOf(query), 1)
+                listParsed.splice(0, 0, query)
+                localStorage.setItem(key, JSON.stringify(listParsed))
+
+                if (key === 'listLocalSearch') setListLocalSearch(listParsed)
+                if (key === 'listOrigin') setListOrigin(listParsed)
+                if (key === 'listDestination') setListDestination(listParsed)
+            }
+        } else {
+            localStorage.setItem(key, JSON.stringify([query]))
+            if (key === 'listLocalSearch') setListLocalSearch([query])
+            if (key === 'listOrigin') setListOrigin([query])
+            if (key === 'listDestination') setListDestination([query])
+        }
+    }
+
+    useEffect(() => {
+        const listLocalSearch = localStorage.getItem('listLocalSearch')
+        if (listLocalSearch) {
+            setListLocalSearch(JSON.parse(listLocalSearch))
+        } else {
+            localStorage.setItem('listLocalSearch', JSON.stringify([]))
+        }
+    }, [])
 
     return (
         <>
@@ -63,11 +114,12 @@ export function RouteForm(props: RouteFormProps) {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'start',
+                justifyContent: 'center',
                 width: '100%',
                 height: expandedCard ? '210px' : '80px',
                 gap: designTokens.spacing.medium,
                 padding: `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`,
+                paddingBottom: expandedCard ? designTokens.spacing.medium : designTokens.spacing.mediumLarge,
                 borderRadius: designTokens.borderRadius.medium,
                 backgroundColor: designTokens.color.background,
                 boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
@@ -113,19 +165,15 @@ export function RouteForm(props: RouteFormProps) {
                                     type='text'
                                     id='localQuery'
                                     value={localSearch}
-                                    onChange={(e) => { setLocalSearch(e.target.value) }}
+                                    onChange={(e) => setLocalSearch(e.target.value)}
                                     autoComplete='off'
                                     onFocus={() => setIsFocusedSearch(true)}
-                                    onBlur={() => {
-                                        setTimeout(() => setIsFocusedSearch(false), 100)
-                                    }}
+                                    onBlur={() => { setTimeout(() => setIsFocusedSearch(false), 100) }}
                                 />
                                 <ListAutoComplete
-                                    items={['rua 1', 'rua 2', 'rua 3']}
+                                    items={listLocalSearch}
                                     show={isFocusedSearch}
-                                    onSelect={(item) => {
-                                        setLocalSearch(item)
-                                    }}
+                                    onSelect={(item) => { setLocalSearch(item) }}
                                 />
                             </div>
                             <button style={{
@@ -142,6 +190,7 @@ export function RouteForm(props: RouteFormProps) {
                                 border: 'none',
                                 fontSize: designTokens.font.size.medium,
                             }} onClick={() => {
+                                handleLocalStorage(localSearch, 'listLocalSearch')
                                 onSearchLocal(localSearch)
                             }}><IoSearchSharp size={'20px'} />Buscar Endereço</button>
                         </div>
@@ -195,8 +244,46 @@ export function RouteForm(props: RouteFormProps) {
                                 gap: designTokens.spacing.small,
                                 width: '100%',
                             }}>
-                                <input {...register('origem')} style={inputStyle} type='text' id='origem' />
-                                <input {...register('destino')} style={inputStyle} type='text' id='destino' />
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        id='origem'
+                                        type='text'
+                                        autoComplete='off'
+                                        style={inputStyle}
+                                        onFocus={() => setIsFocusedOrigin(true)}
+                                        {...register('origem', {
+                                            onBlur: () => { setTimeout(() => setIsFocusedOrigin(false), 100) }
+                                        })}
+                                    />
+                                    <ListAutoComplete
+                                        items={listOrigin}
+                                        show={isFocusedOrigin}
+                                        onSelect={(item) => {
+                                            setValue('origem', item)
+                                            setLocalSearch(item)
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        id='destino'
+                                        type='text'
+                                        autoComplete='off'
+                                        style={inputStyle}
+                                        onFocus={() => setIsFocusedDestination(true)}
+                                        {...register('destino', {
+                                            onBlur: () => { setTimeout(() => setIsFocusedDestination(false), 100) }
+                                        })}
+                                    />
+                                    <ListAutoComplete
+                                        items={listDestination}
+                                        show={isFocusedDestination}
+                                        onSelect={(item) => {
+                                            setValue('destino', item)
+                                            setLocalSearch(item)
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div style={{
