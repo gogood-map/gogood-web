@@ -168,8 +168,6 @@ export function MapComponent(props: MapComponentProps) {
     }, [routes])
 
     useEffect(() => {
-        console.log(queryLocalSearch);
-
         searchPlace(queryLocalSearch || "")
     }, [queryLocalSearch])
 
