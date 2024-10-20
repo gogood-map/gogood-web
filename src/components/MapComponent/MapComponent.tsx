@@ -3,6 +3,7 @@ import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
 import { getCitySuburb } from '../../utils/requests/dashboard'
+import { toast } from 'react-toastify'
 
 export type MapComponentProps = {
     routes?: RoutesResponse[],
@@ -217,7 +218,7 @@ export function MapComponent(props: MapComponentProps) {
     const searchPlace = (query: string) => {
 
         if (query === '') {
-            console.log('vazio')
+            toast.error('Digite um local para pesquisar')
         } else {
 
             const request = {
