@@ -156,7 +156,12 @@ export function Map() {
                 centerMap={centerMap}
                 radius = {radius}
             />
-            <RouteSteps visible={visibleInstructions} steps={steps} onShare={() => { handleShare(selectedRoute) }} />
+            <RouteSteps
+            visible={visibleInstructions}
+            steps={steps}
+            onShare={() => { handleShare(selectedRoute) }}
+            onClose={() => { setVisibleInstructions(false) }}
+            />
         </>
     )
 }
