@@ -1,4 +1,4 @@
-import { TbLoader2 } from "react-icons/tb";
+import { TbLoader2 } from 'react-icons/tb'
 import style from './LoaderIcon.module.css'
 
 type LoaderIconProps = {

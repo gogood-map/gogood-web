@@ -60,8 +60,6 @@ export function MapComponent(props: MapComponentProps) {
                 scaleControl: false,
             })
 
-
-
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
                 const zoom = map.getZoom()
@@ -82,8 +80,6 @@ export function MapComponent(props: MapComponentProps) {
             })
             const placesService = new google.maps.places.PlacesService(map)
             setPlacesService(placesService)
-
-
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -148,7 +144,7 @@ export function MapComponent(props: MapComponentProps) {
 
             async function createPolyline(route: RoutesResponse, index: number) {
                 if (routes) {
-                    const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
+                    const { encoding } = await google.maps.importLibrary('geometry') as google.maps.GeometryLibrary
                     const caminho = encoding.decodePath(route.polyline)
                     const polylineRota = new google.maps.Polyline({
                         path: caminho,
@@ -168,16 +164,14 @@ export function MapComponent(props: MapComponentProps) {
     }, [routes])
 
     useEffect(() => {
-        console.log(queryLocalSearch);
-
-        searchPlace(queryLocalSearch || "")
+        searchPlace(queryLocalSearch || '')
     }, [queryLocalSearch])
 
 
     const loadRadius = (zoom?: number) => {
         let radius = 5.0
         if (zoom && zoom <= 13) {
-            return radius;
+            return radius
         }
         else if (zoom && zoom <= 15) {
             radius = 2.5
@@ -218,14 +212,14 @@ export function MapComponent(props: MapComponentProps) {
 
     const searchPlace = (query: string) => {
 
-        if (query === "") {
-            console.log("vazio")
+        if (query === '') {
+            return
         } else {
 
             const request = {
                 query: query,
                 fields: ['geometry'],
-            };
+            }
 
             placesService?.findPlaceFromQuery(request, (response) => {
 
@@ -237,25 +231,16 @@ export function MapComponent(props: MapComponentProps) {
                         map?.setCenter(coordenate)
                         const marker = new google.maps.Marker({
                             position: coordenate,
-                            title: "Hello World!"
-                        });
+                            title: query,
+                        })
                         marker.setMap(map)
-                        console.log("foi")
                     } else {
-                        console.log("não foi")
                         return
                     }
-
-
                 }
-
-
             })
         }
-
-
-
-
     }
-    return <div id="map" style={{ width: '100%', height: '100%' }} />
+
+    return <div id='map' style={{ width: '100%', height: '100%' }} />
 }

@@ -9,24 +9,18 @@ import { createHistory } from '../../utils/requests/history'
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 
 export function Map() {
-
-
     const [routes, setRoutes] = useState<RoutesResponse[]>()
     const [routesView, setRoutesView] = useState<RoutesResponse[] | undefined>(undefined)
     const [selectedRoute, setSelectedRoute] = useState<RoutesResponse | undefined>(undefined)
-    const [localSearch, setLocalSearch] = useState<string>("")
+    const [localSearch, setLocalSearch] = useState<string>('')
     const [centerMap, setCenter ] = useState<number[]>([])
     const [radius, setRadius ] = useState<number>(16)
-
     const [searchStatus, setSearchStatus] = useState<'loading' | 'success' | 'error' | 'none'>('none')
     const [visibleInstructions, setVisibleInstructions] = useState(false)
     const [steps, setSteps] = useState<{ instruction: string }[]>([])
     const [travelMode, setTravelMode] = useState<string>('')
     const { user } = useAuth()
     const pathParams = new URLSearchParams(window.location.search)
-
-    
-
 
     const handleMapCenter = (lat:number, lng:number)=>{
         setCenter([lat, lng])
@@ -47,7 +41,7 @@ export function Map() {
             ? `Dados atualizados até 2° semestre de ${new Date().getFullYear() - 1}`
             : `Dados atualizados até 1° semestre de ${new Date().getFullYear()}`
         toast.info(message)
-        
+
         const routeId = pathParams.get('id-rota')
 
         if (routeId) {

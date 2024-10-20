@@ -1,10 +1,10 @@
-import { FiLogOut, FiMenu } from 'react-icons/fi';
+import { FiLogOut, FiMenu } from 'react-icons/fi'
 import { ReactNode, useContext } from 'react'
-import { designTokens } from 'design-tokens';
-import { SidebarItem } from '../SidebarItem/SidebarItem';
-import { useAuth } from '../../hooks/AuthProvider/AuthProvider';
-import { useNavigate } from 'react-router-dom';
-import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout';
+import { designTokens } from 'design-tokens'
+import { SidebarItem } from '../SidebarItem/SidebarItem'
+import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
+import { useNavigate } from 'react-router-dom'
+import { SidebarContext, SidebarContextProps } from '../../pages/SidebarLayout/SidebarLayout'
 
 type SidebarProps = {
     children: ReactNode
@@ -77,7 +77,7 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                     {children}
                 </ul>
                 <div>
-                    <SidebarItem icon={<FiLogOut size={'28px'} />} text="Sair" active={false} onClick={() => {
+                    <SidebarItem icon={<FiLogOut size={'28px'} />} text='Sair' active={false} onClick={() => {
                         logout()
                         navigate('/')
                     }} />

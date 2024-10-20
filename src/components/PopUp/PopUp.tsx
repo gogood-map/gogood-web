@@ -1,5 +1,5 @@
-import { designTokens } from "design-tokens"
-import { IoClose } from "react-icons/io5"
+import { designTokens } from 'design-tokens'
+import { IoClose } from 'react-icons/io5'
 
 export type PopUpProps = {
   children: React.ReactNode

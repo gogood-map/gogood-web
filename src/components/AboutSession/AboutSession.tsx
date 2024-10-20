@@ -9,9 +9,9 @@ export type AboutSessionProps = {
 }
 
 export function AboutSession(props: AboutSessionProps) {
-    const { image, subtitle, title, body, imageBg } = props;
+    const { image, subtitle, title, body, imageBg } = props
 
-    const paragraphs = body.split('\n');
+    const paragraphs = body.split('\n')
 
     return (
         <div id='sobre-nos' style={{
@@ -36,7 +36,7 @@ export function AboutSession(props: AboutSessionProps) {
                 zIndex: 1,
                 position: 'relative',
             }}>
-                <img src={imageBg} alt="" style={{
+                <img src={imageBg} alt='' style={{
                     position: 'absolute',
                     marginTop: '-130px',
                     height: `calc(100% + 130px)`,
@@ -75,8 +75,8 @@ export function AboutSession(props: AboutSessionProps) {
                         }}>{paragraph}</p>
                     ))}
                 </div>
-                <img src={image} alt="" style={{ width: '55%', height: '100%' }} />
+                <img src={image} alt='' style={{ width: '55%', height: '100%' }} />
             </div>
         </div>
-    );
+    )
 }
