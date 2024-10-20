@@ -101,11 +101,20 @@ export function RouteForm(props: RouteFormProps) {
 
     useEffect(() => {
         const listLocalSearch = localStorage.getItem('listLocalSearch')
-        if (listLocalSearch) {
-            setListLocalSearch(JSON.parse(listLocalSearch))
-        } else {
-            localStorage.setItem('listLocalSearch', JSON.stringify([]))
-        }
+        const listOrigin = localStorage.getItem('listOrigin')
+        const listDestination = localStorage.getItem('listDestination')
+
+        listLocalSearch
+        ? setListLocalSearch(JSON.parse(listLocalSearch))
+        : localStorage.setItem('listLocalSearch', JSON.stringify([]))
+
+        listOrigin
+        ? setListOrigin(JSON.parse(listOrigin))
+        : localStorage.setItem('listOrigin', JSON.stringify([]))
+
+        listDestination
+        ? setListDestination(JSON.parse(listDestination))
+        : localStorage.setItem('listDestination', JSON.stringify([]))
     }, [])
 
     return (
