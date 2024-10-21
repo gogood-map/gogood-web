@@ -85,29 +85,6 @@ export function AddressCarousel(props: AddressCarouselProps) {
     }
   }, [])
 
-  useEffect(() => {
-    if (user) {
-      getAddressByUser(user?.id).then((response) => {
-        const formatedAddresses = response.data.map((address) => ({
-          id: address.enderecos.id,
-          zipCode: address.enderecos.cep,
-          street: address.enderecos.rua,
-          number: address.enderecos.numero,
-          city: address.enderecos.cidade,
-          district: address.enderecos.bairro,
-          tag: address.tipoEndereco,
-        }))
-
-        setAddresses(formatedAddresses)
-
-      }).catch((error) => {
-        console.error(error)
-      })
-    }
-  }, [
-    user, addresses
-  ])
-
   return (
     <>
       {addresses.length > 0 && (
