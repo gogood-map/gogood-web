@@ -1,0 +1,35 @@
+.route-search-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 312px;
+  max-height: calc(100vh - 32px);
+  position: absolute;
+  gap: 8px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  top: 0;
+  background-color: transparent;
+  transition: left 0.3s ease;
+}
+
+.expanded {
+  left: calc(180px + 16px);
+}
+
+.collapsed {
+  left: calc(60px + 16px);
+}
+
+.scrollable {
+  overflow-y: scroll;
+}
+
+.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
