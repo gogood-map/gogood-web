@@ -6,6 +6,7 @@ import { DetailResponse } from '../../../../utils/types/details'
 import { CardQtdOcorrencia } from './CardQtdOcorrencias'
 import { CardCrimeMaisOcorrencia } from './CardCrimeMaisOcorrencia'
 import { CardRanking } from './CardRanking'
+import { LoaderIcon } from '../../../../components/LoaderIcon/LoaderIcon'
 
 type AreaDetailsProps = {
   centerMap: number[]
@@ -33,13 +34,13 @@ export function AreaDetails(props: AreaDetailsProps) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        width: '100%',
+        width: `calc(100% - 2 * ${designTokens.spacing.medium})`,
         color: designTokens.color.text,
-        height: expandDetails ? '260px' : '44px',
+        minHeight: expandDetails ? '260px' : '44px',
         padding: designTokens.spacing.medium,
         background: designTokens.color.background,
         borderRadius: designTokens.borderRadius.medium,
-        gap: designTokens.spacing.mediumLarge,
+        gap: expandDetails ? designTokens.spacing.medium : '0px',
         boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
         transition: 'height 0.3s ease',
         position: 'relative',
@@ -141,13 +142,52 @@ export function AreaDetails(props: AreaDetailsProps) {
                 flexDirection: 'column',
                 transition: 'height 0.3s ease',
               }}>
+              {(!detailsData ||
+                !detailsData?.qtdOcorrencias ||
+                !detailsData?.top5Ocorrencias ||
+                detailsData?.top5Ocorrencias.length === 0
+              ) && (
+                  <span style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: designTokens.spacing.medium,
+                    width: '100%',
+                    height: '100%',
+                  }}>
+                    <span style={{
+                      fontFamily: designTokens.font.family,
+                      fontSize: designTokens.font.size.medium,
+                      color: designTokens.color.text,
+                      fontWeight: designTokens.font.weight.semiBold,
+                    }}>
+                      Carregando...
+                    </span>
+                    <span style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '100%',
+                      height: '32px',
+                    }}>
+                      <LoaderIcon size={32} />
+                    </span>
+                  </span>
+                )}
 
-              <CardQtdOcorrencia qtd={detailsData?.qtdOcorrencias} ></CardQtdOcorrencia>
+              {detailsData &&
+                detailsData?.qtdOcorrencias !== 0 &&
+                detailsData?.top5Ocorrencias.length !== 0 &&
+                (
+                  <>
+                    <CardQtdOcorrencia qtd={detailsData?.qtdOcorrencias} ></CardQtdOcorrencia>
 
-              <CardCrimeMaisOcorrencia topCrime={detailsData?.top5Ocorrencias[0]}></CardCrimeMaisOcorrencia>
+                    <CardCrimeMaisOcorrencia topCrime={detailsData?.top5Ocorrencias[0]}></CardCrimeMaisOcorrencia>
 
-              <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
-
+                    <CardRanking lista={detailsData?.top5Ocorrencias}></CardRanking>
+                  </>
+                )}
             </div>
           </>
         }

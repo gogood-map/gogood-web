@@ -1,4 +1,5 @@
 import { designTokens } from 'design-tokens'
+import { IoClose } from 'react-icons/io5'
 import { PiCopySimple } from 'react-icons/pi'
 import styled from 'styled-components'
 
@@ -8,10 +9,11 @@ export type RouteStepsProps = {
     instruction: string
   }[]
   onShare?: () => void
+  onClose?: () => void
 }
 
 export function RouteSteps(props: RouteStepsProps) {
-  const { steps, visible, onShare } = props
+  const { steps, visible, onShare, onClose } = props
 
   const ListSteps = styled.div`
     display: flex;
@@ -74,6 +76,12 @@ export function RouteSteps(props: RouteStepsProps) {
         }}>
           Instruções da rota
         </h1>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+        }} onClick={onClose}>
+          <IoClose size={24} />
+        </div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
