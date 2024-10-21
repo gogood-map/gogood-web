@@ -139,8 +139,8 @@ export function RouteForm(props: RouteFormProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            height: expandedCard
+            width: `calc(100% - 2 * ${designTokens.spacing.medium})`,
+            minHeight: expandedCard
                 ? address.length > 0
                     ? '225px' : '180px'
                 : address.length > 0
