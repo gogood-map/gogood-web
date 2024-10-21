@@ -251,7 +251,7 @@ export function RegisterForm() {
                         currentStep={formStep}
                         steps={steps.length}
                         disabled={(!watch('email') || !watch('password') || !watch('confirmPassword'))
-                            || (errors.email || errors.password || errors.confirmPassword ? true : false)}
+                            || ((errors.email ? true : false) || (errors.password ? true : false) || errors.confirmPassword ? true : false)}
                         onClickNext={() => setFormStep(formStep + 1)}
                     />
                     <div style={{
@@ -311,7 +311,7 @@ export function RegisterForm() {
                             {...register('name', {
                                 required: { value: true, message: 'Nome obrigatório' },
                                 minLength: { value: 3, message: 'Nome deve ter no mínimo 3 caracteres' },
-                                validate: (value) => isAlpha(value.replace(/\s/g, ""), 'pt-BR') || 'Nome deve conter apenas letras'
+                                validate: (value) => isAlpha(value.replace(/\s/g, ''), 'pt-BR') || 'Nome deve conter apenas letras'
                             })}
                             placeholder='Seu nome'
                         />

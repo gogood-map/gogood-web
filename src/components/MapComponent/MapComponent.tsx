@@ -5,23 +5,32 @@ import axios from 'axios'
 import { getCitySuburb } from '../../utils/requests/dashboard'
 
 export type MapComponentProps = {
-    routes?: RoutesResponse[]
+    routes?: RoutesResponse[],
+    onCenterMapChange?: (lat: number, lng: number) => void
+    onRadiusChange?: (radius: number) => void
+    queryLocalSearch?: string
 }
 
 export function MapComponent(props: MapComponentProps) {
-    const { routes } = props
+    const { routes, onCenterMapChange, onRadiusChange, queryLocalSearch } = props
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [heatmap, setHeatmap] = useState<google.maps.visualization.HeatmapLayer | null>(null)
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
+    const [placesService, setPlacesService] = useState<google.maps.places.PlacesService>()
+
+
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: 'weekly',
-        libraries: ['visualization'],
+        libraries: ['visualization', 'places', 'marker'],
     })
 
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const debounce = (func: (...args: any[]) => void, wait: number) => {
         let timeout: NodeJS.Timeout
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return function executedFunction(...args: any[]) {
             const later = () => {
                 clearTimeout(timeout)
@@ -33,30 +42,50 @@ export function MapComponent(props: MapComponentProps) {
     }
 
 
-    const debouncedLoadData = useCallback(debounce((lat, lng) => {
-        loadData(lat, lng).then(newData => setData(newData))
+    const debouncedLoadData = useCallback(debounce((lat, lng, zoom) => {
+        loadData(lat, lng, zoom).then(newData => setData(newData))
     }, 500), [])
 
     useEffect(() => {
         loader.load().then(() => {
             const map = new google.maps.Map(document.getElementById('map') as HTMLElement, {
                 center: { lat: -23.5581213, lng: -46.661614 },
-                zoom: 15,
+                zoom: 16,
+                maxZoom: 16 + 3,
+                minZoom: 7,
                 mapTypeControl: false,
                 streetViewControl: false,
                 fullscreenControl: false,
-                zoomControl: false,
+                zoomControl: true,
+                scaleControl: false,
             })
 
             map.addListener('center_changed', () => {
                 const center = map.getCenter()
-                if (center) {
-                    debouncedLoadData(center.lat(), center.lng())
+                const zoom = map.getZoom()
+
+                if (center && zoom) {
+
+                    debouncedLoadData(center.lat(), center.lng(), zoom)
                 }
             })
+            map.addListener('zoom_changed', () => {
+                const center = map.getCenter()
+                const zoom = map.getZoom()
+
+                if (center && zoom) {
+
+                    debouncedLoadData(center.lat(), center.lng(), zoom)
+                }
+            })
+            const placesService = new google.maps.places.PlacesService(map)
+            setPlacesService(placesService)
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
+
+                    onCenterMapChange && onCenterMapChange(position.coords.latitude, position.coords.latitude)
+
                     const pos = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -79,6 +108,7 @@ export function MapComponent(props: MapComponentProps) {
 
 
     useEffect(() => {
+
         if (map && data.length) {
             if (heatmap) {
                 heatmap.setMap(null)
@@ -90,8 +120,6 @@ export function MapComponent(props: MapComponentProps) {
                 gradient: [
                     'rgba(0,0,0,0)',
                     'yellow',
-                    'rgba(255, 165, 0, 100)',
-                    'rgba(255, 165, 0, 100)',
                     'rgba(255, 165, 0, 100)',
                     'rgba(255, 165, 0, 100)',
                     'red'
@@ -116,7 +144,7 @@ export function MapComponent(props: MapComponentProps) {
 
             async function createPolyline(route: RoutesResponse, index: number) {
                 if (routes) {
-                    const { encoding } = await google.maps.importLibrary("geometry") as google.maps.GeometryLibrary
+                    const { encoding } = await google.maps.importLibrary('geometry') as google.maps.GeometryLibrary
                     const caminho = encoding.decodePath(route.polyline)
                     const polylineRota = new google.maps.Polyline({
                         path: caminho,
@@ -135,23 +163,84 @@ export function MapComponent(props: MapComponentProps) {
         }
     }, [routes])
 
-    const loadData = async (lat: number, lng: number) => {
+    useEffect(() => {
+        searchPlace(queryLocalSearch || '')
+    }, [queryLocalSearch])
+
+
+    const loadRadius = (zoom?: number) => {
+        let radius = 5.0
+        if (zoom && zoom <= 13) {
+            return radius
+        }
+        else if (zoom && zoom <= 15) {
+            radius = 2.5
+        } else if (zoom && zoom <= 17) {
+            radius = 1.25
+        } else {
+            radius = 0.575
+        }
+        return radius
+
+    }
+
+    const loadData = async (lat: number, lng: number, zoom: number) => {
         const baseUrl = import.meta.env.VITE_BASE_URL
-        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}`, {
+        const radius = loadRadius(zoom)
+        const response = await axios.get(`${baseUrl}/consultar/local/${lat}/${lng}?raio=${radius}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
             },
         })
 
+        onRadiusChange && onRadiusChange(radius)
+
+        onCenterMapChange && onCenterMapChange(lat, lng)
+
         if (response.status !== 200) {
             return Promise.reject('Erro ao consultar local')
         }
 
-        return response.data.mapData.map((item: { latitude: number; longitude: number }) => {
-            return new google.maps.LatLng(item.latitude, item.longitude)
+        return response.data.coordenadasOcorrencias.map((item: [number, number]) => {
+            const [long, lat] = item
+
+            return new google.maps.LatLng(lat, long)
         })
     }
 
-    return <div id="map" style={{ width: '100%', height: '100%' }} />
+
+    const searchPlace = (query: string) => {
+
+        if (query === '') {
+            return
+        } else {
+
+            const request = {
+                query: query,
+                fields: ['geometry'],
+            }
+
+            placesService?.findPlaceFromQuery(request, (response) => {
+
+                if (response) {
+                    const itemResponse = response[0]
+
+                    if (itemResponse.geometry?.location) {
+                        const coordenate = new google.maps.LatLng(itemResponse.geometry?.location?.lat(), itemResponse.geometry?.location?.lng())
+                        map?.setCenter(coordenate)
+                        const marker = new google.maps.Marker({
+                            position: coordenate,
+                            title: query,
+                        })
+                        marker.setMap(map)
+                    } else {
+                        return
+                    }
+                }
+            })
+        }
+    }
+
+    return <div id='map' style={{ width: '100%', height: '100%' }} />
 }

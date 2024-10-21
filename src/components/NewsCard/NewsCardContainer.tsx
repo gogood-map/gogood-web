@@ -1,5 +1,5 @@
-import { designTokens } from "design-tokens"
-import { NewsCard, NewsCardProps } from "./NewsCard"
+import { designTokens } from 'design-tokens'
+import { NewsCard, NewsCardProps } from './NewsCard'
 
 export type NewsCardContainerProps = {
     cards: NewsCardProps[]
@@ -22,4 +22,4 @@ export function NewsCardContainer(props: NewsCardContainerProps) {
             ))}
         </div>
     )
-} 
+}

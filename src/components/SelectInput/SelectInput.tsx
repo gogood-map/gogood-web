@@ -1,5 +1,5 @@
-import { designTokens } from "design-tokens"
-import { UseFormRegisterReturn } from "react-hook-form"
+import { designTokens } from 'design-tokens'
+import { UseFormRegisterReturn } from 'react-hook-form'
 
 export type SelectInputProps = {
   label: string

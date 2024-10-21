@@ -25,7 +25,7 @@ export function DashboardLine(props: DashboardProps) {
         pointBorderWidth: 0,
       }
     ],
-  } as ChartData<"line", (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>
+  } as ChartData<'line', (number | [number, number] | Point | BubbleDataPoint | null)[], unknown>
 
   const options = {
     scales: {
@@ -39,7 +39,7 @@ export function DashboardLine(props: DashboardProps) {
       }
     },
     maintainAspectRatio: false,
-  } as ChartOptions<"line">
+  } as ChartOptions<'line'>
 
   useEffect(() => {
     const chart = ChartJS.getChart('lineChart')

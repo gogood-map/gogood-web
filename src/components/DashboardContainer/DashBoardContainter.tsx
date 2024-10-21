@@ -19,5 +19,5 @@ export function DashboardContainer(props: DashboardContainerProps) {
     }}>
       {children}
     </div>
-  );
+  )
 }

@@ -185,7 +185,7 @@ export const FormProfile = () => {
                 register={register('name', {
                   required: { value: true, message: 'Nome obrigatório' },
                   minLength: { value: 3, message: 'Nome deve ter no mínimo 3 caracteres' },
-                  validate: (value) => isAlpha(value.replace(/\s/g, ""), 'pt-BR') || 'Nome deve conter apenas letras'
+                  validate: (value) => isAlpha(value.replace(/\s/g, ''), 'pt-BR') || 'Nome deve conter apenas letras'
                 })}
               />
 

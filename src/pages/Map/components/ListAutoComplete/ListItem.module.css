@@ -1,0 +1,26 @@
+.item_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #F4FBF9;
+  gap: 8px;
+  border-radius: 8px;
+
+  &:hover {
+    background-color: #E0E0E0;
+  }
+}
+
+.item_icon {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+}
+
+.item_text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #334049;
+}

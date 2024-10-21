@@ -8,7 +8,7 @@ import { CancelRouteSelect } from '../CancelRouteSelect/CancelRouteSelect'
 
 export function routesColors(routes: RoutesResponse[]) {
     const colors = routes.map(route => {
-        const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
+        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
         if (ocorrenciasPorKm < 50) {
             return designTokens.color.success
         } else if (ocorrenciasPorKm < 75) {
@@ -23,8 +23,6 @@ export function routesColors(routes: RoutesResponse[]) {
         colors[1] = designTokens.color.alert
     } else if (colors.every(color => color === designTokens.color.alert)) {
         colors[0] = designTokens.color.success
-    } else if (colors.every(color => color === designTokens.color.success)) {
-        // colors = colors
     } else if (!colors.includes(designTokens.color.success)) {
         colors[0] = designTokens.color.success
         colors[1] = designTokens.color.alert
@@ -33,9 +31,11 @@ export function routesColors(routes: RoutesResponse[]) {
     return colors
 }
 
-export function routesRisk(routes: RoutesResponse[]) {
-    let risk = routes.map(route => {
-        const ocorrenciasPorKm = route.qtdOcorrenciasTotais / route.distancia
+type RiskLevel = 'Baixo Risco' | 'Médio Risco' | 'Alto Risco'
+
+export function routesRisk(routes: RoutesResponse[]): RiskLevel[] {
+    let risk: RiskLevel[] = routes.map(route => {
+        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
         if (ocorrenciasPorKm < 50) {
             return 'Baixo Risco'
         } else if (ocorrenciasPorKm < 75) {
@@ -45,25 +45,39 @@ export function routesRisk(routes: RoutesResponse[]) {
         }
     })
 
-    if (risk.every(risk => risk === 'Alto Risco')) {
-        risk[0] = 'Baixo Risco'
-        risk[1] = 'Médio Risco'
-    } else if (risk.every(risk => risk === 'Médio Risco')) {
-        risk[0] = 'Baixo Risco'
-    } else if (risk.every(risk => risk === 'Baixo Risco')) {
-        risk = risk
+    if (risk.every(r => r === 'Alto Risco')) {
+        risk = ['Baixo Risco', 'Médio Risco', ...risk.slice(2)]
+    } else if (risk.every(r => r === 'Médio Risco')) {
+        risk = ['Baixo Risco', ...risk.slice(1)]
     } else if (!risk.includes('Baixo Risco')) {
-        risk[0] = 'Baixo Risco'
-        risk[1] = 'Médio Risco'
+        risk = ['Baixo Risco', ...risk.slice(1)]
     }
 
     return risk
 }
 
+
 export type RoutesResponse = {
     origem: string
     destino: string
     distancia: number
+    ocorrencias: {
+        numBo: string,
+        crime: string,
+        tipoLocal: string,
+        rua: string,
+        bairro: string,
+        delegacia: string,
+        cidade: string,
+        dataOcorrencia: string,
+        dataAberturaBo: string,
+        localizacao: {
+            x: number,
+            y: number,
+            type: string,
+            coordinates: number[]
+        }
+    }[],
     duracao: string
     horarioSaida: string
     horarioChegada: string
@@ -73,6 +87,7 @@ export type RoutesResponse = {
         instrucao: string
     }[]
 }
+
 
 type RoutesSelectionProps = {
     routes?: RoutesResponse[]
@@ -121,7 +136,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
     }
 
     const height = routes && expandedCard && searchStatus === 'success'
-        ? `calc(60px + 35px + (35px * ${routes.length}) + (8px * ${routes.length - 1}))`
+        ? `calc(60px + (35px * ${routes.length}) + (8px * ${routes.length}) + ${selectedRoute ? '35px' : '1px'})`
         : expandedCard && (searchStatus === 'loading' || searchStatus === 'error')
             ? ' '
             : '0px'
@@ -132,7 +147,7 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            width: '100%',
+            width: `calc(100% - 2 * ${designTokens.spacing.medium})`,
             height: height,
             overflow: 'hidden',
             gap: designTokens.spacing.medium,
@@ -143,7 +158,9 @@ export function RoutesSelection(props: RoutesSelectionProps) {
             borderRadius: designTokens.borderRadius.medium,
             boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
             transition: 'height 0.3s ease',
-            position: 'relative'
+            position: 'relative',
+            flexGrow: 1,
+            flexShrink: 0,
         }}>
             <div onClick={onClose} style={{
                 display: 'flex',
@@ -160,11 +177,12 @@ export function RoutesSelection(props: RoutesSelectionProps) {
                 alignItems: 'center',
                 flexDirection: 'row',
                 width: '100%',
-                gap: designTokens.spacing.small,
                 fontSize: designTokens.font.size.medium,
                 fontWeight: designTokens.font.weight.bold,
                 color: designTokens.color.text,
-            }}>Selecione uma opção</div>
+            }}>
+                Selecione uma opção
+            </div>
             <div style={{
                 display: 'flex',
                 width: '100%',

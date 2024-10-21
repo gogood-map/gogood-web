@@ -211,7 +211,7 @@ export function LoginForm() {
                         }
                     }}
                     shape='circle'
-                    onError={() => console.error("Erro ao logar com Google")}
+                    onError={() => console.error('Erro ao logar com Google')}
                 />
                 <div style={{
                     display: 'flex',
