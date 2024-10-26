@@ -2,11 +2,10 @@ import { designTokens } from 'design-tokens'
 import { useContext, useEffect, useState } from 'react'
 import { IoIosBicycle } from 'react-icons/io'
 import { IoBusOutline, IoSearchSharp } from 'react-icons/io5'
-import { MdDirectionsWalk, MdOutlinePlace } from 'react-icons/md'
+import { MdDirectionsWalk, MdOutlineExpandLess, MdOutlineExpandMore } from 'react-icons/md'
 import { RiCarLine } from 'react-icons/ri'
 import { RouteSearchCardContext, RouteSearchCardContextProps } from '../RouteSearchCard/RouteSearchCard'
 import { useForm } from 'react-hook-form'
-import { PiPathBold } from 'react-icons/pi'
 import { RouteRequest } from '../../../../utils/types/route'
 import { ListAutoComplete } from '../ListAutoComplete/ListAutoComplete'
 import { Address } from '../../../Profile/components/AddressList/AddressList'
@@ -166,8 +165,8 @@ export function RouteForm(props: RouteFormProps) {
                     display: 'flex',
                     cursor: 'pointer',
                 }} onClick={onClickExpand}>
-                    {!expandedCard && <MdOutlinePlace size={iconSize} />}
-                    {expandedCard && <PiPathBold size={iconSize} />}
+                    {expandedCard && <MdOutlineExpandLess size={iconSize} />}
+                    {!expandedCard && <MdOutlineExpandMore size={iconSize} />}
                 </span>
             </div>
 
