@@ -1,6 +1,5 @@
 import { designTokens } from 'design-tokens'
 import { Address } from '../../../Profile/components/AddressList/AddressList'
-import { useState } from 'react'
 
 export type CarouselItemProps = {
   address: Address
@@ -10,28 +9,6 @@ export type CarouselItemProps = {
 
 export function CarouselItem(props: CarouselItemProps) {
   const { address, icon, onClick } = props
-  const [isHovered, setIsHovered] = useState(false)
-
-  const toolTipStyle = {
-    position: 'absolute',
-    top: `calc(100% + ${designTokens.spacing.tiny})`,
-    borderRadius: designTokens.borderRadius.medium,
-    padding: designTokens.spacing.small,
-    marginLeft: designTokens.spacing.small,
-    backgroundColor: designTokens.color.background,
-    color: designTokens.color.text,
-    fontSize: designTokens.font.size.medium,
-    visibility: 'hidden',
-    opacity: '0',
-    transform: `translateY(-${designTokens.spacing.tiny})`,
-    transition: 'visibility 0s, opacity 0.3s, transform 0.3s',
-  } as React.CSSProperties
-
-  const hoveredToolTipStyle = {
-    visibility: 'visible',
-    opacity: '1',
-    transform: 'translateY(0)'
-  } as React.CSSProperties
 
   return (
     <div style={{
@@ -58,8 +35,6 @@ export function CarouselItem(props: CarouselItemProps) {
         {icon}
       </span>
       <p
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         style={{
           color: designTokens.color.text,
           fontWeight: designTokens.font.weight.semiBold,
@@ -71,14 +46,6 @@ export function CarouselItem(props: CarouselItemProps) {
           margin: 0,
         }}
       >{address.tag}</p>
-      <div style={
-        isHovered ?
-          { ...toolTipStyle, ...hoveredToolTipStyle } :
-          toolTipStyle
-      }>
-        {address.street}, {address.number} - {address.city}
-      </div>
-
     </div>
   )
 }
