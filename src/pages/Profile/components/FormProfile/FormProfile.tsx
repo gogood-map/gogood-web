@@ -1,6 +1,5 @@
 import { designTokens } from 'design-tokens'
 import { RiAccountCircleLine } from 'react-icons/ri'
-import unknownUser from '../../../../assets/unknown-user.png'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../../../hooks/AuthProvider/AuthProvider'
 import { useForm } from 'react-hook-form'
@@ -12,6 +11,7 @@ import { deleteUser, updateUser } from '../../../../utils/requests/user'
 import { toast } from 'react-toastify'
 import { isAlpha, isEmail } from 'validator'
 import { useNavigate } from 'react-router-dom'
+import { ImageProfile } from '../ImageProfile/ImageProfile'
 
 export const FormProfile = () => {
   const { user, logout, login } = useAuth()
@@ -156,15 +156,7 @@ export const FormProfile = () => {
           flex: 1
         }}
       >
-        <section>
-          <div style={{
-            width: 100,
-            height: 100,
-            backgroundSize: 'cover',
-            borderRadius: 100,
-            backgroundImage: `url(${unknownUser})`
-          }}></div>
-        </section>
+        <ImageProfile />
 
         <section style={{
           display: 'flex',
