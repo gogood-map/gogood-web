@@ -42,3 +42,18 @@ export const getGoogleUserByLogin = async (email: string, googleId: string)
     google_id: googleId
   })
 }
+
+export const updateUserImage = async (userId: number, image: Blob)
+  : Promise<AxiosResponse<void>> => {
+  return await axios.post(`${baseURL}/usuarios/foto`, {
+    id: userId,
+    foto: image
+  })
+}
+
+export const getUserImage = async (userId: number)
+  : Promise<AxiosResponse<Blob>> => {
+  return await axios.get(`${baseURL}/usuarios/foto/${userId}`, {
+    responseType: 'blob'
+  });
+}
