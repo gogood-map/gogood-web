@@ -37,12 +37,12 @@ export function AddressCarousel(props: AddressCarouselProps) {
 
   const responsive = {
     superLargeDesktop: {
-      breakpoint: { max: 4000, min: 3000 },
-      items: 5
+      breakpoint: { max: 4000, min: 1920 },
+      items: 2
     },
     desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 3
+      breakpoint: { max: 1920, min: 1024 },
+      items: 2
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
