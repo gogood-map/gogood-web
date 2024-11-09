@@ -42,3 +42,21 @@ export const getGoogleUserByLogin = async (email: string, googleId: string)
     google_id: googleId
   })
 }
+
+export const updateUserImage = async (userId: number, image: Blob)
+  : Promise<AxiosResponse<void>> => {
+  const formData = new FormData()
+  formData.append('id', userId.toString())
+  formData.append('foto', image)
+
+  return await axios.post(`${baseURL}/usuarios/foto`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data', },
+  })
+}
+
+export const getUserImage = async (userId: number)
+  : Promise<AxiosResponse<Blob>> => {
+  return await axios.get(`${baseURL}/usuarios/foto/${userId}`, {
+    responseType: 'blob'
+  })
+}
