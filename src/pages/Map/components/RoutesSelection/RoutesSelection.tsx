@@ -7,55 +7,40 @@ import { IoClose } from 'react-icons/io5'
 import { CancelRouteSelect } from '../CancelRouteSelect/CancelRouteSelect'
 
 export function routesColors(routes: RoutesResponse[]) {
-    const colors = routes.map(route => {
-        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
-        if (ocorrenciasPorKm < 50) {
-            return designTokens.color.success
-        } else if (ocorrenciasPorKm < 75) {
-            return designTokens.color.alert
-        } else {
-            return designTokens.color.error
-        }
+    const orderedRoutes = routes.sort((a, b) => {
+        return a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais
     })
 
-    if (colors.every(color => color === designTokens.color.error)) {
-        colors[0] = designTokens.color.success
-        colors[1] = designTokens.color.alert
-    } else if (colors.every(color => color === designTokens.color.alert)) {
-        colors[0] = designTokens.color.success
-    } else if (!colors.includes(designTokens.color.success)) {
-        colors[0] = designTokens.color.success
-        colors[1] = designTokens.color.alert
-    }
-
-    return colors
+    return orderedRoutes.map((_, index) => {
+        if (index === 0) {
+            return designTokens.color.success
+        } else if (index === 1) {
+            return designTokens.color.alert
+        } else if (index === 2) {
+            return designTokens.color.error
+        } else {
+            return designTokens.color.text
+        }
+    })
 }
 
 type RiskLevel = 'Baixo Risco' | 'Médio Risco' | 'Alto Risco'
 
 export function routesRisk(routes: RoutesResponse[]): RiskLevel[] {
-    let risk: RiskLevel[] = routes.map(route => {
-        const ocorrenciasPorKm = route.ocorrencias.length / route.distancia
-        if (ocorrenciasPorKm < 50) {
-            return 'Baixo Risco'
-        } else if (ocorrenciasPorKm < 75) {
-            return 'Médio Risco'
-        } else {
-            return 'Alto Risco'
+    const risk: RiskLevel[] = routes.map(
+        route => {
+            if (route.qtdOcorrenciasTotais < 5) {
+                return 'Baixo Risco'
+            } else if (route.qtdOcorrenciasTotais >= 5 && route.qtdOcorrenciasTotais < 10) {
+                return 'Médio Risco'
+            } else {
+                return 'Alto Risco'
+            }
         }
-    })
-
-    if (risk.every(r => r === 'Alto Risco')) {
-        risk = ['Baixo Risco', 'Médio Risco', ...risk.slice(2)]
-    } else if (risk.every(r => r === 'Médio Risco')) {
-        risk = ['Baixo Risco', ...risk.slice(1)]
-    } else if (!risk.includes('Baixo Risco')) {
-        risk = ['Baixo Risco', ...risk.slice(1)]
-    }
+    )
 
     return risk
 }
-
 
 export type RoutesResponse = {
     origem: string
@@ -87,7 +72,6 @@ export type RoutesResponse = {
         instrucao: string
     }[]
 }
-
 
 type RoutesSelectionProps = {
     routes?: RoutesResponse[]
