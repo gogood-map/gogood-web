@@ -10,7 +10,6 @@ import { DashboardCard } from '../../components/DashboardCard/DashboardCard'
 import { designTokens } from 'design-tokens'
 import { useEffect, useState } from 'react'
 import { getCitySuburb, getDashboard } from '../../utils/requests/dashboard'
-import { toast } from 'react-toastify'
 
 export function Home() {
     const [data, setData] = useState<number[]>([])
@@ -43,20 +42,20 @@ export function Home() {
                                 const labels = data.map(({ anoMes }) => anoMes)
                                 setData(dataResponse.reverse())
                                 setLabels(labels.reverse())
-                            }).catch(() => {
-                                toast.error('Erro ao buscar dados da dashboard para localização atual')
+                            }).catch((error) => {
+                                console.warn('Error ao buscar dados da dashboard', error)
                             }).finally(() => {
                                 if (data.address.city && data.address.suburb) {
                                     setTitle(`Escala de furtos em ${data.address.city} - ${data.address.suburb}`)
                                 }
                             })
-                        }).catch(() => {
-                            toast.error('Erro ao buscar dados de localização')
+                        }).catch((error) => {
+                            console.warn('Error ao buscar cidade e bairro', error)
                         })
                 })
             }
-        }).catch(() => {
-            toast.error('Erro ao buscar dados da dashboard')
+        }).catch((error) => {
+            console.warn('Error ao buscar dados da dashboard', error)
         })
     }, [])
 
