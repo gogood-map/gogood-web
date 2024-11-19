@@ -8,12 +8,14 @@ import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 import { getAddressByUser } from '../../utils/requests/address'
 import { toast } from 'react-toastify'
 import styles from './Profile.module.css'
+import { useNavigate } from 'react-router-dom'
 
 export const Profile = () => {
   const [showCard, setShowCard] = useState(false)
   const [updateForm, setUpdateForm] = useState(false)
   const [addressCard, setAddressCard] = useState<AddressFormProps | null>(null)
   const [addresses, setAddresses] = useState<Address[]>([])
+  const navigate = useNavigate()
   const { user } = useAuth()
 
   const handleCardClickOut = () => {
@@ -68,7 +70,7 @@ export const Profile = () => {
 
   useEffect(() => {
     if (!user) {
-      toast.error('Faça login para visualizar os endereços')
+      navigate('/login')
       return
     }
     getAddressByUser(user.id)

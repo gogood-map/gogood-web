@@ -9,15 +9,17 @@ import { getRoute } from '../../utils/requests/route'
 import { getHistoryByUser } from '../../utils/requests/history'
 import { useAuth } from '../../hooks/AuthProvider/AuthProvider'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 export function History() {
-  const [route, setRoute] = useState<RoutesResponse[]>()
   const [historyItems, setHistoryItems] = useState<HistoryTableItemProps[]>([])
+  const [route, setRoute] = useState<RoutesResponse[]>()
+  const navigate = useNavigate()
   const { user } = useAuth()
 
   useEffect(() => {
     if (!user) {
-      toast.error('Faça login para visualizar o histórico')
+      navigate('/login')
       return
     }
     getHistoryByUser(user?.id)
