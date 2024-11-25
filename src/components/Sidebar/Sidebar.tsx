@@ -12,9 +12,10 @@ type SidebarProps = {
 }
 
 export function Sidebar({ children, onClick }: SidebarProps) {
-    const navigate = useNavigate()
-    const { logout } = useAuth()
     const { expanded } = useContext(SidebarContext) as SidebarContextProps
+    const { logout } = useAuth()
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
     const buttonStyle = {
         backgroundColor: 'rgb(249, 250, 251)',
@@ -76,12 +77,14 @@ export function Sidebar({ children, onClick }: SidebarProps) {
                 }}>
                     {children}
                 </ul>
-                <div>
-                    <SidebarItem icon={<FiLogOut size={'28px'} />} text='Sair' active={false} onClick={() => {
-                        logout()
-                        navigate('/')
-                    }} />
-                </div>
+                {user &&
+                    <div>
+                        <SidebarItem icon={<FiLogOut size={'28px'} />} text='Sair' active={false} onClick={() => {
+                            logout()
+                            navigate('/')
+                        }} />
+                    </div>
+                }
             </nav>
         </aside>
     )
