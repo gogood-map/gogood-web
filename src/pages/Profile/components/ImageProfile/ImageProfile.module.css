@@ -1,0 +1,49 @@
+.div-main {
+  position: relative;
+  display: inline-block;
+}
+
+.image-profile {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.image-profile:hover {
+  opacity: 0.8;
+}
+
+.tooltip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #f4fbf9;
+  border: 1px solid #d1d1d1;
+  border-radius: 0px 16px 16px 16px;
+  box-shadow: 2px 3px 7px #d1d1d1;
+  z-index: 10;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.label-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  transition: background-color 0.3s;
+  background-color: #f4fbf9;
+}
+
+.label-tooltip:hover {
+  background-color: #E0E0E0;
+}

@@ -60,3 +60,8 @@ export const getUserImage = async (userId: number)
     responseType: 'blob'
   })
 }
+
+export const deleteUserImage = async (userId: number)
+  : Promise<AxiosResponse<void>> => {
+  return await axios.delete(`${baseURL}/usuarios/foto/${userId}`)
+}
