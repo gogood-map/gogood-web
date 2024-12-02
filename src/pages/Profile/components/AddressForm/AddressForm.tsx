@@ -330,7 +330,7 @@ export function AddressForm(props: AddressFormProps) {
         }}>
           <label style={{
             fontSize: designTokens.font.size.smallMedium
-          }}>Etiqueta (opcional)</label>
+          }}>Etiqueta</label>
           <div style={{
             display: 'flex',
             flexDirection: 'row',
