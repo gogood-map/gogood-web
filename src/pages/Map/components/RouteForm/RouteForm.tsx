@@ -141,16 +141,17 @@ export function RouteForm(props: RouteFormProps) {
             width: `calc(100% - 2 * ${designTokens.spacing.medium})`,
             minHeight: expandedCard
                 ? address.length > 0
-                    ? '225px' : '180px'
+                    ? '190px' : '180px'
                 : address.length > 0
                     ? '116px' : '80px',
+            height: 'fit-content',
             gap: designTokens.spacing.medium,
             padding: `${designTokens.spacing.mediumLarge} ${designTokens.spacing.medium}`,
             paddingBottom: expandedCard ? designTokens.spacing.medium : designTokens.spacing.mediumLarge,
             borderRadius: designTokens.borderRadius.medium,
             backgroundColor: designTokens.color.background,
             boxShadow: `0 4px 14px 0 ${designTokens.color.boxShadow}`,
-            transition: 'height 0.3s ease',
+            transition: 'height 0.3s ease min-height 0.3s ease',
             position: 'relative',
         }}>
             <div style={{

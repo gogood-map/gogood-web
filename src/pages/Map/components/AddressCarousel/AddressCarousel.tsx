@@ -20,7 +20,7 @@ export function AddressCarousel(props: AddressCarouselProps) {
   const { onClick } = props
   const { user } = useAuth()
   const [addresses, setAddresses] = useState<Address[]>([])
-  const iconSize = 16
+  const iconSize = 24
 
   const buttonStyle = {
     display: 'flex',
@@ -91,9 +91,9 @@ export function AddressCarousel(props: AddressCarouselProps) {
         <Carousel
           responsive={responsive}
           partialVisible={true}
-          sliderClass={style['carousel-slider']}
-          itemClass={style['carousel-item']}
-          containerClass={style['carousel-container']}
+          // sliderClass={style['carousel-slider']}
+          // itemClass={style['carousel-item']}
+          // containerClass={style['carousel-container']}
           customRightArrow={<div style={{
             right: 0,
             ...buttonStyle

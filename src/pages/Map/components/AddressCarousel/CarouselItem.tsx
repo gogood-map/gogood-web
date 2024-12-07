@@ -34,6 +34,13 @@ export function CarouselItem(props: CarouselItemProps) {
       }}>
         {icon}
       </span>
+      <span style={{
+        display: 'flex',
+        flexDirection: 'column',
+        // gap: designTokens.spacing.tiny,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      }}>
       <p
         style={{
           color: designTokens.color.text,
@@ -46,6 +53,19 @@ export function CarouselItem(props: CarouselItemProps) {
           margin: 0,
         }}
       >{address.tag}</p>
+      <p
+        style={{
+          color: designTokens.color.text,
+          fontSize: '12px',
+          lineClamp: 1,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          margin: 0,
+          maxWidth: '75px',
+        }}
+      >{address.street}</p>
+      </span>
     </div>
   )
 }
