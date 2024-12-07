@@ -24,22 +24,24 @@ export function routesColors(routes: RoutesResponse[]) {
     })
 }
 
-type RiskLevel = 'Baixo Risco' | 'Médio Risco' | 'Alto Risco'
+type RiskLevel = 'Baixo Risco' | 'Médio Risco' | 'Alto Risco' | 'Risco Desconhecido'
 
 export function routesRisk(routes: RoutesResponse[]): RiskLevel[] {
-    const risk: RiskLevel[] = routes.map(
-        route => {
-            if (route.qtdOcorrenciasTotais < 5) {
-                return 'Baixo Risco'
-            } else if (route.qtdOcorrenciasTotais >= 5 && route.qtdOcorrenciasTotais < 10) {
-                return 'Médio Risco'
-            } else {
-                return 'Alto Risco'
-            }
-        }
-    )
+    const orderedRoutes = routes.sort((a, b) => {
+        return a.qtdOcorrenciasTotais - b.qtdOcorrenciasTotais
+    })
 
-    return risk
+    return orderedRoutes.map((_, index) => {
+        if (index === 0) {
+            return 'Baixo Risco'
+        } else if (index === 1) {
+            return 'Médio Risco'
+        } else if (index === 2) {
+            return 'Alto Risco'
+        } else {
+            return 'Risco Desconhecido'
+        }
+    })
 }
 
 export type RoutesResponse = {
