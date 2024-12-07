@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Loader } from '@googlemaps/js-api-loader'
 import { RoutesResponse, routesColors } from '../../pages/Map/components/RoutesSelection/RoutesSelection'
 import axios from 'axios'
@@ -18,14 +18,13 @@ export function MapComponent(props: MapComponentProps) {
     const [polyline, setPolyline] = useState<google.maps.Polyline[] | null>(null)
     const [data, setData] = useState<google.maps.LatLng[]>([])
     const [placesService, setPlacesService] = useState<google.maps.places.PlacesService>()
-
+    const markersRef = useRef<google.maps.Marker[]>([])
 
     const loader = new Loader({
         apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
         version: 'weekly',
         libraries: ['visualization', 'places', 'marker'],
     })
-
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const debounce = (func: (...args: any[]) => void, wait: number) => {
@@ -40,7 +39,6 @@ export function MapComponent(props: MapComponentProps) {
             timeout = setTimeout(later, wait)
         }
     }
-
 
     const debouncedLoadData = useCallback(debounce((lat, lng, zoom) => {
         loadData(lat, lng, zoom).then(newData => setData(newData))
@@ -209,37 +207,43 @@ export function MapComponent(props: MapComponentProps) {
         })
     }
 
-
     const searchPlace = (query: string) => {
-
         if (query === '') {
             return
-        } else {
-
-            const request = {
-                query: query,
-                fields: ['geometry'],
-            }
-
-            placesService?.findPlaceFromQuery(request, (response) => {
-
-                if (response) {
-                    const itemResponse = response[0]
-
-                    if (itemResponse.geometry?.location) {
-                        const coordenate = new google.maps.LatLng(itemResponse.geometry?.location?.lat(), itemResponse.geometry?.location?.lng())
-                        map?.setCenter(coordenate)
-                        const marker = new google.maps.Marker({
-                            position: coordenate,
-                            title: query,
-                        })
-                        marker.setMap(map)
-                    } else {
-                        return
-                    }
-                }
-            })
         }
+
+        const request = {
+            query: query,
+            fields: ['geometry'],
+        }
+
+        placesService?.findPlaceFromQuery(request, (response) => {
+            if (response && response.length > 0) {
+                const itemResponse = response[0]
+
+                if (itemResponse.geometry?.location) {
+                    const coordenate = new google.maps.LatLng(
+                        itemResponse.geometry.location.lat(),
+                        itemResponse.geometry.location.lng()
+                    )
+
+                    map?.setCenter(coordenate)
+
+                    markersRef.current.forEach((marker) => {
+                        marker.setMap(null)
+                    })
+                    markersRef.current = []
+
+                    const marker = new google.maps.Marker({
+                        position: coordenate,
+                        title: query,
+                        map: map,
+                    })
+
+                    markersRef.current.push(marker)
+                }
+            }
+        })
     }
 
     return <div id='map' style={{ width: '100%', height: '100%' }} />
